@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ресторан — Главная</title>
+    <title>Bean Scene — Ресторан премиум-кухни</title>
     <link rel="stylesheet" href="css/color.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- HEADER -->
-    <header class="header">
+
+    <!-- ========== HEADER ========== -->
+    <header class="header" id="header">
         <div class="container">
-            <a href="index.html" class="logo">Логотип</a>
+            <a href="index.html" class="logo">Bean <span>Scene</span></a>
             <nav class="nav">
                 <ul>
-                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="index.html" class="active">Главная</a></li>
                     <li><a href="about.html">О нас</a></li>
                     <li><a href="menu.html">Меню</a></li>
                     <li><a href="promotions.html">Акции</a></li>
@@ -23,96 +24,154 @@
                 </ul>
             </nav>
             <div class="header-actions">
-                <a href="cart.html" class="cart-link">Корзина</a>
-                <a href="login.html" class="login-link">Войти</a>
+                <a href="login.html">Войти</a>
+                <a href="register.html" class="btn-primary">Регистрация</a>
             </div>
         </div>
     </header>
 
-    <!-- INTRO SECTION -->
-    <section class="intro">
-        <div class="container">
-            <h1>Добро пожаловать в наш ресторан</h1>
-            <p>Насладитесь изысканной кухней в уютной атмосфере</p>
-            <a href="menu.html" class="btn">Посмотреть меню</a>
+    <!-- ========== HERO ========== -->
+    <section class="hero">
+        <div class="hero-content">
+            <p class="hero-subtitle">Добро пожаловать</p>
+            <h1>Изысканная <span>кухня</span><br>в каждой детали</h1>
+            <p>Откройте для себя мир гастрономических шедевров от лучших шеф-поваров. Свежие продукты, авторские рецепты, неповторимая атмосфера.</p>
+            <div class="hero-buttons">
+                <a href="menu.html" class="btn">Посмотреть меню</a>
+                <a href="about.html" class="btn btn-outline">О ресторане</a>
+            </div>
         </div>
     </section>
 
-    <!-- ADVANTAGES -->
-    <section class="advantages">
+    <!-- ========== ABOUT ========== -->
+    <section class="about" id="about">
         <div class="container">
-            <h2>Наши преимущества</h2>
-            <div class="advantages-grid">
-                <div class="advantage-card">
-                    <h3>Свежие продукты</h3>
-                    <p>Только отборные ингредиенты от местных поставщиков</p>
+            <div class="about-grid">
+                <div class="about-image fade-in">
+                    <img src="images/about.jpg" alt="О ресторане">
                 </div>
-                <div class="advantage-card">
-                    <h3>Изысканный вкус</h3>
-                    <p>Блюда от шеф-поваров с многолетним опытом</p>
-                </div>
-                <div class="advantage-card">
-                    <h3>Быстрая доставка</h3>
-                    <p>Доставим заказ в течение 60 минут</p>
+                <div class="about-text fade-in">
+                    <h2>О <span>ресторане</span></h2>
+                    <p>Bean Scene — это не просто ресторан. Это место, где встречаются традиции и современность, где каждое блюдо — произведение искусства.</p>
+                    <p>Мы используем только свежие продукты от местных фермеров, а наши шеф-повара постоянно экспериментируют, чтобы удивлять вас новыми вкусами.</p>
+                    <a href="about.html" class="btn">Узнать больше</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- POPULAR DISHES -->
-    <section class="popular-dishes">
+    <!-- ========== MENU ========== -->
+    <section class="menu-section" id="menu">
         <div class="container">
-            <h2>Популярные блюда</h2>
+            <h2 class="section-title fade-in">Популярные <span style="color: var(--color-primary);">блюда</span></h2>
+            <p class="section-subtitle fade-in">Попробуйте наши фирменные блюда, которые завоевали сердца гостей</p>
             <div class="dishes-grid" id="popular-dishes">
-                <!-- Карточки будут загружаться через JS -->
+                <!-- Загружается через JS -->
+            </div>
+            <div style="text-align: center; margin-top: 50px;">
+                <a href="menu.html" class="btn btn-outline">Полное меню</a>
             </div>
         </div>
     </section>
 
-    <!-- REVIEWS -->
-    <section class="reviews">
+    <!-- ========== STATS ========== -->
+    <section class="stats" id="stats">
         <div class="container">
-            <h2>Отзывы наших гостей</h2>
-            <div class="reviews-slider" id="reviews-slider">
-                <!-- Слайдер отзывов -->
+            <div class="stats-grid">
+                <div class="stat-item fade-in">
+                    <div class="stat-number" data-target="15">0</div>
+                    <div class="stat-label">Лет опыта</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-number" data-target="250">0</div>
+                    <div class="stat-label">Блюд в меню</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-number" data-target="50">0</div>
+                    <div class="stat-label">Шеф-поваров</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-number" data-target="98">0</div>
+                    <div class="stat-label">% Довольных гостей</div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- NEWS -->
-    <section class="news-section">
+    <!-- ========== REVIEWS ========== -->
+    <section class="reviews" id="reviews">
         <div class="container">
-            <h2>Новости и обновления</h2>
+            <h2 class="section-title fade-in">Отзывы <span style="color: var(--color-primary);">гостей</span></h2>
+            <p class="section-subtitle fade-in">Что говорят о нас наши посетители</p>
+            <div class="reviews-grid" id="reviews-grid">
+                <!-- Загружается через JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== NEWS ========== -->
+    <section class="menu-section" id="news">
+        <div class="container">
+            <h2 class="section-title fade-in">Новости и <span style="color: var(--color-primary);">акции</span></h2>
+            <p class="section-subtitle fade-in">Будьте в курсе последних событий и спецпредложений</p>
             <div class="news-grid" id="news-grid">
-                <!-- Новости через JS -->
+                <!-- Загружается через JS -->
             </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
+    <!-- ========== CONTACT CTA ========== -->
+    <section class="about" style="background: var(--color-bg-dark); color: var(--color-text-white);">
+        <div class="container" style="text-align: center;">
+            <h2 class="section-title" style="color: var(--color-text-white);">Забронируйте <span style="color: var(--color-primary);">столик</span></h2>
+            <p class="section-subtitle" style="color: rgba(255,255,255,0.7);">Позвоните нам или оставьте заявку на сайте</p>
+            <div style="margin-top: 30px;">
+                <a href="tel:+79991234567" class="btn" style="font-size: 20px; padding: 16px 50px;">+7 (999) 123-45-67</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <h4>Ресторан</h4>
-                    <p>Лучшие блюда для настоящих гурманов</p>
+                    <h4>Bean Scene</h4>
+                    <p>Ресторан премиум-кухни. Мы создаём незабываемые гастрономические впечатления для наших гостей. Свежие продукты, авторские рецепты, уютная атмосфера.</p>
                 </div>
                 <div class="footer-col">
                     <h4>Навигация</h4>
                     <ul>
+                        <li><a href="index.html">Главная</a></li>
                         <li><a href="about.html">О нас</a></li>
                         <li><a href="menu.html">Меню</a></li>
+                        <li><a href="promotions.html">Акции</a></li>
+                        <li><a href="news.html">Новости</a></li>
                         <li><a href="contact.html">Контакты</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
+                    <h4>Меню</h4>
+                    <ul>
+                        <li><a href="menu.html">Салаты</a></li>
+                        <li><a href="menu.html">Супы</a></li>
+                        <li><a href="menu.html">Горячие блюда</a></li>
+                        <li><a href="menu.html">Десерты</a></li>
+                        <li><a href="menu.html">Напитки</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
                     <h4>Контакты</h4>
-                    <p>Телефон: +7 (999) 123-45-67</p>
-                    <p>Email: info@restaurant.ru</p>
+                    <ul>
+                        <li><a href="tel:+79991234567">+7 (999) 123-45-67</a></li>
+                        <li><a href="mailto:info@beanscene.ru">info@beanscene.ru</a></li>
+                        <li>г. Москва, ул. Тверская, 15</li>
+                        <li>Пн–Вс: 10:00 – 23:00</li>
+                    </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 Ресторан. Все права защищены.</p>
+                <p>&copy; 2026 Bean Scene. Все права защищены. Сделано с ❤️</p>
             </div>
         </div>
     </footer>

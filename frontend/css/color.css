@@ -1,20 +1,25 @@
 :root {
-    /* Цветовая палитра */
-    --color-primary: #ED4141;        /* Основной цвет (кнопки, акценты) */
-    --color-primary-hover: #c92e2e;  /* При наведении */
-    --color-bg: #FFF;                /* Фоновый цвет */
-    --color-text: #333;              /* Цвет текста */
+    /* === Цветовая палитра (Bean Scene Style) === */
+    --color-primary: #B88E2F;        /* Золотистый/горчичный — акценты */
+    --color-primary-hover: #9e7528;  /* При наведении */
+    --color-bg: #FFF;                /* Фоновый */
+    --color-bg-dark: #1A1A1A;        /* Тёмный фон (hero, footer) */
+    --color-bg-section: #F9F1E7;     /* Светлый бежевый для секций */
+    --color-text: #333;              /* Основной текст */
     --color-text-light: #9099A0;     /* Дополнительный текст */
-    --color-header-footer: #000;     /* Шапка и подвал */
+    --color-text-white: #FFF;        /* Белый текст */
     --color-border: #E5E8EB;         /* Границы */
-    --color-light: #F8B3B3;          /* Дополнительный светлый */
-    --color-bg-section: #F9F9F9;     /* Фон секций */
+    --color-card-bg: #FFF;           /* Фон карточек */
+    --color-overlay: rgba(0,0,0,0.65); /* Оверлей на hero */
 
-    /* Шрифты */
-    --font-main: 'Open Sans', Arial, sans-serif;
-    --font-heading: 'Montserrat', Arial, sans-serif;
+    /* === Шрифты === */
+    --font-main: 'Inter', 'Open Sans', Arial, sans-serif;
+    --font-heading: 'Playfair Display', 'Montserrat', Georgia, serif;
 
-    /* Размеры */
+    /* === Размеры === */
     --container-width: 1200px;
-    --header-height: 80px;
+    --header-height: 90px;
+    --border-radius: 12px;
+    --shadow-card: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.15);
 }
