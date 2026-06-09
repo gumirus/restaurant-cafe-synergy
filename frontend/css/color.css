@@ -1,0 +1,20 @@
+:root {
+    /* Цветовая палитра */
+    --color-primary: #ED4141;        /* Основной цвет (кнопки, акценты) */
+    --color-primary-hover: #c92e2e;  /* При наведении */
+    --color-bg: #FFF;                /* Фоновый цвет */
+    --color-text: #333;              /* Цвет текста */
+    --color-text-light: #9099A0;     /* Дополнительный текст */
+    --color-header-footer: #000;     /* Шапка и подвал */
+    --color-border: #E5E8EB;         /* Границы */
+    --color-light: #F8B3B3;          /* Дополнительный светлый */
+    --color-bg-section: #F9F9F9;     /* Фон секций */
+
+    /* Шрифты */
+    --font-main: 'Open Sans', Arial, sans-serif;
+    --font-heading: 'Montserrat', Arial, sans-serif;
+
+    /* Размеры */
+    --container-width: 1200px;
+    --header-height: 80px;
+}
