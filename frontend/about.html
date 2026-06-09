@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>О нас — Ресторан</title>
+    <title>О нас — Bean Scene</title>
     <link rel="stylesheet" href="css/color.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/svg+xml" href="images/logo.svg">
 </head>
 <body>
-    <header class="header">
+    <header class="header" id="header">
         <div class="container">
-            <a href="index.html" class="logo">Логотип</a>
+            <a href="index.html" class="logo">
+                <img src="images/logo.svg" alt="Bean Scene" height="50">
+            </a>
             <nav class="nav">
                 <ul>
                     <li><a href="index.html">Главная</a></li>
-                    <li><a href="about.html">О нас</a></li>
+                    <li><a href="about.html" class="active">О нас</a></li>
                     <li><a href="menu.html">Меню</a></li>
                     <li><a href="promotions.html">Акции</a></li>
                     <li><a href="news.html">Новости</a></li>
@@ -22,8 +25,8 @@
                 </ul>
             </nav>
             <div class="header-actions">
-                <a href="cart.html">Корзина</a>
                 <a href="login.html">Войти</a>
+                <a href="register.html" class="btn-primary">Регистрация</a>
             </div>
         </div>
     </header>
@@ -31,30 +34,97 @@
     <section class="page-hero">
         <div class="container">
             <h1>О нашем ресторане</h1>
+            <p>История, миссия и команда Bean Scene</p>
         </div>
     </section>
 
-    <section class="about-story">
+    <section class="about">
         <div class="container">
-            <h2>Наша история</h2>
-            <p>История создания и развития ресторана. Миссия и ценности компании.</p>
-        </div>
-    </section>
-
-    <section class="about-team">
-        <div class="container">
-            <h2>Наша команда</h2>
-            <div class="team-grid">
-                <!-- Карточки команды -->
+            <div class="about-grid">
+                <div class="about-image fade-in">
+                    <img src="images/about.jpg" alt="О ресторане">
+                </div>
+                <div class="about-text fade-in">
+                    <h2>Наша <span>история</span></h2>
+                    <p>Bean Scene открыл свои двери в 2011 году. За 15 лет мы прошли путь от небольшого кафе до ресторана премиум-класса, завоевав признание гостей и профессиональные награды.</p>
+                    <p>Наша философия — использовать только свежие продукты от местных фермеров, сочетать классические рецепты с современными гастрономическими трендами и создавать атмосферу, в которую хочется возвращаться.</p>
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <span class="feature-icon">🥩</span>
+                            <span>Свежие продукты</span>
+                        </div>
+                        <div class="about-feature">
+                            <span class="feature-icon">👨‍🍳</span>
+                            <span>Шеф-повара из Европы</span>
+                        </div>
+                        <div class="about-feature">
+                            <span class="feature-icon">🍷</span>
+                            <span>Винная карта</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="faq">
+    <section class="team-section">
         <div class="container">
-            <h2>Часто задаваемые вопросы</h2>
+            <h2 class="section-title fade-in">Наша <span>команда</span></h2>
+            <p class="section-subtitle fade-in">Профессионалы, которые создают для вас кулинарные шедевры</p>
+            <div class="team-grid">
+                <div class="team-card fade-in">
+                    <img class="team-card-image" src="images/placeholder.jpg" alt="Антонио Бьянки">
+                    <div class="team-card-body">
+                        <h3>Антонио Бьянки</h3>
+                        <div class="team-role">Шеф-повар</div>
+                        <p>15 лет опыта в ресторанах Мишлен</p>
+                    </div>
+                </div>
+                <div class="team-card fade-in">
+                    <img class="team-card-image" src="images/placeholder.jpg" alt="Мария Соколова">
+                    <div class="team-card-body">
+                        <h3>Мария Соколова</h3>
+                        <div class="team-role">Су-шеф</div>
+                        <p>Специалист по итальянской кухне</p>
+                    </div>
+                </div>
+                <div class="team-card fade-in">
+                    <img class="team-card-image" src="images/placeholder.jpg" alt="Дмитрий Волков">
+                    <div class="team-card-body">
+                        <h3>Дмитрий Волков</h3>
+                        <div class="team-role">Кондитер</div>
+                        <p>Автор уникальных десертов</p>
+                    </div>
+                </div>
+                <div class="team-card fade-in">
+                    <img class="team-card-image" src="images/placeholder.jpg" alt="Елена Преображенская">
+                    <div class="team-card-body">
+                        <h3>Елена Преображенская</h3>
+                        <div class="team-role">Сомелье</div>
+                        <p>Эксперт по винным сочетаниям</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="reviews">
+        <div class="container">
+            <h2 class="section-title fade-in">Часто задаваемые <span>вопросы</span></h2>
+            <p class="section-subtitle fade-in">Ответы на популярные вопросы гостей</p>
             <div class="faq-list" id="faq-list">
-                <!-- FAQ аккордеон через JS -->
+                <div class="faq-item">
+                    <div class="faq-question">Как забронировать столик?</div>
+                    <div class="faq-answer">Вы можете забронировать столик через форму на сайте, по телефону +7 (999) 123-45-67 или написав нам на email.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Есть ли у вас доставка?</div>
+                    <div class="faq-answer">Да, мы доставляем блюда по Москве в пределах МКАД. Минимальная сумма заказа — 1500 ₽.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Работаете ли вы в праздничные дни?</div>
+                    <div class="faq-answer">Да, мы работаем ежедневно с 10:00 до 23:00, включая выходные и праздничные дни.</div>
+                </div>
             </div>
         </div>
     </section>
@@ -63,25 +133,50 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <h4>Ресторан</h4>
-                    <p>Лучшие блюда для настоящих гурманов</p>
+                    <a href="index.html" class="logo" style="margin-bottom: 20px;">
+                        <img src="images/logo.svg" alt="Bean Scene" height="40">
+                    </a>
+                    <p>Ресторан премиум-кухни. Мы создаём незабываемые гастрономические впечатления для наших гостей.</p>
+                    <div class="social-links">
+                        <a href="#" title="Instagram">📷</a>
+                        <a href="#" title="VK">💬</a>
+                        <a href="#" title="Telegram">✈️</a>
+                        <a href="#" title="YouTube">▶️</a>
+                    </div>
                 </div>
                 <div class="footer-col">
                     <h4>Навигация</h4>
                     <ul>
+                        <li><a href="index.html">Главная</a></li>
                         <li><a href="about.html">О нас</a></li>
                         <li><a href="menu.html">Меню</a></li>
+                        <li><a href="promotions.html">Акции</a></li>
+                        <li><a href="news.html">Новости</a></li>
                         <li><a href="contact.html">Контакты</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
+                    <h4>Меню</h4>
+                    <ul>
+                        <li><a href="menu.html">Салаты</a></li>
+                        <li><a href="menu.html">Супы</a></li>
+                        <li><a href="menu.html">Горячие блюда</a></li>
+                        <li><a href="menu.html">Десерты</a></li>
+                        <li><a href="menu.html">Напитки</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
                     <h4>Контакты</h4>
-                    <p>Телефон: +7 (999) 123-45-67</p>
-                    <p>Email: info@restaurant.ru</p>
+                    <ul>
+                        <li><a href="tel:+79991234567">+7 (999) 123-45-67</a></li>
+                        <li><a href="mailto:info@beanscene.ru">info@beanscene.ru</a></li>
+                        <li>г. Москва, ул. Тверская, 15</li>
+                        <li>Пн–Вс: 10:00 – 23:00</li>
+                    </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 Ресторан. Все права защищены.</p>
+                <p>&copy; 2026 Bean Scene. Все права защищены. Сделано с ❤️</p>
             </div>
         </div>
     </footer>

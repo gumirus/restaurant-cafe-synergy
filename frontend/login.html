@@ -3,12 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход — Ресторан</title>
+    <title>Вход — Bean Scene</title>
     <link rel="stylesheet" href="css/color.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/svg+xml" href="images/logo.svg">
 </head>
 <body>
-    <header class="header">...</header>
+    <header class="header" id="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.svg" alt="Bean Scene" height="50">
+            </a>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="about.html">О нас</a></li>
+                    <li><a href="menu.html">Меню</a></li>
+                    <li><a href="promotions.html">Акции</a></li>
+                    <li><a href="news.html">Новости</a></li>
+                    <li><a href="contact.html">Контакты</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a href="login.html" class="active">Войти</a>
+                <a href="register.html" class="btn-primary">Регистрация</a>
+            </div>
+        </div>
+    </header>
+
     <section class="auth-section">
         <div class="container">
             <form class="auth-form" id="login-form" method="POST" action="../backend/login.php">
@@ -20,7 +42,59 @@
             </form>
         </div>
     </section>
-    <footer class="footer">...</footer>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="index.html" class="logo" style="margin-bottom: 20px;">
+                        <img src="images/logo.svg" alt="Bean Scene" height="40">
+                    </a>
+                    <p>Ресторан премиум-кухни. Мы создаём незабываемые гастрономические впечатления для наших гостей.</p>
+                    <div class="social-links">
+                        <a href="#" title="Instagram">📷</a>
+                        <a href="#" title="VK">💬</a>
+                        <a href="#" title="Telegram">✈️</a>
+                        <a href="#" title="YouTube">▶️</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Навигация</h4>
+                    <ul>
+                        <li><a href="index.html">Главная</a></li>
+                        <li><a href="about.html">О нас</a></li>
+                        <li><a href="menu.html">Меню</a></li>
+                        <li><a href="promotions.html">Акции</a></li>
+                        <li><a href="news.html">Новости</a></li>
+                        <li><a href="contact.html">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Меню</h4>
+                    <ul>
+                        <li><a href="menu.html">Салаты</a></li>
+                        <li><a href="menu.html">Супы</a></li>
+                        <li><a href="menu.html">Горячие блюда</a></li>
+                        <li><a href="menu.html">Десерты</a></li>
+                        <li><a href="menu.html">Напитки</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Контакты</h4>
+                    <ul>
+                        <li><a href="tel:+79991234567">+7 (999) 123-45-67</a></li>
+                        <li><a href="mailto:info@beanscene.ru">info@beanscene.ru</a></li>
+                        <li>г. Москва, ул. Тверская, 15</li>
+                        <li>Пн–Вс: 10:00 – 23:00</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Bean Scene. Все права защищены. Сделано с ❤️</p>
+            </div>
+        </div>
+    </footer>
+
     <script src="js/validation.js"></script>
 </body>
 </html>
