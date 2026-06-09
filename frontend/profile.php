@@ -73,7 +73,7 @@ $user = $stmt->fetch();
 
 // История заказов
 $stmt = $pdo->prepare("
-    SELECT o.id, o.total, o.status, o.created_at
+    SELECT o.id, o.total_price AS total, o.status, o.created_at
     FROM orders o
     WHERE o.user_id = ?
     ORDER BY o.created_at DESC
