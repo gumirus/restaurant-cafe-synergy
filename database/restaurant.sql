@@ -191,7 +191,7 @@ INSERT INTO promotions (title, description, start_date, end_date) VALUES
 -- Логин: +79990000001
 -- Пароль: admin123
 INSERT INTO users (phone, password, access_rights_id) VALUES
-    ('+79990000001', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1);
+    ('+79990000001', '$2y$12$llzwV9kcLPH7qobUz48wje0Z5efr2SVHTYWvvZJkiX00gxOFZal06', 1);
 
 -- ========== ТЕСТОВЫЙ ПОЛЬЗОВАТЕЛЬ ==========
 -- Логин: +79990000002
