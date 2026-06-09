@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/header.php';
+require_once __DIR__ . '/../backend/config/db.php';
 
 // Проверка авторизации
 if (!isLoggedIn()) {
@@ -9,12 +10,68 @@ if (!isLoggedIn()) {
 
 $user_id = $_SESSION['user_id'];
 
-// Получаем информацию о пользователе
-$stmt = $pdo->prepare("SELECT phone, created_at FROM users WHERE id = ?");
+// ========== ОБРАБОТКА ФОРМ ==========
+
+// Обновление профиля
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
+    $name = trim($_POST['name'] ?? '');
+    $bio = trim($_POST['bio'] ?? '');
+
+    // Загрузка аватара
+    $avatar = null;
+    if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
+        $ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION);
+        $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        if (in_array(strtolower($ext), $allowed)) {
+            $avatar = 'avatar_' . $user_id . '_' . time() . '.' . $ext;
+            move_uploaded_file($_FILES['avatar']['tmp_name'], __DIR__ . '/uploads/' . $avatar);
+        }
+    }
+
+    $sql = "UPDATE users SET name = ?, bio = ?" . ($avatar ? ", avatar = ?" : "") . " WHERE id = ?";
+    $params = [$name, $bio];
+    if ($avatar) $params[] = $avatar;
+    $params[] = $user_id;
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    $success = '✅ Профиль обновлён';
+}
+
+// Повторение заказа
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['repeat_order'])) {
+    $order_id = (int)$_POST['order_id'];
+
+    // Получаем товары из заказа
+    $stmt = $pdo->prepare("SELECT dish_id, quantity FROM order_items WHERE order_id = ?");
+    $stmt->execute([$order_id]);
+    $items = $stmt->fetchAll();
+
+    foreach ($items as $item) {
+        // Проверяем, есть ли уже в корзине
+        $stmt = $pdo->prepare("SELECT id, count FROM shopping_cart WHERE user_id = ? AND dish_id = ?");
+        $stmt->execute([$user_id, $item['dish_id']]);
+        $existing = $stmt->fetch();
+
+        if ($existing) {
+            $stmt = $pdo->prepare("UPDATE shopping_cart SET count = count + ? WHERE id = ?");
+            $stmt->execute([$item['quantity'], $existing['id']]);
+        } else {
+            $stmt = $pdo->prepare("INSERT INTO shopping_cart (user_id, dish_id, count) VALUES (?, ?, ?)");
+            $stmt->execute([$user_id, $item['dish_id'], $item['quantity']]);
+        }
+    }
+    $success = '✅ Заказ #' . $order_id . ' добавлен в корзину!';
+}
+
+// ========== ПОЛУЧЕНИЕ ДАННЫХ ==========
+
+// Информация о пользователе
+$stmt = $pdo->prepare("SELECT phone, name, bio, avatar, created_at FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
 
-// Получаем историю заказов
+// История заказов
 $stmt = $pdo->prepare("
     SELECT o.id, o.total, o.status, o.created_at
     FROM orders o
@@ -32,6 +89,8 @@ $status_labels = [
     'completed'  => '✔️ Выполнен',
     'cancelled'  => '❌ Отменён',
 ];
+
+$avatar_url = $user['avatar'] ? 'uploads/' . $user['avatar'] : 'images/default-avatar.svg';
 ?>
 
     <!-- ========== PROFILE ========== -->
@@ -39,117 +98,230 @@ $status_labels = [
         <div class="container">
             <h1 class="section-title">Личный <span style="color: var(--color-primary);">кабинет</span></h1>
 
-            <div class="profile-info">
+            <?php if (isset($success)): ?>
+                <div class="alert alert-success"><?= $success ?></div>
+            <?php endif; ?>
+
+            <div class="profile-layout">
+                <!-- ===== ЛЕВАЯ КОЛОНКА — Профиль ===== -->
                 <div class="profile-card">
-                    <div class="profile-icon">👤</div>
-                    <div class="profile-details">
-                        <p><strong>Телефон:</strong> <?= htmlspecialchars($user['phone']) ?></p>
-                        <p><strong>Зарегистрирован:</strong> <?= date('d.m.Y', strtotime($user['created_at'])) ?></p>
-                    </div>
+                    <h2>Мой профиль</h2>
+                    <form method="POST" enctype="multipart/form-data" class="profile-form">
+                        <div class="avatar-section">
+                            <div class="avatar-preview">
+                                <img src="<?= $avatar_url ?>" alt="Аватар" id="avatar-preview-img">
+                            </div>
+                            <label class="btn btn-small avatar-upload-btn">
+                                📷 Загрузить фото
+                                <input type="file" name="avatar" accept="image/*" style="display:none" onchange="previewAvatar(event)">
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Телефон</label>
+                            <input type="text" value="<?= htmlspecialchars($user['phone']) ?>" disabled class="input-disabled">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Имя</label>
+                            <input type="text" name="name" value="<?= htmlspecialchars($user['name'] ?? '') ?>" placeholder="Ваше имя">
+                        </div>
+
+                        <div class="form-group">
+                            <label>О себе</label>
+                            <textarea name="bio" placeholder="Расскажите о себе..."><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
+                        </div>
+
+                        <button type="submit" name="update_profile" class="btn">💾 Сохранить</button>
+                    </form>
+                </div>
+
+                <!-- ===== ПРАВАЯ КОЛОНКА — Заказы ===== -->
+                <div class="profile-orders">
+                    <h2>История заказов</h2>
+
+                    <?php if (empty($orders)): ?>
+                        <div class="orders-empty">
+                            <p>📋 У вас пока нет заказов</p>
+                            <a href="menu.php" class="btn">Перейти в меню</a>
+                        </div>
+                    <?php else: ?>
+                        <?php foreach ($orders as $order): ?>
+                            <div class="order-card">
+                                <div class="order-card-header">
+                                    <span class="order-number">Заказ #<?= $order['id'] ?></span>
+                                    <span class="order-date"><?= date('d.m.Y H:i', strtotime($order['created_at'])) ?></span>
+                                    <span class="order-status-badge status-<?= $order['status'] ?>">
+                                        <?= $status_labels[$order['status']] ?>
+                                    </span>
+                                </div>
+                                <div class="order-card-body">
+                                    <?php
+                                    $stmt = $pdo->prepare("SELECT name, price, quantity FROM order_items WHERE order_id = ?");
+                                    $stmt->execute([$order['id']]);
+                                    $items = $stmt->fetchAll();
+                                    ?>
+                                    <table class="order-items-table">
+                                        <tr>
+                                            <th>Блюдо</th>
+                                            <th>Цена</th>
+                                            <th>Кол-во</th>
+                                            <th>Сумма</th>
+                                        </tr>
+                                        <?php foreach ($items as $item): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($item['name']) ?></td>
+                                            <td><?= number_format($item['price'], 2) ?> ₽</td>
+                                            <td><?= $item['quantity'] ?></td>
+                                            <td><?= number_format($item['price'] * $item['quantity'], 2) ?> ₽</td>
+                                        </tr>
+                                        <?php endforeach; ?>
+                                    </table>
+                                </div>
+                                <div class="order-card-footer">
+                                    <span class="order-total">Итого: <strong><?= number_format($order['total'], 2) ?> ₽</strong></span>
+                                    <form method="POST" style="display:inline">
+                                        <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
+                                        <button type="submit" name="repeat_order" class="btn btn-small">🔄 Повторить заказ</button>
+                                    </form>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </div>
-
-            <h2 class="section-title" style="margin-top: 60px; font-size: 1.5rem;">История <span style="color: var(--color-primary);">заказов</span></h2>
-
-            <?php if (empty($orders)): ?>
-                <div class="orders-empty">
-                    <p>📋 У вас пока нет заказов</p>
-                    <a href="menu.php" class="btn">Перейти в меню</a>
-                </div>
-            <?php else: ?>
-                <div class="orders-table">
-                    <div class="orders-header">
-                        <div class="orders-col">№</div>
-                        <div class="orders-col">Дата</div>
-                        <div class="orders-col">Сумма</div>
-                        <div class="orders-col">Статус</div>
-                        <div class="orders-col">Детали</div>
-                    </div>
-                    <?php foreach ($orders as $order): ?>
-                        <div class="orders-row">
-                            <div class="orders-col">#<?= $order['id'] ?></div>
-                            <div class="orders-col"><?= date('d.m.Y H:i', strtotime($order['created_at'])) ?></div>
-                            <div class="orders-col"><?= number_format($order['total'], 2) ?> ₽</div>
-                            <div class="orders-col">
-                                <span class="order-status status-<?= $order['status'] ?>">
-                                    <?= $status_labels[$order['status']] ?? $order['status'] ?>
-                                </span>
-                            </div>
-                            <div class="orders-col">
-                                <button class="btn btn-small order-details-btn" data-order-id="<?= $order['id'] ?>">Подробнее</button>
-                            </div>
-                        </div>
-                        <!-- Детали заказа (скрыты) -->
-                        <div class="order-items" id="order-items-<?= $order['id'] ?>" style="display: none;">
-                            <?php
-                            $stmt = $pdo->prepare("SELECT name, price, quantity FROM order_items WHERE order_id = ?");
-                            $stmt->execute([$order['id']]);
-                            $items = $stmt->fetchAll();
-                            ?>
-                            <table class="order-items-table">
-                                <tr>
-                                    <th>Блюдо</th>
-                                    <th>Цена</th>
-                                    <th>Кол-во</th>
-                                    <th>Сумма</th>
-                                </tr>
-                                <?php foreach ($items as $item): ?>
-                                <tr>
-                                    <td><?= htmlspecialchars($item['name']) ?></td>
-                                    <td><?= number_format($item['price'], 2) ?> ₽</td>
-                                    <td><?= $item['quantity'] ?></td>
-                                    <td><?= number_format($item['price'] * $item['quantity'], 2) ?> ₽</td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </table>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
         </div>
     </section>
 
     <style>
     .profile-section { padding: 120px 0 60px; }
-    .profile-info { margin-top: 40px; }
+    .alert {
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-weight: 500;
+    }
+    .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+
+    .profile-layout {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 40px;
+        margin-top: 40px;
+    }
+
+    /* ===== КАРТОЧКА ПРОФИЛЯ ===== */
     .profile-card {
         background: var(--color-surface);
         border: 1px solid var(--color-border);
         border-radius: 12px;
         padding: 30px;
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        max-width: 500px;
     }
-    .profile-icon { font-size: 3rem; }
-    .profile-details p { margin-bottom: 8px; color: var(--color-text); }
-    .profile-details strong { color: var(--color-primary); }
-
-    .orders-empty { text-align: center; padding: 60px 0; }
-    .orders-empty p { font-size: 1.3rem; margin-bottom: 20px; color: var(--color-text); }
-
-    .orders-table { margin-top: 30px; }
-    .orders-header {
-        display: grid;
-        grid-template-columns: 0.5fr 1.5fr 1fr 1.5fr 1fr;
-        padding: 15px 0;
-        border-bottom: 2px solid var(--color-border);
-        font-weight: 600;
+    .profile-card h2 {
         color: var(--color-primary);
+        margin-bottom: 25px;
+        font-size: 1.3rem;
     }
-    .orders-row {
-        display: grid;
-        grid-template-columns: 0.5fr 1.5fr 1fr 1.5fr 1fr;
-        padding: 18px 0;
-        border-bottom: 1px solid var(--color-border);
-        align-items: center;
+    .profile-form .form-group {
+        margin-bottom: 18px;
+    }
+    .profile-form label {
+        display: block;
+        margin-bottom: 6px;
         color: var(--color-text);
+        font-weight: 500;
+        font-size: 0.9rem;
     }
-    .order-status {
+    .profile-form input[type="text"],
+    .profile-form textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        background: var(--color-bg);
+        color: var(--color-text);
+        font-size: 0.95rem;
+        transition: border-color 0.3s;
+    }
+    .profile-form input:focus,
+    .profile-form textarea:focus {
+        outline: none;
+        border-color: var(--color-primary);
+    }
+    .profile-form textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+    .input-disabled {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        background: rgba(255,255,255,0.05);
+        color: var(--color-text-light);
+        font-size: 0.95rem;
+        opacity: 0.7;
+    }
+
+    /* ===== АВАТАР ===== */
+    .avatar-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+    .avatar-preview {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid var(--color-primary);
+    }
+    .avatar-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .avatar-upload-btn {
+        cursor: pointer;
+        font-size: 0.85rem;
+    }
+    .btn-small {
+        padding: 8px 18px;
+        font-size: 0.85rem;
+    }
+
+    /* ===== ЗАКАЗЫ ===== */
+    .profile-orders h2 {
+        color: var(--color-primary);
+        margin-bottom: 25px;
+        font-size: 1.3rem;
+    }
+    .orders-empty { text-align: center; padding: 60px 0; }
+    .orders-empty p { font-size: 1.2rem; margin-bottom: 20px; color: var(--color-text); }
+
+    .order-card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+    .order-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        background: rgba(255,255,255,0.03);
+        border-bottom: 1px solid var(--color-border);
+    }
+    .order-number { font-weight: 700; color: var(--color-primary); }
+    .order-date { color: var(--color-text-light); font-size: 0.85rem; }
+    .order-status-badge {
         padding: 4px 12px;
         border-radius: 20px;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         font-weight: 500;
     }
     .status-pending { background: #fff3cd; color: #856404; }
@@ -159,12 +331,7 @@ $status_labels = [
     .status-completed { background: #d4edda; color: #155724; }
     .status-cancelled { background: #f8d7da; color: #721c24; }
 
-    .btn-small {
-        padding: 8px 16px;
-        font-size: 0.85rem;
-    }
-
-    .order-items { padding: 15px 0 15px 20px; }
+    .order-card-body { padding: 15px 20px; }
     .order-items-table {
         width: 100%;
         border-collapse: collapse;
@@ -172,31 +339,50 @@ $status_labels = [
     }
     .order-items-table th {
         text-align: left;
-        padding: 10px;
-        border-bottom: 1px solid var(--color-border);
+        padding: 8px 10px;
+        border-bottom: 2px solid var(--color-border);
         color: var(--color-primary);
+        font-weight: 600;
     }
     .order-items-table td {
-        padding: 10px;
+        padding: 8px 10px;
         border-bottom: 1px solid var(--color-border);
         color: var(--color-text);
+    }
+
+    .order-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        border-top: 1px solid var(--color-border);
+        background: rgba(255,255,255,0.02);
+    }
+    .order-total {
+        font-size: 1.1rem;
+        color: var(--color-text);
+    }
+    .order-total strong {
+        color: var(--color-primary);
+        font-size: 1.2rem;
+    }
+
+    /* ===== АДАПТИВ ===== */
+    @media (max-width: 768px) {
+        .profile-layout {
+            grid-template-columns: 1fr;
+        }
     }
     </style>
 
     <script>
-    document.querySelectorAll('.order-details-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const orderId = this.dataset.orderId;
-            const items = document.getElementById('order-items-' + orderId);
-            if (items.style.display === 'none') {
-                items.style.display = 'block';
-                this.textContent = 'Скрыть';
-            } else {
-                items.style.display = 'none';
-                this.textContent = 'Подробнее';
-            }
-        });
-    });
+    function previewAvatar(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            document.getElementById('avatar-preview-img').src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
     </script>
 
 <?php require_once __DIR__ . '/footer.php'; ?>
