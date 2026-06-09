@@ -38,7 +38,7 @@
             <p>Откройте для себя мир гастрономических шедевров от лучших шеф-поваров. Свежие продукты, авторские рецепты, неповторимая атмосфера.</p>
             <div class="hero-buttons">
                 <a href="menu.html" class="btn">Посмотреть меню</a>
-                <a href="about.html" class="btn btn-outline">О ресторане</a>
+                <a href="#booking" class="btn btn-outline">Забронировать</a>
             </div>
         </div>
     </section>
@@ -54,22 +54,33 @@
                     <h2>О <span>ресторане</span></h2>
                     <p>Bean Scene — это не просто ресторан. Это место, где встречаются традиции и современность, где каждое блюдо — произведение искусства.</p>
                     <p>Мы используем только свежие продукты от местных фермеров, а наши шеф-повара постоянно экспериментируют, чтобы удивлять вас новыми вкусами.</p>
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <span class="feature-icon">🥩</span>
+                            <span>Свежие продукты</span>
+                        </div>
+                        <div class="about-feature">
+                            <span class="feature-icon">👨‍🍳</span>
+                            <span>Шеф-повара из Европы</span>
+                        </div>
+                        <div class="about-feature">
+                            <span class="feature-icon">🍷</span>
+                            <span>Винная карта</span>
+                        </div>
+                    </div>
                     <a href="about.html" class="btn">Узнать больше</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ========== MENU ========== -->
-    <section class="menu-section" id="menu">
+    <!-- ========== SPECIAL DISHES (Chef's Picks) ========== -->
+    <section class="menu-section" id="specials">
         <div class="container">
-            <h2 class="section-title fade-in">Популярные <span style="color: var(--color-primary);">блюда</span></h2>
-            <p class="section-subtitle fade-in">Попробуйте наши фирменные блюда, которые завоевали сердца гостей</p>
-            <div class="dishes-grid" id="popular-dishes">
+            <h2 class="section-title fade-in">Фирменные <span style="color: var(--color-primary);">блюда</span></h2>
+            <p class="section-subtitle fade-in">Рекомендация нашего шеф-повара</p>
+            <div class="specials-grid" id="specials-grid">
                 <!-- Загружается через JS -->
-            </div>
-            <div style="text-align: center; margin-top: 50px;">
-                <a href="menu.html" class="btn btn-outline">Полное меню</a>
             </div>
         </div>
     </section>
@@ -98,12 +109,81 @@
         </div>
     </section>
 
+    <!-- ========== MENU PREVIEW ========== -->
+    <section class="menu-section" id="menu">
+        <div class="container">
+            <h2 class="section-title fade-in">Популярные <span style="color: var(--color-primary);">блюда</span></h2>
+            <p class="section-subtitle fade-in">Попробуйте наши фирменные блюда, которые завоевали сердца гостей</p>
+            <div class="dishes-grid" id="popular-dishes">
+                <!-- Загружается через JS -->
+            </div>
+            <div style="text-align: center; margin-top: 50px;">
+                <a href="menu.html" class="btn btn-outline">Полное меню</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TEAM ========== -->
+    <section class="about" id="team">
+        <div class="container">
+            <h2 class="section-title fade-in">Наша <span style="color: var(--color-primary);">команда</span></h2>
+            <p class="section-subtitle fade-in">Профессионалы, которые создают для вас кулинарные шедевры</p>
+            <div class="team-grid" id="team-grid">
+                <!-- Загружается через JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== BOOKING ========== -->
+    <section class="booking-section" id="booking">
+        <div class="container">
+            <div class="booking-wrapper fade-in">
+                <div class="booking-info">
+                    <h2>Забронируйте <span>столик</span></h2>
+                    <p>Заполните форму, и мы свяжемся с вами для подтверждения бронирования.</p>
+                    <div class="booking-contacts">
+                        <p>📞 <a href="tel:+79991234567">+7 (999) 123-45-67</a></p>
+                        <p>📧 <a href="mailto:info@beanscene.ru">info@beanscene.ru</a></p>
+                        <p>📍 г. Москва, ул. Тверская, 15</p>
+                    </div>
+                </div>
+                <form class="booking-form" id="booking-form">
+                    <div class="form-row">
+                        <input type="text" placeholder="Ваше имя" required>
+                        <input type="tel" placeholder="Телефон" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="email" placeholder="Email">
+                        <input type="number" placeholder="Количество гостей" min="1" max="20" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="date" required>
+                        <input type="time" required>
+                    </div>
+                    <textarea placeholder="Особые пожелания (необязательно)"></textarea>
+                    <button type="submit" class="btn" style="width: 100%;">Забронировать</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
     <!-- ========== REVIEWS ========== -->
     <section class="reviews" id="reviews">
         <div class="container">
             <h2 class="section-title fade-in">Отзывы <span style="color: var(--color-primary);">гостей</span></h2>
             <p class="section-subtitle fade-in">Что говорят о нас наши посетители</p>
             <div class="reviews-grid" id="reviews-grid">
+                <!-- Загружается через JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== GALLERY ========== -->
+    <section class="gallery-section" id="gallery">
+        <div class="container">
+            <h2 class="section-title fade-in">Наша <span style="color: var(--color-primary);">галерея</span></h2>
+            <p class="section-subtitle fade-in">Атмосфера нашего ресторана в фотографиях</p>
+            <div class="gallery-grid" id="gallery-grid">
                 <!-- Загружается через JS -->
             </div>
         </div>
@@ -120,13 +200,16 @@
         </div>
     </section>
 
-    <!-- ========== CONTACT CTA ========== -->
-    <section class="about" style="background: var(--color-bg-dark); color: var(--color-text-white);">
-        <div class="container" style="text-align: center;">
-            <h2 class="section-title" style="color: var(--color-text-white);">Забронируйте <span style="color: var(--color-primary);">столик</span></h2>
-            <p class="section-subtitle" style="color: rgba(255,255,255,0.7);">Позвоните нам или оставьте заявку на сайте</p>
-            <div style="margin-top: 30px;">
-                <a href="tel:+79991234567" class="btn" style="font-size: 20px; padding: 16px 50px;">+7 (999) 123-45-67</a>
+    <!-- ========== NEWSLETTER ========== -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="newsletter-wrapper fade-in">
+                <h2>Подпишитесь на <span>новости</span></h2>
+                <p>Получайте информацию о новых блюдах, акциях и мастер-классах первыми</p>
+                <form class="newsletter-form" id="newsletter-form">
+                    <input type="email" placeholder="Ваш email" required>
+                    <button type="submit" class="btn">Подписаться</button>
+                </form>
             </div>
         </div>
     </section>
@@ -138,6 +221,12 @@
                 <div class="footer-col">
                     <h4>Bean Scene</h4>
                     <p>Ресторан премиум-кухни. Мы создаём незабываемые гастрономические впечатления для наших гостей. Свежие продукты, авторские рецепты, уютная атмосфера.</p>
+                    <div class="social-links">
+                        <a href="#" title="Instagram">📷</a>
+                        <a href="#" title="VK">💬</a>
+                        <a href="#" title="Telegram">✈️</a>
+                        <a href="#" title="YouTube">▶️</a>
+                    </div>
                 </div>
                 <div class="footer-col">
                     <h4>Навигация</h4>
