@@ -181,20 +181,25 @@ $page = $_GET['page'] ?? 'dashboard';
                                 <tr>
                                     <td>#<?= $order['id'] ?></td>
                                     <td><?= htmlspecialchars($order['phone']) ?></td>
-                                    <td><?= number_format($order['total_price'], 0, '', ' ') ?> ₽</td>
+                                    <td><?= number_format($order['total'], 0, '', ' ') ?> ₽</td>
                                     <td>
                                         <?php
                                         $badgeClass = match($order['status']) {
-                                            'new' => 'badge-info',
+                                            'pending' => 'badge-warning',
                                             'confirmed' => 'badge-success',
+                                            'preparing' => 'badge-info',
+                                            'ready' => 'badge-info',
+                                            'completed' => 'badge-success',
                                             'cancelled' => 'badge-danger',
                                             default => 'badge-warning'
                                         };
                                         $statusLabels = [
-                                            'new' => 'Новый',
-                                            'confirmed' => 'Подтверждён',
-                                            'cancelled' => 'Отменён',
-                                            'completed' => 'Выполнен'
+                                            'pending' => '🕐 Ожидает',
+                                            'confirmed' => '✅ Подтверждён',
+                                            'preparing' => '👨‍🍳 Готовится',
+                                            'ready' => '🍽️ Готов',
+                                            'completed' => '✔️ Выполнен',
+                                            'cancelled' => '❌ Отменён'
                                         ];
                                         ?>
                                         <span class="badge <?= $badgeClass ?>">
@@ -389,13 +394,15 @@ $page = $_GET['page'] ?? 'dashboard';
                                 <tr>
                                     <td>#<?= $order['id'] ?></td>
                                     <td><?= htmlspecialchars($order['phone']) ?></td>
-                                    <td><strong><?= number_format($order['total_price'], 0, '', ' ') ?> ₽</strong></td>
+                                    <td><strong><?= number_format($order['total'], 0, '', ' ') ?> ₽</strong></td>
                                     <td>
                                         <span class="badge <?= match($order['status']) {
-                                            'new' => 'badge-info',
+                                            'pending' => 'badge-warning',
                                             'confirmed' => 'badge-success',
-                                            'cancelled' => 'badge-danger',
+                                            'preparing' => 'badge-info',
+                                            'ready' => 'badge-info',
                                             'completed' => 'badge-success',
+                                            'cancelled' => 'badge-danger',
                                             default => 'badge-warning'
                                         } ?>">
                                             <?= $statusLabels[$order['status']] ?? $order['status'] ?>
@@ -403,8 +410,18 @@ $page = $_GET['page'] ?? 'dashboard';
                                     </td>
                                     <td><?= date('d.m.Y H:i', strtotime($order['created_at'])) ?></td>
                                     <td>
-                                        <a href="../updateOrderStatus.php?id=<?= $order['id'] ?>&status=confirmed" class="btn btn-sm">✅</a>
-                                        <a href="../updateOrderStatus.php?id=<?= $order['id'] ?>&status=cancelled" class="btn btn-sm btn-danger">❌</a>
+                                        <form method="POST" action="orders.php" style="display:inline">
+                                            <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
+                                            <select name="status" style="padding:4px 8px;border:1px solid var(--color-border);border-radius:4px;font-size:0.8rem;">
+                                                <option value="pending" <?= $order['status']==='pending'?'selected':'' ?>>🕐 Ожидает</option>
+                                                <option value="confirmed" <?= $order['status']==='confirmed'?'selected':'' ?>>✅ Подтверждён</option>
+                                                <option value="preparing" <?= $order['status']==='preparing'?'selected':'' ?>>👨‍🍳 Готовится</option>
+                                                <option value="ready" <?= $order['status']==='ready'?'selected':'' ?>>🍽️ Готов</option>
+                                                <option value="completed" <?= $order['status']==='completed'?'selected':'' ?>>✔️ Выполнен</option>
+                                                <option value="cancelled" <?= $order['status']==='cancelled'?'selected':'' ?>>❌ Отменён</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-sm">💾</button>
+                                        </form>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>

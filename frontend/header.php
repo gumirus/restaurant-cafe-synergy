@@ -36,6 +36,7 @@ $current_page = basename($_SERVER['SCRIPT_NAME']);
             </nav>
             <div class="header-actions">
                 <?php if (isLoggedIn()): ?>
+                    <a href="profile.php" title="Личный кабинет">👤</a>
                     <a href="cart.php" class="cart-btn" title="Корзина">
                         🛒 <span id="cart-count" class="cart-count">0</span>
                     </a>
