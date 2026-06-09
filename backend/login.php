@@ -31,7 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_phone'] = $user['phone'];
             $_SESSION['access_rights'] = $user['access_rights'];
 
-            redirect('../frontend/index.html');
+            // Админа — в админ-панель, пользователя — на главную
+            if ($user['access_rights'] === 'ADMIN') {
+                redirect('admin/index.php');
+            } else {
+                redirect('../frontend/index.html');
+            }
         } else {
             $errors[] = 'Неверный номер телефона или пароль';
         }
