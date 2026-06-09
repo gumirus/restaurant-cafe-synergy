@@ -73,17 +73,19 @@ img {
 }
 
 .logo {
-    font-family: var(--font-heading);
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--color-primary);
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    display: flex;
+    align-items: center;
 }
 
-.logo span {
-    color: var(--color-text-white);
-    font-weight: 400;
+.logo img {
+    height: 45px;
+    width: auto;
+    display: block;
+    transition: opacity 0.3s;
+}
+
+.logo:hover img {
+    opacity: 0.9;
 }
 
 .nav ul {
