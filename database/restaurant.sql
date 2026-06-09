@@ -153,3 +153,36 @@ INSERT INTO reviews (name, text, rating) VALUES
     ('Анна', 'Очень вкусно! Обязательно вернусь ещё!', 5),
     ('Иван', 'Отличное место для ужина с семьёй.', 4),
     ('Мария', 'Лучший ресторан в городе!', 5);
+
+-- ========== 12. БРОНИРОВАНИЯ ==========
+CREATE TABLE bookings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    email VARCHAR(255) DEFAULT NULL,
+    guests INT NOT NULL DEFAULT 1,
+    booking_date DATE NOT NULL,
+    booking_time TIME NOT NULL,
+    comment TEXT DEFAULT NULL,
+    status ENUM('pending', 'confirmed', 'cancelled') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+INSERT INTO bookings (name, phone, guests, booking_date, booking_time, status) VALUES
+    ('Анна Петрова', '+79991234567', 2, CURDATE() + INTERVAL 1 DAY, '19:00', 'confirmed'),
+    ('Иван Сидоров', '+79997654321', 4, CURDATE() + INTERVAL 2 DAY, '20:00', 'pending');
+
+-- ========== 13. АКЦИИ ==========
+CREATE TABLE promotions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    start_date DATE DEFAULT NULL,
+    end_date DATE DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+INSERT INTO promotions (title, description, start_date, end_date) VALUES
+    ('Скидка 20% на первый заказ', 'Для новых клиентов скидка на первый заказ через сайт', CURDATE(), CURDATE() + INTERVAL 30 DAY),
+    ('Бизнес-ланч за 350 ₽', 'С 12:00 до 15:00 в будние дни — комплексный обед', CURDATE(), NULL),
+    ('Десерт в подарок', 'Фирменный десерт в подарок в день рождения', CURDATE(), NULL);
