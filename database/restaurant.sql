@@ -186,3 +186,15 @@ INSERT INTO promotions (title, description, start_date, end_date) VALUES
     ('Скидка 20% на первый заказ', 'Для новых клиентов скидка на первый заказ через сайт', CURDATE(), CURDATE() + INTERVAL 30 DAY),
     ('Бизнес-ланч за 350 ₽', 'С 12:00 до 15:00 в будние дни — комплексный обед', CURDATE(), NULL),
     ('Десерт в подарок', 'Фирменный десерт в подарок в день рождения', CURDATE(), NULL);
+
+-- ========== ТЕСТОВЫЙ АДМИН ==========
+-- Логин: +79990000001
+-- Пароль: admin123
+INSERT INTO users (phone, password, access_rights_id) VALUES
+    ('+79990000001', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1);
+
+-- ========== ТЕСТОВЫЙ ПОЛЬЗОВАТЕЛЬ ==========
+-- Логин: +79990000002
+-- Пароль: user123
+INSERT INTO users (phone, password, access_rights_id) VALUES
+    ('+79990000002', '$2y$10$D9GXqB4s5m6n7o8p9q0r1s2t3u4v5w6x7y8z9a0b1c2d3e4f5g6h7i8j9k', 2);
