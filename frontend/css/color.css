@@ -1,25 +1,25 @@
 :root {
-    /* === Цветовая палитра (Bean Scene Style) === */
-    --color-primary: #B88E2F;        /* Золотистый/горчичный — акценты */
-    --color-primary-hover: #9e7528;  /* При наведении */
+    /* === Цветовая палитра (65+ Restaurant Templates Style) === */
+    --color-primary: #D4A853;        /* Золотистый — акценты */
+    --color-primary-hover: #c49a3f;  /* При наведении */
     --color-bg: #FFF;                /* Фоновый */
-    --color-bg-dark: #1A1A1A;        /* Тёмный фон (hero, footer) */
-    --color-bg-section: #F9F1E7;     /* Светлый бежевый для секций */
-    --color-text: #333;              /* Основной текст */
-    --color-text-light: #9099A0;     /* Дополнительный текст */
+    --color-bg-dark: #1E1E1E;        /* Тёмный фон */
+    --color-bg-section: #F8F5F0;     /* Светлый кремовый для секций */
+    --color-bg-card: #FFF;           /* Фон карточек */
+    --color-text: #2D2D2D;           /* Основной текст */
+    --color-text-light: #7A7A7A;     /* Дополнительный текст */
     --color-text-white: #FFF;        /* Белый текст */
-    --color-border: #E5E8EB;         /* Границы */
-    --color-card-bg: #FFF;           /* Фон карточек */
-    --color-overlay: rgba(0,0,0,0.65); /* Оверлей на hero */
+    --color-border: #E8E0D6;         /* Границы */
+    --color-overlay: rgba(0,0,0,0.6); /* Оверлей на hero */
 
     /* === Шрифты === */
-    --font-main: 'Inter', 'Open Sans', Arial, sans-serif;
-    --font-heading: 'Playfair Display', 'Montserrat', Georgia, serif;
+    --font-main: 'Montserrat', 'Inter', Arial, sans-serif;
+    --font-heading: 'Playfair Display', 'Georgia', serif;
 
     /* === Размеры === */
     --container-width: 1200px;
-    --header-height: 90px;
-    --border-radius: 12px;
-    --shadow-card: 0 4px 20px rgba(0,0,0,0.08);
-    --shadow-hover: 0 8px 30px rgba(0,0,0,0.15);
+    --header-height: 80px;
+    --border-radius: 8px;
+    --shadow-card: 0 2px 15px rgba(0,0,0,0.06);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
 }
