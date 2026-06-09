@@ -197,4 +197,4 @@ INSERT INTO users (phone, password, access_rights_id) VALUES
 -- Логин: +79990000002
 -- Пароль: user123
 INSERT INTO users (phone, password, access_rights_id) VALUES
-    ('+79990000002', '$2y$10$D9GXqB4s5m6n7o8p9q0r1s2t3u4v5w6x7y8z9a0b1c2d3e4f5g6h7i8j9k', 2);
+    ('+79990000002', '$2y$12$H7pouL8eE8egGw4xB9hluuH2OPYeOf8/VMBpMJAHWHdvZcCpAUqSu', 2);
