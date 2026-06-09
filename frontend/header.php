@@ -19,7 +19,7 @@ $current_page = basename($_SERVER['SCRIPT_NAME']);
 <body>
 
     <!-- ========== HEADER ========== -->
-    <header class="header" id="header">
+    <header class="header scrolled" id="header">
         <div class="container">
             <a href="index.php" class="logo">
                 <img src="images/logo.svg" alt="Bean Scene" height="50">

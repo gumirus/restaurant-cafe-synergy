@@ -52,17 +52,18 @@ img {
     left: 0;
     width: 100%;
     height: var(--header-height);
-    background: transparent;
+    background: var(--color-bg-dark);
     color: var(--color-text-white);
     z-index: 1000;
     display: flex;
     align-items: center;
     transition: all 0.4s;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
 }
 
 .header.scrolled {
     background: var(--color-bg-dark);
-    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.4);
 }
 
 .header .container {
