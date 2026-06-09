@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($user['access_rights'] === 'ADMIN') {
                 redirect('admin/index.php');
             } else {
-                redirect('../frontend/index.html');
+                redirect('../frontend/index.php');
             }
         } else {
             $errors[] = 'Неверный номер телефона или пароль';

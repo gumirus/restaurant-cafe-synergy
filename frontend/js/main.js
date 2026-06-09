@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
     loadNews();
     initBookingForm();
     initNewsletterForm();
+    initCart();
+    updateCartCount();
 });
 
 // ========== HEADER SCROLL ==========
@@ -248,6 +250,58 @@ function initBookingForm() {
         alert('✅ Спасибо! Мы свяжемся с вами для подтверждения бронирования.');
         form.reset();
     });
+}
+
+// ========== CART ==========
+function initCart() {
+    document.addEventListener('click', async function(e) {
+        const btn = e.target.closest('.add-to-cart');
+        if (!btn) return;
+
+        const dishId = btn.dataset.id;
+        if (!dishId) return;
+
+        btn.textContent = '...';
+        btn.disabled = true;
+
+        try {
+            const resp = await fetch('../backend/cart_add.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'dish_id=' + dishId
+            });
+            const result = await resp.json();
+            if (result.success) {
+                btn.textContent = '✅ В корзине';
+                updateCartCount();
+            } else {
+                btn.textContent = '❌ Ошибка';
+                if (result.error === 'Необходимо авторизоваться') {
+                    setTimeout(() => { window.location.href = 'login.php'; }, 1000);
+                }
+            }
+        } catch (err) {
+            btn.textContent = '❌ Ошибка';
+        }
+
+        setTimeout(() => {
+            btn.textContent = 'В корзину';
+            btn.disabled = false;
+        }, 2000);
+    });
+}
+
+function updateCartCount() {
+    const badge = document.getElementById('cart-count');
+    if (!badge) return;
+
+    // Получаем количество из куки или через fetch
+    fetch('../backend/cart_count.php')
+        .then(r => r.json())
+        .then(data => {
+            badge.textContent = data.count;
+        })
+        .catch(() => {});
 }
 
 // ========== NEWSLETTER FORM ==========

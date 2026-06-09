@@ -6,4 +6,4 @@
 require_once __DIR__ . '/config/session.php';
 
 session_destroy();
-redirect('../frontend/index.html');
+redirect('../frontend/index.php');
