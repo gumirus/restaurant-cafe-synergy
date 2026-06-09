@@ -200,7 +200,7 @@ img {
     justify-content: center;
     text-align: center;
     background: linear-gradient(var(--color-overlay), var(--color-overlay)), 
-                url('../images/hero-bg.svg');
+                url('../images/hero-bg.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;

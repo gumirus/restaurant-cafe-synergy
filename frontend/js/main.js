@@ -98,7 +98,7 @@ function loadSpecials() {
 
     container.innerHTML = specials.map(s => `
         <div class="special-card fade-in">
-            <img class="special-card-image" src="images/placeholder.svg" alt="${s.name}">
+            <img class="special-card-image" src="images/placeholder.jpg" alt="${s.name}">
             <div class="special-card-body">
                 <span class="special-badge">${s.badge}</span>
                 <h3>${s.name}</h3>
@@ -125,7 +125,7 @@ function loadPopularDishes() {
 
     container.innerHTML = dishes.map(dish => `
         <div class="dish-card fade-in">
-            <img class="dish-card-image" src="images/placeholder.svg" alt="${dish.name}">
+            <img class="dish-card-image" src="images/placeholder.jpg" alt="${dish.name}">
             <div class="dish-card-body">
                 <h3>${dish.name}</h3>
                 <p>${dish.desc}</p>
@@ -154,7 +154,7 @@ function loadTeam() {
 
     container.innerHTML = team.map(m => `
         <div class="team-card fade-in">
-            <img class="team-card-image" src="images/placeholder.svg" alt="${m.name}">
+            <img class="team-card-image" src="images/placeholder.jpg" alt="${m.name}">
             <div class="team-card-body">
                 <h3>${m.name}</h3>
                 <div class="team-role">${m.role}</div>
@@ -205,7 +205,7 @@ function loadGallery() {
 
     container.innerHTML = gallery.map(g => `
         <div class="gallery-item fade-in">
-            <img src="images/placeholder.svg" alt="${g.label}">
+            <img src="images/placeholder.jpg" alt="${g.label}">
             <div class="gallery-overlay">🔍</div>
         </div>
     `).join('');
@@ -226,7 +226,7 @@ function loadNews() {
 
     container.innerHTML = news.map(n => `
         <div class="news-card fade-in">
-            <img class="news-card-image" src="images/placeholder.svg" alt="${n.title}">
+            <img class="news-card-image" src="images/placeholder.jpg" alt="${n.title}">
             <div class="news-card-body">
                 <span class="news-date">${n.date}</span>
                 <h3>${n.title}</h3>

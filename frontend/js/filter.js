@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         dishesGrid.innerHTML = filtered.map(item => `
             <div class="dish-card">
-                <img src="images/placeholder.svg" alt="${item.name}">
+                <img src="images/placeholder.jpg" alt="${item.name}">
                 <div class="dish-card-body">
                     <h3>${item.name}</h3>
                     <p>${item.desc}</p>
