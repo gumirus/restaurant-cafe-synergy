@@ -338,18 +338,16 @@ function initImageModal() {
     const img = document.getElementById('img-modal-img');
     const close = modal.querySelector('.img-modal-close');
 
-    // Открытие/закрытие по клику на .clickable-img
+    // Открытие по клику на .clickable-img
     document.addEventListener('click', function(e) {
         const target = e.target.closest('.clickable-img');
         if (!target) return;
-        // Игнорируем клики по картинке внутри модалки
-        if (target.closest('.img-modal-overlay')) return;
-        e.preventDefault();
-        // Если модалка уже открыта — закрываем
-        if (modal.classList.contains('active')) {
+        // Если клик по картинке внутри модалки — закрываем
+        if (target.closest('.img-modal-overlay')) {
             closeModal();
             return;
         }
+        e.preventDefault();
         img.src = target.src;
         img.alt = target.alt;
         modal.classList.add('active');
@@ -363,7 +361,7 @@ function initImageModal() {
 
     close.addEventListener('click', closeModal);
     modal.addEventListener('click', function(e) {
-        if (e.target === this) closeModal();
+        if (e.target === this || e.target === img) closeModal();
     });
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') closeModal();
