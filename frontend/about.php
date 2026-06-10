@@ -42,7 +42,7 @@
             <p class="section-subtitle fade-in">Профессионалы, которые создают для вас кулинарные шедевры</p>
             <div class="team-grid">
                 <div class="team-card fade-in">
-                    <img class="team-card-image" src="images/placeholder.jpg" alt="Антонио Бьянки">
+                    <img class="team-card-image clickable-img" src="uploads/team/1-chef.jpg" alt="Антонио Бьянки">
                     <div class="team-card-body">
                         <h3>Антонио Бьянки</h3>
                         <div class="team-role">Шеф-повар</div>
@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <div class="team-card fade-in">
-                    <img class="team-card-image" src="images/placeholder.jpg" alt="Мария Соколова">
+                    <img class="team-card-image clickable-img" src="uploads/team/2-sous-chef.jpg" alt="Мария Соколова">
                     <div class="team-card-body">
                         <h3>Мария Соколова</h3>
                         <div class="team-role">Су-шеф</div>
@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 <div class="team-card fade-in">
-                    <img class="team-card-image" src="images/placeholder.jpg" alt="Дмитрий Волков">
+                    <img class="team-card-image clickable-img" src="uploads/team/3-pastry.jpg" alt="Дмитрий Волков">
                     <div class="team-card-body">
                         <h3>Дмитрий Волков</h3>
                         <div class="team-role">Кондитер</div>
@@ -66,7 +66,7 @@
                     </div>
                 </div>
                 <div class="team-card fade-in">
-                    <img class="team-card-image" src="images/placeholder.jpg" alt="Елена Преображенская">
+                    <img class="team-card-image clickable-img" src="uploads/team/4-sommelier.jpg" alt="Елена Преображенская">
                     <div class="team-card-body">
                         <h3>Елена Преображенская</h3>
                         <div class="team-role">Сомелье</div>
