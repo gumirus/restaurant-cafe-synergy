@@ -127,9 +127,9 @@
     .team-card:hover { transform: translateY(-5px); }
     .team-card-image { width: 100%; height: 250px; object-fit: cover; }
     .team-card-body { padding: 20px; }
-    .team-card-body h3 { color: var(--color-text-white); margin-bottom: 5px; }
+    .team-card-body h3 { color: #444; margin-bottom: 5px; }
     .team-role { color: var(--color-primary); font-weight: 600; margin-bottom: 10px; }
-    .team-card-body p { color: var(--color-text-light); font-size: 0.9rem; }
+    .team-card-body p { color: #666; font-size: 0.9rem; }
     .reviews { padding: 80px 0; }
     .faq-list { max-width: 700px; margin: 40px auto 0; }
     .faq-item { border: 1px solid var(--color-border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
