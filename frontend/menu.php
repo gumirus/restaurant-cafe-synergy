@@ -153,7 +153,7 @@
 
             dishesGrid.innerHTML = filtered.map(item => `
                 <div class="dish-card">
-                    <img src="${item.img}" alt="${item.name}">
+                    <img class="clickable-img" src="${item.img}" alt="${item.name}">
                     <div class="dish-card-body">
                         <h3>${item.name}</h3>
                         <p>${item.desc}</p>
