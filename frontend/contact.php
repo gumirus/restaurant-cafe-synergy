@@ -84,7 +84,7 @@
         <div class="container">
             <h2 class="section-title">Как нас <span>найти</span></h2>
             <div class="map-container">
-                <iframe src="https://yandex.ru/map-widget/v1/?ll=37.615560%2C55.752220&z=16&pt=37.615560%2C55.752220%2Cpm2rdl&l=map&mode=search&text=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D1%83%D0%BB.%20%D0%A2%D0%B2%D0%B5%D1%80%D1%81%D0%BA%D0%B0%D1%8F%2C%2015" width="100%" height="450" style="border:0; border-radius: 16px;" allowfullscreen="" loading="lazy"></iframe>
+                <iframe src="https://yandex.ru/map-widget/v1/?ll=37.610000%2C55.740000&z=16&pt=37.610000%2C55.740000%2Cpm2rdl&l=map&text=Bean%20Scene%20%D1%80%D0%B5%D1%81%D1%82%D0%BE%D1%80%D0%B0%D0%BD" width="100%" height="450" style="border:0; border-radius: 16px;" allowfullscreen="" loading="lazy"></iframe>
             </div>
         </div>
     </section>
