@@ -83,12 +83,8 @@
     <section class="map-section">
         <div class="container">
             <h2 class="section-title">Как нас <span>найти</span></h2>
-            <div class="map-placeholder">
-                <div class="map-content">
-                    <span class="map-icon">📍</span>
-                    <p>г. Москва, ул. Тверская, 15</p>
-                    <p class="map-hint">Схема проезда будет добавлена</p>
-                </div>
+            <div class="map-container">
+                <iframe src="https://yandex.ru/map-widget/v1/?ll=37.615560%2C55.752220&z=16&pt=37.615560%2C55.752220%2Cpm2rdl&l=map&mode=search&text=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D1%83%D0%BB.%20%D0%A2%D0%B2%D0%B5%D1%80%D1%81%D0%BA%D0%B0%D1%8F%2C%2015" width="100%" height="450" style="border:0; border-radius: 16px;" allowfullscreen="" loading="lazy"></iframe>
             </div>
         </div>
     </section>
@@ -121,10 +117,8 @@
     .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--color-primary); }
     .form-group textarea { min-height: 80px; resize: vertical; }
     .map-section { padding: 80px 0; }
-    .map-placeholder { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 16px; padding: 80px; text-align: center; margin-top: 40px; }
-    .map-icon { font-size: 3rem; }
-    .map-content p { color: var(--color-text); font-size: 1.1rem; margin-top: 10px; }
-    .map-hint { color: var(--color-text-light); font-size: 0.9rem !important; }
+    .map-container { margin-top: 40px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .map-container iframe { display: block; }
     @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } }
     </style>
 
