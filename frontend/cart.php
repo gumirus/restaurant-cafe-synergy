@@ -10,20 +10,29 @@ if (!isLoggedIn()) {
 
 $user_id = $_SESSION['user_id'];
 
-// Получаем корзину пользователя
-$stmt = $pdo->prepare("
-    SELECT c.id, c.count as quantity, d.id as dish_id, d.name, d.price, d.image
-    FROM shopping_cart c
-    JOIN dishes d ON c.dish_id = d.id
-    WHERE c.user_id = ?
-    ORDER BY c.id DESC
-");
+// Ищем активный заказ (корзину)
+$stmt = $pdo->prepare("SELECT id FROM orders WHERE user_id = ? AND status = 'cart' LIMIT 1");
 $stmt->execute([$user_id]);
-$cart_items = $stmt->fetchAll();
+$order = $stmt->fetch();
 
+$cart_items = [];
 $total = 0;
-foreach ($cart_items as $item) {
-    $total += $item['price'] * $item['quantity'];
+
+if ($order) {
+    // Получаем товары из активного заказа
+    $stmt = $pdo->prepare("
+        SELECT oi.id, oi.count as quantity, d.id as dish_id, d.name, d.price, d.image
+        FROM order_items oi
+        JOIN dishes d ON oi.dish_id = d.id
+        WHERE oi.order_id = ?
+        ORDER BY oi.id DESC
+    ");
+    $stmt->execute([$order['id']]);
+    $cart_items = $stmt->fetchAll();
+
+    foreach ($cart_items as $item) {
+        $total += $item['price'] * $item['quantity'];
+    }
 }
 ?>
 
@@ -624,7 +633,7 @@ foreach ($cart_items as $item) {
     // Обновление количества
     document.querySelectorAll('.qty-plus, .qty-minus').forEach(btn => {
         btn.addEventListener('click', async function() {
-            const cartId = this.dataset.cartId;
+            const itemId = this.dataset.cartId;
             const delta = this.classList.contains('qty-plus') ? 1 : -1;
             const row = this.closest('.cart-row');
             const qtySpan = row.querySelector('.qty-value');
@@ -634,7 +643,7 @@ foreach ($cart_items as $item) {
             const resp = await fetch('../backend/cart_update.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `cart_id=${cartId}&quantity=${newQty}`
+                body: `item_id=${itemId}&quantity=${newQty}`
             });
             const result = await resp.json();
             if (result.success) {
@@ -649,11 +658,11 @@ foreach ($cart_items as $item) {
     // Удаление из корзины
     document.querySelectorAll('.cart-remove').forEach(btn => {
         btn.addEventListener('click', async function() {
-            const cartId = this.dataset.cartId;
+            const itemId = this.dataset.cartId;
             const resp = await fetch('../backend/cart_remove.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `cart_id=${cartId}`
+                body: `item_id=${itemId}`
             });
             const result = await resp.json();
             if (result.success) {

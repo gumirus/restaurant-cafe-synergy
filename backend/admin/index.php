@@ -28,8 +28,8 @@ $stats['users'] = $stmt->fetch()['count'];
 $stmt = $pdo->query("SELECT COUNT(*) as count FROM dishes");
 $stats['dishes'] = $stmt->fetch()['count'];
 
-// Количество заказов
-$stmt = $pdo->query("SELECT COUNT(*) as count FROM orders");
+// Количество заказов (исключая корзины)
+$stmt = $pdo->query("SELECT COUNT(*) as count FROM orders WHERE status != 'cart'");
 $stats['orders'] = $stmt->fetch()['count'];
 
 // Количество бронирований
@@ -46,6 +46,7 @@ $stmt = $pdo->query("
     LEFT JOIN order_items oi ON oi.order_id = o.id
     LEFT JOIN dishes d ON oi.dish_id = d.id
     LEFT JOIN order_feedback ofb ON ofb.order_id = o.id
+    WHERE o.status != 'cart'
     GROUP BY o.id
     ORDER BY o.created_at DESC
     LIMIT 15
@@ -713,6 +714,7 @@ $page = $_GET['page'] ?? 'dashboard';
                                 FROM orders o
                                 JOIN users u ON o.user_id = u.id
                                 LEFT JOIN order_feedback ofb ON ofb.order_id = o.id
+                                WHERE o.status != 'cart'
                                 ORDER BY o.created_at DESC
                             ");
                             while ($order = $stmt->fetch()):

@@ -40,6 +40,9 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar VARCHAR(255) DEFAULT NULL AFTE
 ALTER TABLE users ADD COLUMN IF NOT EXISTS position VARCHAR(100) DEFAULT NULL AFTER avatar;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER created_at;
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER created_at;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS type VARCHAR(20) DEFAULT 'delivery' AFTER status;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment_status VARCHAR(20) DEFAULT 'unpaid' AFTER type;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS booking_id INT DEFAULT NULL AFTER payment_status;
 INSERT IGNORE INTO access_rights (name) VALUES ('EMPLOYEE');
 
 -- ========== 3. КАТЕГОРИИ БЛЮД ==========
@@ -127,7 +130,7 @@ CREATE TABLE orders (
     user_id INT NOT NULL,
     personal_id INT DEFAULT NULL,
     address VARCHAR(255) NOT NULL,
-    status ENUM('pending', 'confirmed', 'preparing', 'ready', 'completed', 'cancelled') DEFAULT 'pending',
+    status ENUM('cart', 'pending', 'confirmed', 'preparing', 'ready', 'completed', 'cancelled') DEFAULT 'cart',
     total_price DECIMAL(10, 2) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

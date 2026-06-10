@@ -17,7 +17,7 @@ $status = $_POST['status'] ?? $_GET['status'] ?? '';
 $allowedStatuses = ['pending', 'confirmed', 'preparing', 'ready', 'completed', 'cancelled'];
 
 if ($id && in_array($status, $allowedStatuses)) {
-    $stmt = $pdo->prepare("UPDATE orders SET status = ? WHERE id = ?");
+    $stmt = $pdo->prepare("UPDATE orders SET status = ?, updated_at = NOW() WHERE id = ?");
     $stmt->execute([$status, $id]);
     $success = true;
 }

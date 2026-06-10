@@ -1,6 +1,7 @@
 <?php
 // =============================================
 // ОФОРМЛЕНИЕ ЗАКАЗА (с выбором типа и оплатой)
+// Меняет статус активного заказа с 'cart' на 'pending'
 // =============================================
 require_once __DIR__ . '/config/db.php';
 require_once __DIR__ . '/config/session.php';
@@ -25,24 +26,27 @@ $booking_time = $_POST['booking_time'] ?? '';
 $guests = (int)($_POST['guests'] ?? 1);
 $comment = trim($_POST['comment'] ?? '');
 
-// Получаем товары из корзины
-$stmt = $pdo->prepare("
-    SELECT sc.dish_id, sc.count, d.name, d.price
-    FROM shopping_cart sc
-    JOIN dishes d ON sc.dish_id = d.id
-    WHERE sc.user_id = ?
-");
+// Ищем активный заказ (status='cart')
+$stmt = $pdo->prepare("SELECT id, total_price FROM orders WHERE user_id = ? AND status = 'cart' LIMIT 1");
 $stmt->execute([$user_id]);
-$items = $stmt->fetchAll();
+$order = $stmt->fetch();
 
-if (empty($items)) {
+if (!$order) {
     echo json_encode(['success' => false, 'error' => 'Корзина пуста']);
     exit;
 }
 
-$total = 0;
-foreach ($items as $item) {
-    $total += $item['price'] * $item['count'];
+$order_id = $order['id'];
+$total = (float)$order['total_price'];
+
+// Проверяем, есть ли товары в заказе
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM order_items WHERE order_id = ?");
+$stmt->execute([$order_id]);
+$itemCount = (int)$stmt->fetchColumn();
+
+if ($itemCount === 0) {
+    echo json_encode(['success' => false, 'error' => 'Корзина пуста']);
+    exit;
 }
 
 try {
@@ -73,27 +77,14 @@ try {
         $booking_id = $pdo->lastInsertId();
     }
 
-    // Создаём заказ
-    $stmt = $pdo->prepare("
-        INSERT INTO orders (user_id, total_price, status, type, payment_status, booking_id, address)
-        VALUES (?, ?, 'pending', ?, 'unpaid', ?, ?)
-    ");
+    // Меняем статус заказа с 'cart' на 'pending'
     $orderAddress = ($type === 'delivery') ? $address : '';
-    $stmt->execute([$user_id, $total, $type, $booking_id, $orderAddress]);
-    $order_id = $pdo->lastInsertId();
-
-    // Добавляем позиции заказа
     $stmt = $pdo->prepare("
-        INSERT INTO order_items (order_id, dish_id, count, price)
-        VALUES (?, ?, ?, ?)
+        UPDATE orders 
+        SET status = 'pending', type = ?, payment_status = 'unpaid', booking_id = ?, address = ?
+        WHERE id = ?
     ");
-    foreach ($items as $item) {
-        $stmt->execute([$order_id, $item['dish_id'], $item['count'], $item['price']]);
-    }
-
-    // Очищаем корзину
-    $stmt = $pdo->prepare("DELETE FROM shopping_cart WHERE user_id = ?");
-    $stmt->execute([$user_id]);
+    $stmt->execute([$type, $booking_id, $orderAddress, $order_id]);
 
     $pdo->commit();
 

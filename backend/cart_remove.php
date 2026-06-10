@@ -1,6 +1,6 @@
 <?php
 // =============================================
-// УДАЛЕНИЕ ТОВАРА ИЗ КОРЗИНЫ
+// УДАЛЕНИЕ ТОВАРА ИЗ КОРЗИНЫ (из активного заказа)
 // =============================================
 require_once __DIR__ . '/config/db.php';
 require_once __DIR__ . '/config/session.php';
@@ -17,25 +17,34 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$cart_id = (int)($_POST['cart_id'] ?? 0);
+$item_id = (int)($_POST['item_id'] ?? 0);
 $user_id = $_SESSION['user_id'];
 
-$stmt = $pdo->prepare("DELETE FROM shopping_cart WHERE id = ? AND user_id = ?");
-$stmt->execute([$cart_id, $user_id]);
-
-// Считаем общую сумму корзины
-$stmt = $pdo->prepare("
-    SELECT SUM(d.price * sc.count) as total
-    FROM shopping_cart sc
-    JOIN dishes d ON sc.dish_id = d.id
-    WHERE sc.user_id = ?
-");
+// Ищем активный заказ
+$stmt = $pdo->prepare("SELECT id FROM orders WHERE user_id = ? AND status = 'cart' LIMIT 1");
 $stmt->execute([$user_id]);
+$order = $stmt->fetch();
+
+if (!$order) {
+    echo json_encode(['success' => false, 'error' => 'Корзина пуста']);
+    exit;
+}
+
+// Удаляем позицию из заказа
+$stmt = $pdo->prepare("DELETE FROM order_items WHERE id = ? AND order_id = ?");
+$stmt->execute([$item_id, $order['id']]);
+
+// Пересчитываем сумму заказа
+$stmt = $pdo->prepare("SELECT COALESCE(SUM(count * price), 0) FROM order_items WHERE order_id = ?");
+$stmt->execute([$order['id']]);
 $cart_total = (float)$stmt->fetchColumn();
 
+$stmt = $pdo->prepare("UPDATE orders SET total_price = ? WHERE id = ?");
+$stmt->execute([$cart_total, $order['id']]);
+
 // Считаем общее количество
-$stmt = $pdo->prepare("SELECT SUM(count) FROM shopping_cart WHERE user_id = ?");
-$stmt->execute([$user_id]);
+$stmt = $pdo->prepare("SELECT COALESCE(SUM(count), 0) FROM order_items WHERE order_id = ?");
+$stmt->execute([$order['id']]);
 $cart_count = (int)$stmt->fetchColumn();
 
 echo json_encode([

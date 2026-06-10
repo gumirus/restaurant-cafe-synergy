@@ -48,20 +48,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['repeat_order'])) {
     $stmt->execute([$order_id]);
     $items = $stmt->fetchAll();
 
+    // Ищем активный заказ (корзину) или создаём новый
+    $stmt = $pdo->prepare("SELECT id FROM orders WHERE user_id = ? AND status = 'cart' LIMIT 1");
+    $stmt->execute([$user_id]);
+    $cartOrder = $stmt->fetch();
+
+    if (!$cartOrder) {
+        $stmt = $pdo->prepare("INSERT INTO orders (user_id, status, total_price) VALUES (?, 'cart', 0)");
+        $stmt->execute([$user_id]);
+        $cartOrderId = $pdo->lastInsertId();
+    } else {
+        $cartOrderId = $cartOrder['id'];
+    }
+
     foreach ($items as $item) {
-        // Проверяем, есть ли уже в корзине
-        $stmt = $pdo->prepare("SELECT id, count FROM shopping_cart WHERE user_id = ? AND dish_id = ?");
-        $stmt->execute([$user_id, $item['dish_id']]);
+        // Проверяем, есть ли уже это блюдо в корзине
+        $stmt = $pdo->prepare("SELECT id, count FROM order_items WHERE order_id = ? AND dish_id = ?");
+        $stmt->execute([$cartOrderId, $item['dish_id']]);
         $existing = $stmt->fetch();
 
         if ($existing) {
-            $stmt = $pdo->prepare("UPDATE shopping_cart SET count = count + ? WHERE id = ?");
+            $stmt = $pdo->prepare("UPDATE order_items SET count = count + ? WHERE id = ?");
             $stmt->execute([$item['quantity'], $existing['id']]);
         } else {
-            $stmt = $pdo->prepare("INSERT INTO shopping_cart (user_id, dish_id, count) VALUES (?, ?, ?)");
-            $stmt->execute([$user_id, $item['dish_id'], $item['quantity']]);
+            $stmt = $pdo->prepare("INSERT INTO order_items (order_id, dish_id, count, price) VALUES (?, ?, ?, (SELECT price FROM dishes WHERE id = ?))");
+            $stmt->execute([$cartOrderId, $item['dish_id'], $item['quantity'], $item['dish_id']]);
         }
     }
+
+    // Пересчитываем сумму
+    $stmt = $pdo->prepare("SELECT COALESCE(SUM(count * price), 0) FROM order_items WHERE order_id = ?");
+    $stmt->execute([$cartOrderId]);
+    $totalPrice = (float)$stmt->fetchColumn();
+    $stmt = $pdo->prepare("UPDATE orders SET total_price = ? WHERE id = ?");
+    $stmt->execute([$totalPrice, $cartOrderId]);
+
     $success = '✅ Заказ #' . $order_id . ' добавлен в корзину!';
 }
 
@@ -72,11 +93,11 @@ $stmt = $pdo->prepare("SELECT phone, email, name, bio, avatar, created_at FROM u
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
 
-// История заказов
+// История заказов (исключая корзины)
 $stmt = $pdo->prepare("
     SELECT o.id, o.total_price AS total, o.status, o.created_at
     FROM orders o
-    WHERE o.user_id = ?
+    WHERE o.user_id = ? AND o.status != 'cart'
     ORDER BY o.created_at DESC
 ");
 $stmt->execute([$user_id]);
