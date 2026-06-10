@@ -125,7 +125,7 @@
     .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; margin-top: 50px; }
     .team-card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 16px; overflow: hidden; text-align: center; transition: transform 0.3s; }
     .team-card:hover { transform: translateY(-5px); }
-    .team-card-image { width: 100%; height: 250px; object-fit: cover; }
+    .team-card-image { width: 100%; height: 250px; object-fit: cover; object-position: top; }
     .team-card-body { padding: 20px; }
     .team-card-body h3 { color: #444; margin-bottom: 5px; }
     .team-role { color: var(--color-primary); font-weight: 600; margin-bottom: 10px; }
