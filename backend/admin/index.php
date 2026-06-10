@@ -508,7 +508,7 @@ $page = $_GET['page'] ?? 'dashboard';
                             ");
                             while ($userRow = $stmt->fetch()):
                             ?>
-                                <tr>
+                                <tr class="user-row" style="cursor:pointer;" onclick="openUserModal(<?= $userRow['id'] ?>, '<?= htmlspecialchars($userRow['name'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['phone'], ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['bio'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['avatar'] ?? '', ENT_QUOTES) ?>', '<?= $userRow['access_name'] ?>', '<?= date('d.m.Y H:i', strtotime($userRow['created_at'])) ?>')">
                                     <td><?= $userRow['id'] ?></td>
                                     <td><?= htmlspecialchars($userRow['name'] ?? '—') ?></td>
                                     <td><?= htmlspecialchars($userRow['phone']) ?></td>
@@ -524,6 +524,113 @@ $page = $_GET['page'] ?? 'dashboard';
                     </table>
                 </div>
             </div>
+
+            <!-- Модальное окно пользователя -->
+            <div id="user-modal" class="user-modal-overlay" onclick="if(event.target===this)closeUserModal()">
+                <div class="user-modal-content">
+                    <button class="user-modal-close" onclick="closeUserModal()">&times;</button>
+                    <div class="user-modal-body">
+                        <div class="user-modal-avatar" id="user-modal-avatar">
+                            <img src="" alt="Аватар" id="user-modal-img">
+                        </div>
+                        <h2 id="user-modal-name"></h2>
+                        <div class="user-modal-phone" id="user-modal-phone"></div>
+                        <div class="user-modal-role" id="user-modal-role"></div>
+                        <div class="user-modal-date" id="user-modal-date"></div>
+                        <div class="user-modal-bio" id="user-modal-bio"></div>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+            .user-modal-overlay {
+                position: fixed; inset: 0; z-index: 99999;
+                background: rgba(0,0,0,0.6);
+                display: flex; align-items: center; justify-content: center;
+                visibility: hidden; opacity: 0;
+                transition: all 0.3s;
+            }
+            .user-modal-overlay.active {
+                visibility: visible; opacity: 1;
+            }
+            .user-modal-content {
+                background: #fff; border-radius: 16px;
+                max-width: 420px; width: 90%; padding: 40px 30px;
+                position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                transform: scale(0.9); transition: transform 0.3s;
+            }
+            .user-modal-overlay.active .user-modal-content {
+                transform: scale(1);
+            }
+            .user-modal-close {
+                position: absolute; top: 12px; right: 18px;
+                background: none; border: none;
+                font-size: 2rem; cursor: pointer; color: #999;
+                line-height: 1;
+            }
+            .user-modal-close:hover { color: #333; }
+            .user-modal-body { text-align: center; }
+            .user-modal-avatar {
+                width: 100px; height: 100px; border-radius: 50%;
+                overflow: hidden; margin: 0 auto 15px;
+                background: #f0f0f0; display: flex;
+                align-items: center; justify-content: center;
+            }
+            .user-modal-avatar img {
+                width: 100%; height: 100%; object-fit: cover;
+            }
+            .user-modal-body h2 {
+                font-size: 1.4rem; margin-bottom: 5px; color: #1a1a2e;
+            }
+            .user-modal-phone {
+                font-size: 1rem; color: #d4a853; font-weight: 600; margin-bottom: 8px;
+            }
+            .user-modal-role {
+                display: inline-block;
+                background: #d4a853; color: #fff;
+                padding: 4px 14px; border-radius: 20px;
+                font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+                letter-spacing: 1px; margin-bottom: 10px;
+            }
+            .user-modal-date {
+                font-size: 0.8rem; color: #999; margin-bottom: 15px;
+            }
+            .user-modal-bio {
+                font-size: 0.9rem; color: #555; line-height: 1.6;
+                padding-top: 15px; border-top: 1px solid #eee;
+            }
+            .user-row:hover {
+                background: rgba(212, 168, 83, 0.08);
+            }
+            </style>
+
+            <script>
+            function openUserModal(id, name, phone, bio, avatar, role, date) {
+                document.getElementById('user-modal-name').textContent = name || 'Без имени';
+                document.getElementById('user-modal-phone').textContent = phone;
+                document.getElementById('user-modal-role').textContent = role;
+                document.getElementById('user-modal-date').textContent = 'Зарегистрирован: ' + date;
+                document.getElementById('user-modal-bio').textContent = bio || 'Пользователь не заполнил информацию о себе';
+
+                const img = document.getElementById('user-modal-img');
+                if (avatar) {
+                    img.src = '../../frontend/' + avatar;
+                    img.style.display = 'block';
+                } else {
+                    img.style.display = 'none';
+                }
+
+                document.getElementById('user-modal').classList.add('active');
+            }
+
+            function closeUserModal() {
+                document.getElementById('user-modal').classList.remove('active');
+            }
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeUserModal();
+            });
+            </script>
 
         <!-- ==================== PROMOTIONS ==================== -->
         <?php elseif ($page === 'promotions'): ?>
