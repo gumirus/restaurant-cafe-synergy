@@ -56,9 +56,11 @@ $recentOrders = $stmt->fetchAll();
 // Последние бронирования
 $stmt = $pdo->query("
     SELECT b.id, b.name, b.phone, b.email, b.guests, b.booking_date, b.booking_time, b.comment, b.status, b.created_at,
-           bf.rating as feedback_rating, bf.comment as feedback_comment
+           bf.rating as feedback_rating, bf.comment as feedback_comment,
+           u.phone as user_phone, u.name as user_name
     FROM bookings b
     LEFT JOIN booking_feedback bf ON bf.booking_id = b.id
+    LEFT JOIN users u ON b.user_id = u.id
     ORDER BY b.created_at DESC
     LIMIT 15
 ");
@@ -73,11 +75,12 @@ foreach ($recentOrders as $order) {
         $feedbackStr = ($order['feedback_rating'] === 'like' ? '👍' : '👎') . ($order['feedback_comment'] ? ' — ' . htmlspecialchars($order['feedback_comment']) : '');
     }
 
+    $clientName = $order['user_name'] ?: ($order['phone'] === $order['user_name'] ? $order['phone'] : $order['user_name']);
     $activityFeed[] = [
         'type' => 'order',
         'id' => $order['id'],
         'title' => '📦 Заказ #' . $order['id'],
-        'client' => $order['user_name'] ?: $order['phone'],
+        'client' => $clientName ?: $order['phone'],
         'phone' => $order['phone'],
         'details' => $order['items'] ?: '—',
         'amount' => $order['total_price'],
@@ -710,7 +713,7 @@ $page = $_GET['page'] ?? 'dashboard';
                         <tbody>
                             <?php
                             $stmt = $pdo->query("
-                                SELECT o.*, u.phone, ofb.rating as feedback_rating, ofb.comment as feedback_comment
+                                SELECT o.*, u.phone, u.name as user_name, ofb.rating as feedback_rating, ofb.comment as feedback_comment
                                 FROM orders o
                                 JOIN users u ON o.user_id = u.id
                                 LEFT JOIN order_feedback ofb ON ofb.order_id = o.id
@@ -718,10 +721,11 @@ $page = $_GET['page'] ?? 'dashboard';
                                 ORDER BY o.created_at DESC
                             ");
                             while ($order = $stmt->fetch()):
+                                $orderClient = $order['user_name'] ? $order['user_name'] . ' (' . $order['phone'] . ')' : $order['phone'];
                             ?>
                                 <tr>
                                     <td>#<?= $order['id'] ?></td>
-                                    <td><?= htmlspecialchars($order['phone']) ?></td>
+                                    <td><?= htmlspecialchars($orderClient) ?></td>
                                     <td>
                                         <?php
                                         $typeLabels = ['delivery' => '🏠 Доставка', 'pickup' => '🚶 Самовывоз', 'booking' => '🍽️ Бронь'];

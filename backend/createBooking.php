@@ -4,6 +4,7 @@
 // =============================================
 
 require_once __DIR__ . '/config/db.php';
+require_once __DIR__ . '/config/session.php';
 
 header('Content-Type: application/json');
 
@@ -19,6 +20,19 @@ $date = $_POST['date'] ?? '';
 $time = $_POST['time'] ?? '';
 $guests = (int)($_POST['guests'] ?? 1);
 $comment = trim($_POST['comment'] ?? '');
+
+// Если пользователь авторизован — берём данные из профиля
+$userId = null;
+if (isLoggedIn()) {
+    $userId = $_SESSION['user_id'];
+    $stmt = $pdo->prepare("SELECT name, phone FROM users WHERE id = ?");
+    $stmt->execute([$userId]);
+    $userData = $stmt->fetch();
+    if ($userData) {
+        if (empty($name)) $name = $userData['name'] ?: $name;
+        if (empty($phone)) $phone = $userData['phone'];
+    }
+}
 
 // Валидация
 $errors = [];
@@ -36,10 +50,10 @@ if (!empty($errors)) {
 
 try {
     $stmt = $pdo->prepare("
-        INSERT INTO bookings (name, phone, email, guests, booking_date, booking_time, comment, status, created_at)
-        VALUES (?, ?, '', ?, ?, ?, ?, 'pending', NOW())
+        INSERT INTO bookings (user_id, name, phone, email, guests, booking_date, booking_time, comment, status, created_at)
+        VALUES (?, ?, ?, '', ?, ?, ?, ?, 'pending', NOW())
     ");
-    $stmt->execute([$name, $phone, $guests, $date, $time, $comment]);
+    $stmt->execute([$userId, $name, $phone, $guests, $date, $time, $comment]);
 
     echo json_encode([
         'success' => true,

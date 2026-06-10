@@ -44,15 +44,37 @@
 
                 <div class="contact-form fade-in">
                     <h2>Забронировать <span>столик</span></h2>
+                    <?php
+                    // Если пользователь авторизован — подставляем данные из профиля
+                    $profileName = '';
+                    $profilePhone = '';
+                    if (isLoggedIn()) {
+                        $stmt = $pdo->prepare("SELECT name, phone FROM users WHERE id = ?");
+                        $stmt->execute([$_SESSION['user_id']]);
+                        $profile = $stmt->fetch();
+                        if ($profile) {
+                            $profileName = htmlspecialchars($profile['name'] ?? '');
+                            $profilePhone = htmlspecialchars($profile['phone']);
+                        }
+                    }
+                    ?>
                     <form id="booking-form">
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Ваше имя</label>
-                                <input type="text" name="name" placeholder="Иван" required>
+                                <?php if (isLoggedIn() && $profileName): ?>
+                                    <input type="text" name="name" value="<?= $profileName ?>" readonly class="input-disabled">
+                                <?php else: ?>
+                                    <input type="text" name="name" placeholder="Иван" required>
+                                <?php endif; ?>
                             </div>
                             <div class="form-group">
                                 <label>Телефон</label>
-                                <input type="tel" name="phone" placeholder="+7 (999) 123-45-67" required>
+                                <?php if (isLoggedIn()): ?>
+                                    <input type="tel" name="phone" value="<?= $profilePhone ?>" readonly class="input-disabled">
+                                <?php else: ?>
+                                    <input type="tel" name="phone" placeholder="+7 (999) 123-45-67" required>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="form-row">

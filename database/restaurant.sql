@@ -44,6 +44,7 @@ ALTER TABLE orders ADD COLUMN IF NOT EXISTS type VARCHAR(20) DEFAULT 'delivery' 
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment_status VARCHAR(20) DEFAULT 'unpaid' AFTER type;
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS booking_id INT DEFAULT NULL AFTER payment_status;
 INSERT IGNORE INTO access_rights (name) VALUES ('EMPLOYEE');
+ALTER TABLE bookings ADD COLUMN user_id INT DEFAULT NULL AFTER id;
 
 -- ========== 3. КАТЕГОРИИ БЛЮД ==========
 CREATE TABLE categories (
@@ -182,6 +183,7 @@ INSERT INTO reviews (name, text, rating) VALUES
 -- ========== 12. БРОНИРОВАНИЯ ==========
 CREATE TABLE bookings (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT DEFAULT NULL,
     name VARCHAR(100) NOT NULL,
     phone VARCHAR(20) NOT NULL,
     email VARCHAR(255) DEFAULT NULL,
@@ -190,7 +192,8 @@ CREATE TABLE bookings (
     booking_time TIME NOT NULL,
     comment TEXT DEFAULT NULL,
     status ENUM('pending', 'confirmed', 'cancelled') DEFAULT 'pending',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 INSERT INTO bookings (name, phone, guests, booking_date, booking_time, status) VALUES
