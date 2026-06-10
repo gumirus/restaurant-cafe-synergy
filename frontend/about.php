@@ -133,10 +133,12 @@
     .reviews { padding: 80px 0; }
     .faq-list { max-width: 700px; margin: 40px auto 0; }
     .faq-item { border: 1px solid var(--color-border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
-    .faq-question { padding: 18px 24px; cursor: pointer; font-weight: 600; color: var(--color-text-white); display: flex; justify-content: space-between; align-items: center; background: var(--color-surface); }
+    .faq-question { padding: 18px 24px; cursor: pointer; font-weight: 600; color: #222; display: flex; justify-content: space-between; align-items: center; background: var(--color-surface); transition: all 0.3s; }
+    .faq-question:hover { color: #fff; background: #e6a800; }
     .faq-question::after { content: '+'; font-size: 1.3rem; color: var(--color-primary); transition: transform 0.3s; }
+    .faq-item.active .faq-question { color: #fff; background: #e6a800; }
     .faq-item.active .faq-question::after { transform: rotate(45deg); }
-    .faq-answer { padding: 0 24px; max-height: 0; overflow: hidden; transition: all 0.3s; color: #333; }
+    .faq-answer { padding: 0 24px; max-height: 0; overflow: hidden; transition: all 0.3s; color: #222; }
     .faq-item.active .faq-answer { padding: 18px 24px; max-height: 200px; }
     @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
     </style>
