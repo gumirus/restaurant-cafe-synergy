@@ -130,7 +130,7 @@
     .team-card-body h3 { color: var(--color-text-white); margin-bottom: 5px; }
     .team-role { color: var(--color-primary); font-weight: 600; margin-bottom: 10px; }
     .team-card-body p { color: var(--color-text-light); font-size: 0.9rem; }
-    .reviews { padding: 80px 0; }
+    .reviews { padding: 80px 0; background: var(--color-bg); }
     .faq-list { max-width: 700px; margin: 40px auto 0; }
     .faq-item { border: 1px solid var(--color-border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
     .faq-question { padding: 18px 24px; cursor: pointer; font-weight: 600; color: var(--color-text-white); display: flex; justify-content: space-between; align-items: center; background: var(--color-surface); }
