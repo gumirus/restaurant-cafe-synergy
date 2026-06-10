@@ -1347,19 +1347,26 @@ section {
 }
 
 .img-modal-overlay {
-    display: none;
     position: fixed;
     inset: 0;
     z-index: 99999;
-    background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(0,0,0,0);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
     align-items: center;
     justify-content: center;
     padding: 40px;
+    display: flex;
+    visibility: hidden;
+    opacity: 0;
+    transition: background 0.4s ease, backdrop-filter 0.4s ease, visibility 0.4s, opacity 0.4s;
 }
 .img-modal-overlay.active {
-    display: flex;
+    visibility: visible;
+    opacity: 1;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 .img-modal-content {
@@ -1368,6 +1375,13 @@ section {
     border-radius: 12px;
     object-fit: contain;
     box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    transform: scale(0.7);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+}
+.img-modal-overlay.active .img-modal-content {
+    transform: scale(1);
+    opacity: 1;
 }
 
 .img-modal-close {
