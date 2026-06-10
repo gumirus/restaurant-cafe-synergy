@@ -111,14 +111,19 @@ $news = [
     /* Модальное окно */
     .modal-overlay {
         display: none; position: fixed; inset: 0; z-index: 9999;
-        background: rgba(0,0,0,0.7); align-items: center; justify-content: center;
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        align-items: center; justify-content: center;
         padding: 20px;
     }
     .modal-overlay.active { display: flex; }
     .modal-content {
-        background: var(--color-surface); border: 1px solid var(--color-border);
+        background: rgba(30, 20, 15, 0.95);
+        border: 1px solid rgba(255,255,255,0.1);
         border-radius: 16px; padding: 40px; max-width: 600px; width: 100%;
         position: relative; max-height: 80vh; overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     }
     .modal-close {
         position: absolute; top: 15px; right: 20px;
