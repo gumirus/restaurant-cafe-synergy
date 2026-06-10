@@ -614,7 +614,7 @@ $page = $_GET['page'] ?? 'dashboard';
 
                 const img = document.getElementById('user-modal-img');
                 if (avatar) {
-                    img.src = '../../frontend/' + avatar;
+                    img.src = '../../frontend/uploads/' + avatar;
                     img.style.display = 'block';
                 } else {
                     img.style.display = 'none';
