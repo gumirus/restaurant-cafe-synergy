@@ -216,7 +216,6 @@ function loadGallery() {
     container.innerHTML = gallery.map(g => `
         <div class="gallery-item fade-in clickable-img" data-src="${g.img}" data-alt="${g.label}">
             <img src="${g.img}" alt="${g.label}">
-            <div class="gallery-overlay">🔍</div>
         </div>
     `).join('');
 
