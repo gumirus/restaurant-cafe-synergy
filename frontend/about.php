@@ -1,35 +1,4 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>О нас — Bean Scene</title>
-    <link rel="stylesheet" href="css/color.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" type="image/svg+xml" href="images/logo.svg">
-</head>
-<body>
-    <header class="header" id="header">
-        <div class="container">
-            <a href="index.html" class="logo">
-                <img src="images/logo.svg" alt="Bean Scene" height="50">
-            </a>
-            <nav class="nav">
-                <ul>
-                    <li><a href="index.html">Главная</a></li>
-                    <li><a href="about.php" class="active">О нас</a></li>
-                    <li><a href="menu.php">Меню</a></li>
-                    <li><a href="promotions.php">Акции</a></li>
-                    <li><a href="news.php">Новости</a></li>
-                    <li><a href="contact.php">Контакты</a></li>
-                </ul>
-            </nav>
-            <div class="header-actions">
-                <a href="login.html">Войти</a>
-                <a href="register.html" class="btn-primary">Регистрация</a>
-            </div>
-        </div>
-    </header>
+<?php require_once __DIR__ . '/header.php'; ?>
 
     <section class="page-hero">
         <div class="container">
@@ -129,59 +98,51 @@
         </div>
     </section>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <a href="index.html" class="logo" style="margin-bottom: 20px;">
-                        <img src="images/logo.svg" alt="Bean Scene" height="40">
-                    </a>
-                    <p>Ресторан премиум-кухни. Мы создаём незабываемые гастрономические впечатления для наших гостей.</p>
-                    <div class="social-links">
-                        <a href="#" title="Instagram">📷</a>
-                        <a href="#" title="VK">💬</a>
-                        <a href="#" title="Telegram">✈️</a>
-                        <a href="#" title="YouTube">▶️</a>
-                    </div>
-                </div>
-                <div class="footer-col">
-                    <h4>Навигация</h4>
-                    <ul>
-                        <li><a href="index.html">Главная</a></li>
-                        <li><a href="about.php">О нас</a></li>
-                        <li><a href="menu.php">Меню</a></li>
-                        <li><a href="promotions.php">Акции</a></li>
-                        <li><a href="news.php">Новости</a></li>
-                        <li><a href="contact.php">Контакты</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Меню</h4>
-                    <ul>
-                        <li><a href="menu.php">Салаты</a></li>
-                        <li><a href="menu.php">Супы</a></li>
-                        <li><a href="menu.php">Горячие блюда</a></li>
-                        <li><a href="menu.php">Десерты</a></li>
-                        <li><a href="menu.php">Напитки</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>Контакты</h4>
-                    <ul>
-                        <li><a href="tel:+79991234567">+7 (999) 123-45-67</a></li>
-                        <li><a href="mailto:info@beanscene.ru">info@beanscene.ru</a></li>
-                        <li>г. Москва, ул. Тверская, 15</li>
-                        <li>Пн–Вс: 10:00 – 23:00</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Bean Scene. Все права защищены. Сделано с ❤️</p>
-            </div>
-        </div>
-    </footer>
+    <style>
+    .page-hero {
+        padding: 140px 0 60px;
+        background: linear-gradient(135deg, var(--color-bg-dark) 0%, #1a0f0a 100%);
+        text-align: center;
+    }
+    .page-hero h1 { font-size: 2.8rem; color: var(--color-text-white); margin-bottom: 10px; }
+    .page-hero p { color: var(--color-text-light); font-size: 1.1rem; }
+    .about { padding: 80px 0; }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .about-image img { width: 100%; border-radius: 16px; }
+    .about-text h2 { font-size: 2rem; margin-bottom: 20px; color: var(--color-text-white); }
+    .about-text h2 span { color: var(--color-primary); }
+    .about-text p { color: var(--color-text-light); line-height: 1.8; margin-bottom: 15px; }
+    .about-features { display: flex; gap: 20px; margin-top: 30px; flex-wrap: wrap; }
+    .about-feature { display: flex; align-items: center; gap: 10px; background: var(--color-surface); padding: 12px 20px; border-radius: 10px; border: 1px solid var(--color-border); }
+    .feature-icon { font-size: 1.5rem; }
+    .team-section { padding: 80px 0; background: var(--color-surface); }
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; margin-top: 50px; }
+    .team-card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 16px; overflow: hidden; text-align: center; transition: transform 0.3s; }
+    .team-card:hover { transform: translateY(-5px); }
+    .team-card-image { width: 100%; height: 250px; object-fit: cover; }
+    .team-card-body { padding: 20px; }
+    .team-card-body h3 { color: var(--color-text-white); margin-bottom: 5px; }
+    .team-role { color: var(--color-primary); font-weight: 600; margin-bottom: 10px; }
+    .team-card-body p { color: var(--color-text-light); font-size: 0.9rem; }
+    .reviews { padding: 80px 0; }
+    .faq-list { max-width: 700px; margin: 40px auto 0; }
+    .faq-item { border: 1px solid var(--color-border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+    .faq-question { padding: 18px 24px; cursor: pointer; font-weight: 600; color: var(--color-text-white); display: flex; justify-content: space-between; align-items: center; background: var(--color-surface); }
+    .faq-question::after { content: '+'; font-size: 1.3rem; color: var(--color-primary); transition: transform 0.3s; }
+    .faq-item.active .faq-question::after { transform: rotate(45deg); }
+    .faq-answer { padding: 0 24px; max-height: 0; overflow: hidden; transition: all 0.3s; color: var(--color-text-light); }
+    .faq-item.active .faq-answer { padding: 18px 24px; max-height: 200px; }
+    @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
+    </style>
 
-    <script src="js/faq.js"></script>
-    <script src="js/main.js"></script>
-</body>
-</html>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', function() {
+                this.parentElement.classList.toggle('active');
+            });
+        });
+    });
+    </script>
+
+<?php require_once __DIR__ . '/footer.php'; ?>
