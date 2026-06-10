@@ -16,7 +16,7 @@
                 <button class="filter-btn" data-category="salads">Салаты</button>
                 <button class="filter-btn" data-category="soups">Супы</button>
                 <button class="filter-btn" data-category="main">Горячие блюда</button>
-                <button class="filter-btn" data-category="sushi">Суши и роллы</button>
+                <button class="filter-btn" data-category="sushi">Холодные блюда</button>
                 <button class="filter-btn" data-category="desserts">Десерты</button>
                 <button class="filter-btn" data-category="drinks">Напитки</button>
             </div>
@@ -151,6 +151,7 @@
             { id: 15, name: 'Лосось с овощами', price: 890, category: 'main', desc: 'Запечённый лосось с сезонными овощами', img: 'uploads/dishes/15-fish.jpg' },
             { id: 16, name: 'Куриный рулет', price: 520, category: 'main', desc: 'Куриный рулет с грибами и сыром', img: 'uploads/dishes/16-chicken.jpg' },
             { id: 17, name: 'Суши-сет', price: 950, category: 'sushi', desc: 'Ассорти из 8 видов суши и роллов', img: 'uploads/dishes/17-sushi.jpg' },
+            { id: 21, name: 'Холодец', price: 350, category: 'sushi', desc: 'Домашний холодец из говядины с хреном', img: 'uploads/dishes/21-kholodets.jpg' },
             { id: 18, name: 'Бургер', price: 490, category: 'main', desc: 'Говяжий бургер с сыром и карамелизированным луком', img: 'uploads/dishes/18-burger.jpg' },
             { id: 19, name: 'Смузи', price: 250, category: 'drinks', desc: 'Ягодный смузи с бананом и мятой', img: 'uploads/dishes/19-smoothie.jpg' },
             { id: 20, name: 'Мороженое', price: 280, category: 'desserts', desc: 'Пломбир с ягодным топпингом', img: 'uploads/dishes/20-icecream.jpg' },
