@@ -55,7 +55,7 @@
                 <div class="team-card fade-in">
                     <img class="team-card-image clickable-img" src="uploads/team/2-sous-chef.jpg" alt="Мария Соколова">
                     <div class="team-card-body">
-                        <h3>Мария Соколова</h3>
+                        <h3>Анастасия Костюренко</h3>
                         <div class="team-role">Су-шеф</div>
                         <p>Специалист по итальянской кухне</p>
                     </div>
