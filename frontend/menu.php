@@ -143,6 +143,16 @@
             { id: 8, name: 'Чизкейк', price: 320, category: 'desserts', desc: 'Нью-йоркский чизкейк', img: 'uploads/dishes/8-cheesecake.jpg' },
             { id: 9, name: 'Лимонад', price: 180, category: 'drinks', desc: 'Домашний лимонад', img: 'uploads/dishes/9-lemonade.jpg' },
             { id: 10, name: 'Кофе', price: 200, category: 'drinks', desc: 'Эспрессо/Капучино/Латте', img: 'uploads/dishes/10-coffee.jpg' },
+            { id: 11, name: 'Боул с киноа', price: 420, category: 'salads', desc: 'Полезный боул с киноа, авокадо и овощами', img: 'uploads/dishes/11-bowl.jpg' },
+            { id: 12, name: 'Пицца Маргарита', price: 550, category: 'main', desc: 'Классическая итальянская пицца с моцареллой', img: 'uploads/dishes/12-pizza.jpg' },
+            { id: 13, name: 'Рамен', price: 480, category: 'soups', desc: 'Японский суп с лапшой, свининой и яйцом', img: 'uploads/dishes/13-ramen.jpg' },
+            { id: 14, name: 'Нисуаз', price: 390, category: 'salads', desc: 'Французский салат с тунцом и яйцом', img: 'uploads/dishes/14-salad.jpg' },
+            { id: 15, name: 'Лосось с овощами', price: 890, category: 'main', desc: 'Запечённый лосось с сезонными овощами', img: 'uploads/dishes/15-fish.jpg' },
+            { id: 16, name: 'Куриный рулет', price: 520, category: 'main', desc: 'Куриный рулет с грибами и сыром', img: 'uploads/dishes/16-chicken.jpg' },
+            { id: 17, name: 'Суши-сет', price: 950, category: 'main', desc: 'Ассорти из 8 видов суши и роллов', img: 'uploads/dishes/17-sushi.jpg' },
+            { id: 18, name: 'Бургер', price: 490, category: 'main', desc: 'Говяжий бургер с сыром и карамелизированным луком', img: 'uploads/dishes/18-burger.jpg' },
+            { id: 19, name: 'Смузи', price: 250, category: 'drinks', desc: 'Ягодный смузи с бананом и мятой', img: 'uploads/dishes/19-smoothie.jpg' },
+            { id: 20, name: 'Мороженое', price: 280, category: 'desserts', desc: 'Пломбир с ягодным топпингом', img: 'uploads/dishes/20-icecream.jpg' },
         ];
 
         // Отобразить все блюда
