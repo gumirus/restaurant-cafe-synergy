@@ -228,14 +228,14 @@ function loadNews() {
     if (!container) return;
 
     const news = [
-        { title: 'Новое сезонное меню', date: '01.06.2026', desc: 'Попробуйте наши новые летние блюда из свежих сезонных продуктов' },
-        { title: 'Скидка 20% на первый заказ', date: '28.05.2026', desc: 'Для новых клиентов скидка на первый заказ через сайт' },
-        { title: 'Мастер-класс от шеф-повара', date: '20.05.2026', desc: 'Научитесь готовить фирменные блюда нашего ресторана' },
+        { title: 'Новое сезонное меню', date: '01.06.2026', desc: 'Попробуйте наши новые летние блюда из свежих сезонных продуктов', img: 'uploads/news/1-seasonal-menu.jpg' },
+        { title: 'Скидка 20% на первый заказ', date: '28.05.2026', desc: 'Для новых клиентов скидка на первый заказ через сайт', img: 'uploads/news/2-discount.jpg' },
+        { title: 'Мастер-класс от шеф-повара', date: '20.05.2026', desc: 'Научитесь готовить фирменные блюда нашего ресторана', img: 'uploads/news/3-masterclass.jpg' },
     ];
 
     container.innerHTML = news.map(n => `
         <div class="news-card fade-in">
-            <img class="news-card-image" src="images/placeholder.jpg" alt="${n.title}">
+            <img class="news-card-image clickable-img" src="${n.img}" alt="${n.title}">
             <div class="news-card-body">
                 <span class="news-date">${n.date}</span>
                 <h3>${n.title}</h3>
