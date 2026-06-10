@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initNewsletterForm();
     initCart();
     updateCartCount();
+    initImageModal();
 });
 
 // ========== HEADER SCROLL ==========
@@ -93,14 +94,14 @@ function loadSpecials() {
     if (!container) return;
 
     const specials = [
-        { name: 'Салат с трюфелем', desc: 'Руккола, пармезан, трюфельное масло', price: 650, badge: 'Шеф-рекомендует' },
-        { name: 'Утиная грудка', desc: 'Карамелизированная утка с соусом из вишни', price: 890, badge: 'Хит сезона' },
-        { name: 'Чизкейк Нью-Йорк', desc: 'Классический десерт с ягодным соусом', price: 390, badge: 'Фирменный' },
+        { name: 'Стейк Рибай', desc: 'Мраморная говядина с трюфельным соусом', price: 1200, badge: 'Шеф-рекомендует', img: 'uploads/dishes/5-steak.jpg' },
+        { name: 'Тирамису', desc: 'Итальянский десерт с маскарпоне', price: 350, badge: 'Фирменный', img: 'uploads/dishes/7-tiramisu.jpg' },
+        { name: 'Том Ям', desc: 'Острый тайский суп с креветками', price: 550, badge: 'Хит сезона', img: 'uploads/dishes/3-tom-yam.jpg' },
     ];
 
     container.innerHTML = specials.map(s => `
         <div class="special-card fade-in">
-            <img class="special-card-image" src="images/placeholder.jpg" alt="${s.name}">
+            <img class="special-card-image clickable-img" src="${s.img}" alt="${s.name}">
             <div class="special-card-body">
                 <span class="special-badge">${s.badge}</span>
                 <h3>${s.name}</h3>
@@ -119,15 +120,21 @@ function loadPopularDishes() {
     if (!container) return;
 
     const dishes = [
-        { id: 1, name: 'Цезарь с курицей', price: 450, category: 'salads', desc: 'Классический салат с пармезаном' },
-        { id: 2, name: 'Том Ям', price: 550, category: 'soups', desc: 'Острый тайский суп с креветками' },
-        { id: 3, name: 'Стейк Рибай', price: 1200, category: 'main', desc: 'Мраморная говядина с трюфелем' },
-        { id: 4, name: 'Тирамису', price: 350, category: 'desserts', desc: 'Итальянский десерт с маскарпоне' },
+        { id: 1, name: 'Цезарь с курицей', price: 450, category: 'salads', desc: 'Классический салат с пармезаном', img: 'uploads/dishes/1-caesar.jpg' },
+        { id: 2, name: 'Греческий салат', price: 380, category: 'salads', desc: 'Свежие овощи с сыром фета', img: 'uploads/dishes/2-greek.jpg' },
+        { id: 3, name: 'Том Ям', price: 550, category: 'soups', desc: 'Острый тайский суп с креветками', img: 'uploads/dishes/3-tom-yam.jpg' },
+        { id: 4, name: 'Борщ', price: 320, category: 'soups', desc: 'Традиционный русский суп', img: 'uploads/dishes/4-borscht.jpg' },
+        { id: 5, name: 'Стейк Рибай', price: 1200, category: 'main', desc: 'Мраморная говядина с трюфелем', img: 'uploads/dishes/5-steak.jpg' },
+        { id: 6, name: 'Паста Карбонара', price: 480, category: 'main', desc: 'Итальянская паста с беконом', img: 'uploads/dishes/6-carbonara.jpg' },
+        { id: 7, name: 'Тирамису', price: 350, category: 'desserts', desc: 'Итальянский десерт с маскарпоне', img: 'uploads/dishes/7-tiramisu.jpg' },
+        { id: 8, name: 'Чизкейк', price: 320, category: 'desserts', desc: 'Нью-йоркский чизкейк', img: 'uploads/dishes/8-cheesecake.jpg' },
+        { id: 9, name: 'Лимонад', price: 180, category: 'drinks', desc: 'Домашний лимонад', img: 'uploads/dishes/9-lemonade.jpg' },
+        { id: 10, name: 'Кофе', price: 200, category: 'drinks', desc: 'Эспрессо/Капучино/Латте', img: 'uploads/dishes/10-coffee.jpg' },
     ];
 
     container.innerHTML = dishes.map(dish => `
         <div class="dish-card fade-in">
-            <img class="dish-card-image" src="images/placeholder.jpg" alt="${dish.name}">
+            <img class="dish-card-image clickable-img" src="${dish.img}" alt="${dish.name}">
             <div class="dish-card-body">
                 <h3>${dish.name}</h3>
                 <p>${dish.desc}</p>
@@ -313,5 +320,44 @@ function initNewsletterForm() {
         e.preventDefault();
         alert('✅ Вы подписались на новости! Спасибо.');
         form.reset();
+    });
+}
+
+// ========== IMAGE MODAL (click to enlarge) ==========
+function initImageModal() {
+    // Удаляем старый модал, если есть
+    const oldModal = document.getElementById('img-modal');
+    if (oldModal) oldModal.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'img-modal';
+    modal.className = 'img-modal-overlay';
+    modal.innerHTML = '<button class="img-modal-close">&times;</button><img class="img-modal-content" id="img-modal-img" src="" alt="">';
+    document.body.appendChild(modal);
+
+    const img = document.getElementById('img-modal-img');
+    const close = modal.querySelector('.img-modal-close');
+
+    // Открытие по клику на .clickable-img
+    document.addEventListener('click', function(e) {
+        const target = e.target.closest('.clickable-img');
+        if (!target) return;
+        img.src = target.src;
+        img.alt = target.alt;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+
+    function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    close.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModal();
     });
 }
