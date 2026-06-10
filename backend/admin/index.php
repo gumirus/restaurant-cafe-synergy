@@ -300,7 +300,7 @@ $page = $_GET['page'] ?? 'dashboard';
                                     <td><?= $dish['id'] ?></td>
                                     <td>
                                         <?php if ($dish['image']): ?>
-                                            <img src="../../frontend/uploads/dishes/<?= $dish['image'] ?>" alt="" style="width:50px;height:50px;object-fit:cover;border-radius:4px;">
+                                            <img src="../../frontend/<?= $dish['image'] ?>" alt="" style="width:50px;height:50px;object-fit:cover;border-radius:4px;">
                                         <?php else: ?>
                                             <span style="color:var(--color-text-light)">—</span>
                                         <?php endif; ?>
