@@ -13,63 +13,101 @@
 ## 📁 Структура проекта
 ```
 restaurant-cafe/
-├── frontend/           # Клиентская часть
-│   ├── index.html      # Главная страница
-│   ├── about.html      # О ресторане
-│   ├── menu.html       # Меню с фильтрацией
-│   ├── promotions.html # Акции
-│   ├── news.html       # Новости
-│   ├── contact.html    # Контакты
-│   ├── cart.html       # Корзина
-│   ├── login.html      # Вход
-│   ├── register.html   # Регистрация
-│   ├── css/            # Стили
-│   │   ├── color.css   # CSS-переменные (цвета)
-│   │   └── style.css   # Основные стили
-│   ├── js/             # Скрипты
-│   │   ├── main.js     # Основные функции
-│   │   ├── faq.js      # FAQ аккордеон
-│   │   ├── filter.js   # Фильтр меню
-│   │   ├── cart.js     # Корзина (localStorage)
-│   │   └── validation.js # Валидация форм
-│   └── images/         # Изображения
-├── backend/            # Серверная часть
+├── frontend/              # Клиентская часть
+│   ├── index.html/.php    # Главная страница
+│   ├── about.html/.php    # О ресторане
+│   ├── menu.html/.php     # Меню с фильтрацией
+│   ├── promotions.html/.php # Акции
+│   ├── news.html/.php     # Новости
+│   ├── contact.html/.php  # Контакты
+│   ├── cart.html/.php     # Корзина
+│   ├── login.html/.php    # Вход
+│   ├── register.html/.php # Регистрация
+│   ├── profile.php        # Личный кабинет
+│   ├── header.php         # Шапка сайта
+│   ├── footer.php         # Подвал сайта
+│   ├── css/
+│   │   ├── color.css      # CSS-переменные (цвета)
+│   │   └── style.css      # Основные стили
+│   ├── js/
+│   │   ├── main.js        # Основные функции (анимации, корзина, бронирование)
+│   │   ├── faq.js         # FAQ аккордеон
+│   │   ├── filter.js      # Фильтр меню
+│   │   ├── cart.js        # Корзина (localStorage)
+│   │   ├── validation.js  # Валидация форм
+│   │   ├── slider.js      # Слайдер новостей
+│   │   └── hidden_text.js # Ограничение текста
+│   └── images/            # Изображения
+├── backend/               # Серверная часть
 │   ├── config/
-│   │   ├── db.php      # Подключение к БД (PDO)
-│   │   └── session.php # Управление сессиями
-│   ├── login.php       # Авторизация
-│   ├── register.php    # Регистрация
-│   ├── logout.php      # Выход
-│   ├── cart.php        # API корзины
-│   ├── order.php       # Оформление заказа
-│   ├── upload.php      # Загрузка изображений
-│   ├── createProduct.php # Добавление блюда
-│   ├── admin/          # Админ-панель
-│   └── uploads/        # Загруженные файлы
+│   │   ├── db.php         # Подключение к БД (PDO)
+│   │   └── session.php    # Управление сессиями
+│   ├── login.php          # Авторизация
+│   ├── register.php       # Регистрация
+│   ├── logout.php         # Выход
+│   ├── cart.php           # API корзины
+│   ├── cart_add.php       # Добавление в корзину
+│   ├── cart_remove.php    # Удаление из корзины
+│   ├── cart_update.php    # Обновление количества
+│   ├── cart_count.php     # Счётчик корзины
+│   ├── checkout.php       # Оформление заказа
+│   ├── order.php          # Заказы
+│   ├── pay.php            # Оплата
+│   ├── found.php          # Поиск блюд
+│   ├── upload.php         # Загрузка изображений
+│   ├── createProduct.php  # Добавление блюда
+│   ├── updateProduct.php  # Редактирование блюда
+│   ├── deleteProduct.php  # Удаление блюда
+│   ├── createPromotion.php # Добавление акции
+│   ├── deletePromotion.php # Удаление акции
+│   ├── deleteReview.php   # Удаление отзыва
+│   ├── createEmployee.php # Добавление сотрудника
+│   ├── updateEmployeeProfile.php # Редактирование профиля сотрудника
+│   ├── updateOrderStatus.php # Обновление статуса заказа
+│   ├── createBooking.php  # Создание бронирования
+│   ├── updateBookingStatus.php # Обновление статуса брони
+│   ├── clearBookings.php  # Очистка бронирований
+│   ├── submitFeedback.php # Обратная связь по заказу
+│   ├── submitBookingFeedback.php # Обратная связь по брони
+│   ├── setup-admin.php    # Настройка администратора
+│   ├── admin/             # Админ-панель
+│   │   ├── index.php      # Дашборд
+│   │   ├── css/admin.css  # Стили админки
+│   │   └── js/            # JS админки
+│   ├── employee/          # Панель сотрудника
+│   │   └── index.php      # Просмотр заказов
+│   └── uploads/           # Загруженные файлы
 ├── database/
-│   └── restaurant.sql  # Дамп БД (11 таблиц)
-├── design/             # Макеты Figma/draw.io
-└── docs/               # Документация
+│   └── restaurant.sql     # Дамп БД (15 таблиц)
+├── design/                # Макеты Figma/draw.io
+├── docs/                  # Документация
+├── router.php             # Маршрутизатор
+└── start.sh               # Скрипт запуска
 ```
 
-## 🗄 База данных (11 таблиц)
-1. `access_rights` — права доступа (ADMIN/USER)
-2. `users` — пользователи
+## 🗄 База данных (15 таблиц)
+1. `access_rights` — права доступа (ADMIN, EMPLOYEE, USER)
+2. `users` — пользователи (телефон, email, пароль, аватар)
 3. `categories` — категории блюд
-4. `dishes` — блюда
-5. `positions` — должности
-6. `personal` — персонал
-7. `shopping_cart` — корзина
-8. `orders` — заказы
+4. `dishes` — блюда (название, описание, цена, вес, фото)
+5. `positions` — должности (Шеф-повар, Су-шеф, Повар и др.)
+6. `personal` — персонал (ФИО, должность, телефон, аватар)
+7. `shopping_cart` — корзина (пользователь, блюдо, количество)
+8. `orders` — заказы (пользователь, статус, тип, оплата, адрес)
 9. `order_items` — состав заказа
-10. `news` — новости
-11. `reviews` — отзывы
+10. `order_feedback` — обратная связь по заказам (лайк/дизлайк)
+11. `booking_feedback` — обратная связь по бронированиям
+12. `bookings` — бронирования столиков
+13. `news` — новости
+14. `reviews` — отзывы
+15. `promotions` — акции и спецпредложения
 
 ## 🚀 Установка и запуск
 
 ### 1. Клонировать проект
 ```bash
-cd /Users/gumirus/Documents/synergy/Практика\ ПМ.09/restaurant-cafe
+git clone https://github.com/gumirus/restaurant-cafe-synergy.git
+cd restaurant-cafe
 ```
 
 ### 2. Настроить БД
@@ -94,31 +132,39 @@ php -S localhost:8000
 http://localhost:8000/frontend/index.html
 ```
 
+## 👥 Роли и доступ
+
+| Роль | Должность | Возможности |
+|------|-----------|-------------|
+| **ADMIN** | Шеф-повар | Полный доступ: управление меню, заказами, бронированиями, сотрудниками, пользователями, акциями |
+| **EMPLOYEE** | Су-шеф, Повар, Официант | Просмотр заказов и меню, обновление статуса |
+| **USER** | Клиент | Просмотр меню, оформление заказов, бронирование, обратная связь |
+
 ## 📋 План разработки (по неделям)
 
 ### Неделя 1 (02.07 – 06.07): Анализ + IDEF0
-- [ ] Анализ предметной области
-- [ ] Диаграмма бизнес-процессов (IDEF0)
+- [x] Анализ предметной области
+- [x] Диаграмма бизнес-процессов (IDEF0)
 
 ### Неделя 2 (07.07 – 13.07): Дизайн
-- [ ] Moodboard
-- [ ] Прототип в Figma
+- [x] Moodboard
+- [x] Прототип в Figma
 
 ### Неделя 3 (14.07 – 20.07): Frontend
-- [ ] HTML-вёрстка (9 страниц)
-- [ ] CSS-стилизация
-- [ ] JavaScript (фильтры, корзина, FAQ, валидация)
+- [x] HTML-вёрстка (9+ страниц)
+- [x] CSS-стилизация
+- [x] JavaScript (фильтры, корзина, FAQ, валидация, слайдер, анимации)
 
 ### Неделя 4 (21.07 – 28.07): Backend + БД + Тесты
-- [ ] MySQL (11 таблиц)
-- [ ] PHP (авторизация, регистрация, корзина, заказы)
-- [ ] Тест-кейсы
-- [ ] Деплой на GitHub
-- [ ] Отчёт-презентация
+- [x] MySQL (15 таблиц)
+- [x] PHP (авторизация, регистрация, корзина, заказы, бронирования, админка)
+- [x] Тест-кейсы
+- [x] Деплой на GitHub
+- [x] Отчёт-презентация
 
 ## 🔗 Полезные ссылки
+- **GitHub** — https://github.com/gumirus/restaurant-cafe-synergy
 - **Figma** — figma.com
 - **draw.io** — draw.io
 - **phpMyAdmin** — localhost/phpmyadmin
-- **GitHub** — github.com
 - **LMS Синергия** — lms.synergy.ru

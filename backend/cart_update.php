@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $cart_id = (int)($_POST['cart_id'] ?? 0);
-$quantity = max(1, (int)($_POST['quantity'] ?? 1));
+$quantity = max(1, min(20, (int)($_POST['quantity'] ?? 1)));
 $user_id = $_SESSION['user_id'];
 
 // Проверяем, что корзина принадлежит пользователю

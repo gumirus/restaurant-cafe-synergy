@@ -31,6 +31,11 @@ $stmt->execute([$user_id, $dish_id]);
 $existing = $stmt->fetch();
 
 if ($existing) {
+    // Проверяем лимит в 20 единиц
+    if ($existing['count'] >= 20) {
+        echo json_encode(['success' => false, 'error' => 'Максимальное количество — 20 шт']);
+        exit;
+    }
     // Увеличиваем количество
     $stmt = $pdo->prepare("UPDATE shopping_cart SET count = count + 1 WHERE id = ?");
     $stmt->execute([$existing['id']]);
