@@ -130,14 +130,14 @@
     .team-card-body h3 { color: var(--color-text-white); margin-bottom: 5px; }
     .team-role { color: var(--color-primary); font-weight: 600; margin-bottom: 10px; }
     .team-card-body p { color: var(--color-text-light); font-size: 0.9rem; }
-    .reviews { padding: 80px 0; background: var(--color-bg); }
+    .reviews { padding: 80px 0; }
     .faq-list { max-width: 700px; margin: 40px auto 0; }
     .faq-item { border: 1px solid var(--color-border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
     .faq-question { padding: 18px 24px; cursor: pointer; font-weight: 600; color: var(--color-text-white); display: flex; justify-content: space-between; align-items: center; background: var(--color-surface); }
     .faq-question::after { content: '+'; font-size: 1.3rem; color: var(--color-primary); transition: transform 0.3s; }
     .faq-item.active .faq-question::after { transform: rotate(45deg); }
-    .faq-answer { padding: 0 24px; max-height: 0; overflow: hidden; transition: all 0.3s; color: #444; background: #fff; }
-    .faq-item.active .faq-answer { padding: 18px 24px; max-height: 200px; color: #fff; background: var(--color-primary); }
+    .faq-answer { padding: 0 24px; max-height: 0; overflow: hidden; transition: all 0.3s; color: #333; }
+    .faq-item.active .faq-answer { padding: 18px 24px; max-height: 200px; }
     @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
     </style>
 
