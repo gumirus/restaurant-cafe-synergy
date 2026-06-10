@@ -133,16 +133,16 @@
 
         // Данные меню
         const menuItems = [
-            { id: 1, name: 'Цезарь с курицей', price: 450, category: 'salads', desc: 'Классический салат с курицей', img: 'images/placeholder.jpg' },
-            { id: 2, name: 'Греческий салат', price: 380, category: 'salads', desc: 'Свежие овощи с сыром фета', img: 'images/placeholder.jpg' },
-            { id: 3, name: 'Том Ям', price: 550, category: 'soups', desc: 'Острый тайский суп', img: 'images/placeholder.jpg' },
-            { id: 4, name: 'Борщ', price: 320, category: 'soups', desc: 'Традиционный русский суп', img: 'images/placeholder.jpg' },
-            { id: 5, name: 'Стейк Рибай', price: 1200, category: 'main', desc: 'Мраморная говядина', img: 'images/placeholder.jpg' },
-            { id: 6, name: 'Паста Карбонара', price: 480, category: 'main', desc: 'Итальянская паста', img: 'images/placeholder.jpg' },
-            { id: 7, name: 'Тирамису', price: 350, category: 'desserts', desc: 'Итальянский десерт', img: 'images/placeholder.jpg' },
-            { id: 8, name: 'Чизкейк', price: 320, category: 'desserts', desc: 'Нью-йоркский чизкейк', img: 'images/placeholder.jpg' },
-            { id: 9, name: 'Лимонад', price: 180, category: 'drinks', desc: 'Домашний лимонад', img: 'images/placeholder.jpg' },
-            { id: 10, name: 'Кофе', price: 200, category: 'drinks', desc: 'Эспрессо/Капучино/Латте', img: 'images/placeholder.jpg' },
+            { id: 1, name: 'Цезарь с курицей', price: 450, category: 'salads', desc: 'Классический салат с курицей', img: 'uploads/dishes/1-caesar.jpg' },
+            { id: 2, name: 'Греческий салат', price: 380, category: 'salads', desc: 'Свежие овощи с сыром фета', img: 'uploads/dishes/2-greek.jpg' },
+            { id: 3, name: 'Том Ям', price: 550, category: 'soups', desc: 'Острый тайский суп', img: 'uploads/dishes/3-tom-yam.jpg' },
+            { id: 4, name: 'Борщ', price: 320, category: 'soups', desc: 'Традиционный русский суп', img: 'uploads/dishes/4-borscht.jpg' },
+            { id: 5, name: 'Стейк Рибай', price: 1200, category: 'main', desc: 'Мраморная говядина', img: 'uploads/dishes/5-steak.jpg' },
+            { id: 6, name: 'Паста Карбонара', price: 480, category: 'main', desc: 'Итальянская паста', img: 'uploads/dishes/6-carbonara.jpg' },
+            { id: 7, name: 'Тирамису', price: 350, category: 'desserts', desc: 'Итальянский десерт', img: 'uploads/dishes/7-tiramisu.jpg' },
+            { id: 8, name: 'Чизкейк', price: 320, category: 'desserts', desc: 'Нью-йоркский чизкейк', img: 'uploads/dishes/8-cheesecake.jpg' },
+            { id: 9, name: 'Лимонад', price: 180, category: 'drinks', desc: 'Домашний лимонад', img: 'uploads/dishes/9-lemonade.jpg' },
+            { id: 10, name: 'Кофе', price: 200, category: 'drinks', desc: 'Эспрессо/Капучино/Латте', img: 'uploads/dishes/10-coffee.jpg' },
         ];
 
         // Отобразить все блюда
