@@ -281,6 +281,10 @@ function initCart() {
             if (result.success) {
                 btn.textContent = '✅ В корзине';
                 updateCartCount();
+                // Показываем уведомление
+                showToast('✅ Добавлено в корзину');
+                // Диспатчим событие для menu.php и других страниц
+                document.dispatchEvent(new CustomEvent('cart-updated', { detail: { count: result.cart_count } }));
             } else {
                 btn.textContent = '❌ Ошибка';
                 if (result.error === 'Необходимо авторизоваться') {
@@ -367,4 +371,35 @@ function initImageModal() {
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') closeModal();
     });
+}
+
+// ========== TOAST NOTIFICATION ==========
+function showToast(msg) {
+    const existing = document.querySelector('.toast-notification');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.textContent = msg;
+    Object.assign(toast.style, {
+        position: 'fixed', bottom: '30px', right: '30px',
+        background: '#1a1a2e', color: '#fff',
+        padding: '16px 28px', borderRadius: '12px',
+        fontSize: '1rem', zIndex: '100000',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+        opacity: '0', transform: 'translateY(20px)',
+        transition: 'opacity 0.3s, transform 0.3s'
+    });
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateY(0)';
+    });
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(20px)';
+        setTimeout(() => toast.remove(), 300);
+    }, 2500);
 }

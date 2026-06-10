@@ -163,36 +163,11 @@
                 </div>
             `).join('');
 
-            // Навешиваем обработчики на кнопки "В корзину"
-            document.querySelectorAll('.add-to-cart').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const dishId = this.dataset.id;
-                    const dish = menuItems.find(d => d.id == dishId);
-                    if (!dish) return;
-
-                    fetch('../backend/cart_add.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: 'dish_id=' + dishId
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Обновляем счётчик корзины
-                            const cartCount = document.getElementById('cart-count');
-                            if (cartCount) cartCount.textContent = data.cart_count;
-                            // Показываем уведомление
-                            showToast('✅ ' + dish.name + ' добавлен в корзину');
-                        } else {
-                            if (data.redirect) {
-                                window.location.href = data.redirect;
-                            } else {
-                                showToast('❌ ' + (data.error || 'Ошибка'));
-                            }
-                        }
-                    })
-                    .catch(() => showToast('❌ Ошибка соединения'));
-                });
+            // Обработчик добавления в корзину — используется из main.js (initCart)
+            // Здесь только обновляем счётчик после добавления
+            document.addEventListener('cart-updated', function(e) {
+                const cartCount = document.getElementById('cart-count');
+                if (cartCount) cartCount.textContent = e.detail.count;
             });
         }
 
