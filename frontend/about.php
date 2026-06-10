@@ -115,7 +115,7 @@
     .about-image-wrapper img { width: 100%; display: block; }
     .about-image-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); }
     .about-text h2 { font-size: 2rem; margin-bottom: 20px; color: var(--color-text-white); }
-    .about-text h2 span { color: #4fc3f7; }
+    .about-text h2 span { color: #333; }
     .about-text h2 .history-word { color: var(--color-primary); }
     .about-text p { color: var(--color-text-light); line-height: 1.8; margin-bottom: 15px; }
     .about-features { display: flex; gap: 20px; margin-top: 30px; flex-wrap: wrap; }
