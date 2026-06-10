@@ -206,6 +206,33 @@ img {
     color: #e74c3c !important;
 }
 
+/* ========== HEADER AVATAR ========== */
+.header-avatar-link {
+    padding: 0 !important;
+    border: none !important;
+    display: flex;
+    align-items: center;
+}
+
+.header-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-primary);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.header-avatar:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(212, 168, 83, 0.4);
+}
+
+.header-avatar-placeholder {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
 /* ========== BUTTONS ========== */
 .btn {
     display: inline-block;

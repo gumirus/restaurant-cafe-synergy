@@ -122,12 +122,80 @@
     @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } }
     </style>
 
-    <script>
-    document.getElementById('booking-form')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('✅ Спасибо! Мы свяжемся с вами для подтверждения брони.');
-        this.reset();
-    });
-    </script>
+    <!-- Модальное окно успешного бронирования -->
+    <div id="booking-modal" class="booking-modal-overlay">
+        <div class="booking-modal">
+            <div class="booking-modal-icon">✅</div>
+            <h2 class="booking-modal-title">Столик забронирован!</h2>
+            <p class="booking-modal-text" id="booking-modal-text">Спасибо! Мы свяжемся с вами для подтверждения.</p>
+            <button class="btn" onclick="closeBookingModal()">Отлично</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно ошибки -->
+    <div id="booking-error-modal" class="booking-modal-overlay">
+        <div class="booking-modal">
+            <div class="booking-modal-icon" style="background:#e74c3c;">❌</div>
+            <h2 class="booking-modal-title" style="color:#e74c3c;">Ошибка</h2>
+            <p class="booking-modal-text" id="booking-error-text">Проверьте данные и попробуйте снова.</p>
+            <button class="btn" onclick="closeBookingErrorModal()">Понятно</button>
+        </div>
+    </div>
+
+    <style>
+    .booking-modal-overlay {
+        position: fixed; inset: 0; z-index: 99999;
+        background: rgba(0,0,0,0.7);
+        display: flex; align-items: center; justify-content: center;
+        visibility: hidden; opacity: 0;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(4px);
+    }
+    .booking-modal-overlay.active {
+        visibility: visible; opacity: 1;
+    }
+    .booking-modal {
+        background: var(--color-surface, #1e1e2e);
+        border: 1px solid var(--color-border, #333);
+        border-radius: 20px;
+        max-width: 400px; width: 90%;
+        padding: 50px 40px 40px;
+        text-align: center;
+        box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+        transform: scale(0.85) translateY(20px);
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .booking-modal-overlay.active .booking-modal {
+        transform: scale(1) translateY(0);
+    }
+    .booking-modal-icon {
+        width: 80px; height: 80px; border-radius: 50%;
+        background: #27ae60; color: #fff;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 2.5rem; margin: 0 auto 20px;
+        box-shadow: 0 8px 30px rgba(39, 174, 96, 0.3);
+    }
+    .booking-modal-title {
+        font-size: 1.6rem; color: var(--color-text-white, #fff);
+        margin-bottom: 12px;
+    }
+    .booking-modal-text {
+        color: var(--color-text-light, #aaa);
+        font-size: 1rem; line-height: 1.6;
+        margin-bottom: 25px;
+    }
+    .booking-modal .btn {
+        background: var(--color-primary, #d4a853);
+        color: #fff; border: none;
+        padding: 12px 40px; border-radius: 10px;
+        font-size: 1rem; font-weight: 600;
+        cursor: pointer; transition: all 0.3s;
+    }
+    .booking-modal .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(212, 168, 83, 0.3);
+    }
+    </style>
+
 
 <?php require_once __DIR__ . '/footer.php'; ?>

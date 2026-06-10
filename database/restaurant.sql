@@ -13,20 +13,34 @@ USE restaurant_db;
 -- ========== 1. ПРАВА ДОСТУПА ==========
 CREATE TABLE access_rights (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE  -- ADMIN / USER
+    name VARCHAR(50) NOT NULL UNIQUE  -- ADMIN / USER / EMPLOYEE
 ) ENGINE=InnoDB;
 
-INSERT INTO access_rights (name) VALUES ('ADMIN'), ('USER');
+INSERT INTO access_rights (name) VALUES ('ADMIN'), ('USER'), ('EMPLOYEE');
 
 -- ========== 2. ПОЛЬЗОВАТЕЛИ ==========
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     phone VARCHAR(20) NOT NULL UNIQUE,
+    name VARCHAR(100) DEFAULT NULL,
+    bio TEXT DEFAULT NULL,
+    avatar VARCHAR(255) DEFAULT NULL,
+    position VARCHAR(100) DEFAULT NULL,  -- должность (Шеф-повар, Повар, Официант и т.д.)
     password VARCHAR(255) NOT NULL,
     access_rights_id INT NOT NULL DEFAULT 2,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (access_rights_id) REFERENCES access_rights(id)
 ) ENGINE=InnoDB;
+
+-- Миграция для существующей БД (добавление новых колонок, если их нет)
+-- Запускается без ошибок, если колонки уже существуют
+ALTER TABLE users ADD COLUMN IF NOT EXISTS name VARCHAR(100) DEFAULT NULL AFTER phone;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS bio TEXT DEFAULT NULL AFTER name;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar VARCHAR(255) DEFAULT NULL AFTER bio;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS position VARCHAR(100) DEFAULT NULL AFTER avatar;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER created_at;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER created_at;
+INSERT IGNORE INTO access_rights (name) VALUES ('EMPLOYEE');
 
 -- ========== 3. КАТЕГОРИИ БЛЮД ==========
 CREATE TABLE categories (
@@ -74,10 +88,17 @@ CREATE TABLE positions (
 
 INSERT INTO positions (name) VALUES
     ('Шеф-повар'),
+    ('Су-шеф'),
     ('Повар'),
+    ('Кондитер'),
     ('Официант'),
+    ('Старший официант'),
     ('Администратор'),
-    ('Курьер');
+    ('Курьер'),
+    ('Бариста'),
+    ('Бармен'),
+    ('Сомелье'),
+    ('Менеджер');
 
 -- ========== 6. ПЕРСОНАЛ ==========
 CREATE TABLE personal (
@@ -106,9 +127,10 @@ CREATE TABLE orders (
     user_id INT NOT NULL,
     personal_id INT DEFAULT NULL,
     address VARCHAR(255) NOT NULL,
-    status ENUM('new', 'processing', 'delivering', 'completed', 'cancelled') DEFAULT 'new',
+    status ENUM('pending', 'confirmed', 'preparing', 'ready', 'completed', 'cancelled') DEFAULT 'pending',
     total_price DECIMAL(10, 2) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (personal_id) REFERENCES personal(id)
 ) ENGINE=InnoDB;
@@ -187,14 +209,63 @@ INSERT INTO promotions (title, description, start_date, end_date) VALUES
     ('Бизнес-ланч за 350 ₽', 'С 12:00 до 15:00 в будние дни — комплексный обед', CURDATE(), NULL),
     ('Десерт в подарок', 'Фирменный десерт в подарок в день рождения', CURDATE(), NULL);
 
--- ========== ТЕСТОВЫЙ АДМИН ==========
+-- ========== 14. ОБРАТНАЯ СВЯЗЬ ПО ЗАКАЗАМ ==========
+CREATE TABLE order_feedback (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL UNIQUE,
+    user_id INT NOT NULL,
+    rating ENUM('like', 'dislike') NOT NULL,
+    comment TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ========== 15. ОБРАТНАЯ СВЯЗЬ ПО БРОНИРОВАНИЯМ ==========
+CREATE TABLE booking_feedback (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    booking_id INT NOT NULL UNIQUE,
+    user_id INT DEFAULT NULL,
+    name VARCHAR(100) NOT NULL,
+    rating ENUM('like', 'dislike') NOT NULL,
+    comment TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ========== ТЕСТОВЫЙ АДМИН (Шеф-повар) ==========
 -- Логин: +79990000001
 -- Пароль: admin123
-INSERT INTO users (phone, password, access_rights_id) VALUES
-    ('+79990000001', '$2y$12$llzwV9kcLPH7qobUz48wje0Z5efr2SVHTYWvvZJkiX00gxOFZal06', 1);
+INSERT INTO users (phone, name, position, password, access_rights_id) VALUES
+    ('+79990000001', 'Шеф-повар', 'Шеф-повар', '$2y$12$llzwV9kcLPH7qobUz48wje0Z5efr2SVHTYWvvZJkiX00gxOFZal06', 1);
 
 -- ========== ТЕСТОВЫЙ ПОЛЬЗОВАТЕЛЬ ==========
 -- Логин: +79990000002
 -- Пароль: user123
 INSERT INTO users (phone, password, access_rights_id) VALUES
     ('+79990000002', '$2y$12$H7pouL8eE8egGw4xB9hluuH2OPYeOf8/VMBpMJAHWHdvZcCpAUqSu', 2);
+
+-- ========== ТЕСТОВЫЕ СОТРУДНИКИ ==========
+-- Су-шеф: +79990000003 / pass123
+INSERT INTO users (phone, name, position, password, access_rights_id) VALUES
+    ('+79990000003', 'Анна', 'Су-шеф', '$2y$12$H7pouL8eE8egGw4xB9hluuH2OPYeOf8/VMBpMJAHWHdvZcCpAUqSu', 3);
+
+-- Повар: +79990000004 / pass123
+INSERT INTO users (phone, name, position, password, access_rights_id) VALUES
+    ('+79990000004', 'Сергей', 'Повар', '$2y$12$H7pouL8eE8egGw4xB9hluuH2OPYeOf8/VMBpMJAHWHdvZcCpAUqSu', 3);
+
+-- Официант: +79990000005 / pass123
+INSERT INTO users (phone, name, position, password, access_rights_id) VALUES
+    ('+79990000005', 'Мария', 'Официант', '$2y$12$H7pouL8eE8egGw4xB9hluuH2OPYeOf8/VMBpMJAHWHdvZcCpAUqSu', 3);
+
+-- Старший официант: +79990000006 / pass123
+INSERT INTO users (phone, name, position, password, access_rights_id) VALUES
+    ('+79990000006', 'Дмитрий', 'Старший официант', '$2y$12$H7pouL8eE8egGw4xB9hluuH2OPYeOf8/VMBpMJAHWHdvZcCpAUqSu', 3);
+
+-- Кондитер: +79990000007 / pass123
+INSERT INTO users (phone, name, position, password, access_rights_id) VALUES
+    ('+79990000007', 'Елена', 'Кондитер', '$2y$12$H7pouL8eE8egGw4xB9hluuH2OPYeOf8/VMBpMJAHWHdvZcCpAUqSu', 3);
+
+-- Бариста: +79990000008 / pass123
+INSERT INTO users (phone, name, position, password, access_rights_id) VALUES
+    ('+79990000008', 'Алексей', 'Бариста', '$2y$12$H7pouL8eE8egGw4xB9hluuH2OPYeOf8/VMBpMJAHWHdvZcCpAUqSu', 3);

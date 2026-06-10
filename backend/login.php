@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         $stmt = $pdo->prepare("
-            SELECT u.id, u.phone, u.password, ar.name as access_rights
+            SELECT u.id, u.phone, u.password, u.position, ar.name as access_rights
             FROM users u
             JOIN access_rights ar ON u.access_rights_id = ar.id
             WHERE u.phone = ?
@@ -30,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_phone'] = $user['phone'];
             $_SESSION['access_rights'] = $user['access_rights'];
+            $_SESSION['user_position'] = $user['position'] ?? '';
 
             // Админа — в админ-панель, сотрудника — в панель сотрудника, пользователя — на главную
             if ($user['access_rights'] === 'ADMIN') {

@@ -12,6 +12,7 @@ if (isLoggedIn()) {
             <form class="auth-form" id="register-form" method="POST" action="../backend/register.php">
                 <h2>Регистрация</h2>
                 <input type="tel" name="phone" placeholder="Номер телефона" required>
+                <input type="email" name="email" placeholder="Электронная почта (необязательно)">
                 <input type="password" name="password" placeholder="Пароль" required>
                 <input type="password" name="password_confirm" placeholder="Подтвердите пароль" required>
                 <button type="submit" class="btn">Зарегистрироваться</button>

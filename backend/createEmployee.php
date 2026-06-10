@@ -34,11 +34,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         $hash = password_hash($password, PASSWORD_DEFAULT);
+
+        // Определяем права доступа в зависимости от должности
+        // Шеф-повар = ADMIN (1), остальные сотрудники = EMPLOYEE (3)
+        $isChef = ($position === 'Шеф-повар');
+        $accessRightsId = $isChef ? 1 : 3;
+
         $stmt = $pdo->prepare("
             INSERT INTO users (phone, name, position, password, access_rights_id)
-            VALUES (?, ?, ?, ?, 3)
+            VALUES (?, ?, ?, ?, ?)
         ");
-        $stmt->execute([$phone, $name, $position, $hash]);
+        $stmt->execute([$phone, $name, $position, $hash, $accessRightsId]);
 
         redirect('admin/index.php?page=users&success=Сотрудник+' . urlencode($name) . '+создан');
     } else {

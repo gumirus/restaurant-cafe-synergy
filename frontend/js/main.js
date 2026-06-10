@@ -246,18 +246,77 @@ function loadNews() {
     setTimeout(initFadeIn, 100);
 }
 
-// ========== BOOKING FORM ==========
+// ========== BOOKING FORM (модальное окно + fetch) ==========
 function initBookingForm() {
     const form = document.getElementById('booking-form');
     if (!form) return;
 
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        alert('✅ Спасибо! Мы свяжемся с вами для подтверждения бронирования.');
-        form.reset();
+        
+        const formData = new FormData(this);
+        const btn = this.querySelector('button[type="submit"]');
+        const originalText = btn.textContent;
+        btn.textContent = '⏳ Отправка...';
+        btn.disabled = true;
+
+        try {
+            const response = await fetch('/backend/createBooking.php', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                openBookingModal(result.message);
+                this.reset();
+            } else {
+                openBookingErrorModal(result.message);
+            }
+        } catch (err) {
+            openBookingErrorModal('Ошибка соединения. Проверьте подключение к интернету.');
+        } finally {
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
     });
 }
 
+// Функции модального окна бронирования
+function openBookingModal(message) {
+    const el = document.getElementById('booking-modal-text');
+    const modal = document.getElementById('booking-modal');
+    if (el) el.textContent = message || 'Спасибо! Мы свяжемся с вами для подтверждения.';
+    if (modal) modal.classList.add('active');
+}
+function closeBookingModal() {
+    const modal = document.getElementById('booking-modal');
+    if (modal) modal.classList.remove('active');
+}
+function openBookingErrorModal(message) {
+    const el = document.getElementById('booking-error-text');
+    const modal = document.getElementById('booking-error-modal');
+    if (el) el.textContent = message || 'Проверьте данные и попробуйте снова.';
+    if (modal) modal.classList.add('active');
+}
+function closeBookingErrorModal() {
+    const modal = document.getElementById('booking-error-modal');
+    if (modal) modal.classList.remove('active');
+}
+
+// Закрытие модалок по Escape и клику вне окна
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeBookingModal();
+        closeBookingErrorModal();
+    }
+});
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('booking-modal-overlay')) {
+        e.target.classList.remove('active');
+    }
+});
 // ========== CART ==========
 function initCart() {
     document.addEventListener('click', async function(e) {

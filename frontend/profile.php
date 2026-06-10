@@ -15,6 +15,7 @@ $user_id = $_SESSION['user_id'];
 // Обновление профиля
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     $name = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
     $bio = trim($_POST['bio'] ?? '');
 
     // Загрузка аватара
@@ -28,8 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
         }
     }
 
-    $sql = "UPDATE users SET name = ?, bio = ?" . ($avatar ? ", avatar = ?" : "") . " WHERE id = ?";
-    $params = [$name, $bio];
+    $sql = "UPDATE users SET name = ?, email = ?, bio = ?" . ($avatar ? ", avatar = ?" : "") . " WHERE id = ?";
+    $params = [$name, $email ?: null, $bio];
     if ($avatar) $params[] = $avatar;
     $params[] = $user_id;
 
@@ -43,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['repeat_order'])) {
     $order_id = (int)$_POST['order_id'];
 
     // Получаем товары из заказа
-    $stmt = $pdo->prepare("SELECT dish_id, quantity FROM order_items WHERE order_id = ?");
+    $stmt = $pdo->prepare("SELECT dish_id, count as quantity FROM order_items WHERE order_id = ?");
     $stmt->execute([$order_id]);
     $items = $stmt->fetchAll();
 
@@ -67,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['repeat_order'])) {
 // ========== ПОЛУЧЕНИЕ ДАННЫХ ==========
 
 // Информация о пользователе
-$stmt = $pdo->prepare("SELECT phone, name, bio, avatar, created_at FROM users WHERE id = ?");
+$stmt = $pdo->prepare("SELECT phone, email, name, bio, avatar, created_at FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
 
@@ -88,6 +89,22 @@ $status_labels = [
     'ready'      => '🍽️ Готов',
     'completed'  => '✔️ Выполнен',
     'cancelled'  => '❌ Отменён',
+];
+
+// История бронирований
+$stmt = $pdo->prepare("
+    SELECT b.id, b.name, b.phone, b.guests, b.booking_date, b.booking_time, b.comment, b.status, b.created_at
+    FROM bookings b
+    WHERE b.phone = ?
+    ORDER BY b.created_at DESC
+");
+$stmt->execute([$user['phone']]);
+$bookings = $stmt->fetchAll();
+
+$booking_labels = [
+    'pending'   => '🕐 Ожидание',
+    'confirmed' => '✅ Подтверждено',
+    'cancelled' => '❌ Отменено',
 ];
 
 $avatar_url = $user['avatar'] ? 'uploads/' . $user['avatar'] : 'images/default-avatar.svg';
@@ -128,6 +145,11 @@ $avatar_url = $user['avatar'] ? 'uploads/' . $user['avatar'] : 'images/default-a
                         </div>
 
                         <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" value="<?= htmlspecialchars($user['email'] ?? '') ?>" placeholder="your@email.com">
+                        </div>
+
+                        <div class="form-group">
                             <label>О себе</label>
                             <textarea name="bio" placeholder="Расскажите о себе..."><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
                         </div>
@@ -138,7 +160,69 @@ $avatar_url = $user['avatar'] ? 'uploads/' . $user['avatar'] : 'images/default-a
 
                 <!-- ===== ПРАВАЯ КОЛОНКА — Заказы ===== -->
                 <div class="profile-orders">
-                    <h2>История заказов</h2>
+                    <h2>📅 Мои бронирования</h2>
+
+                    <?php if (empty($bookings)): ?>
+                        <div class="orders-empty">
+                            <p>📅 У вас пока нет бронирований</p>
+                            <a href="contact.php" class="btn">Забронировать столик</a>
+                        </div>
+                    <?php else: ?>
+                        <?php foreach ($bookings as $booking): ?>
+                            <div class="order-card">
+                                <div class="order-card-header">
+                                    <span class="order-number">Бронь #<?= $booking['id'] ?></span>
+                                    <span class="order-date"><?= date('d.m.Y', strtotime($booking['booking_date'])) ?> в <?= $booking['booking_time'] ?></span>
+                                    <span class="order-status-badge status-<?= $booking['status'] === 'confirmed' ? 'completed' : ($booking['status'] === 'cancelled' ? 'cancelled' : 'pending') ?>">
+                                        <?= $booking_labels[$booking['status']] ?>
+                                    </span>
+                                </div>
+                                <div class="order-card-body">
+                                    <div style="display:flex; gap:20px; flex-wrap:wrap; padding:5px 0;">
+                                        <span>👥 <?= $booking['guests'] ?> <?= $booking['guests'] === 1 ? 'гость' : 'гостей' ?></span>
+                                        <span>📞 <?= htmlspecialchars($booking['phone']) ?></span>
+                                        <?php if ($booking['comment']): ?>
+                                            <span>💬 <?= htmlspecialchars($booking['comment']) ?></span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+
+                                <?php if ($booking['status'] === 'confirmed'): ?>
+                                    <?php
+                                    // Проверяем, есть ли уже отзыв на бронь
+                                    $stmtFbB = $pdo->prepare("SELECT rating, comment FROM booking_feedback WHERE booking_id = ?");
+                                    $stmtFbB->execute([$booking['id']]);
+                                    $fbBooking = $stmtFbB->fetch();
+                                    ?>
+                                    <?php if ($fbBooking): ?>
+                                        <div class="order-feedback-existing">
+                                            <span class="feedback-rating">
+                                                <?= $fbBooking['rating'] === 'like' ? '👍' : '👎' ?>
+                                            </span>
+                                            <?php if ($fbBooking['comment']): ?>
+                                                <span class="feedback-comment"><?= htmlspecialchars($fbBooking['comment']) ?></span>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="order-feedback-form">
+                                            <form method="POST" action="../backend/submitBookingFeedback.php">
+                                                <input type="hidden" name="booking_id" value="<?= $booking['id'] ?>">
+                                                <div class="feedback-buttons">
+                                                    <button type="submit" name="rating" value="like" class="feedback-btn feedback-like" title="Всё понравилось">👍</button>
+                                                    <button type="submit" name="rating" value="dislike" class="feedback-btn feedback-dislike" title="Что-то не понравилось">👎</button>
+                                                </div>
+                                                <div class="feedback-comment-input">
+                                                    <input type="text" name="comment" placeholder="Как вам обстановка, обслуживание, еда? (необязательно)..." maxlength="500">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
+                    <h2 style="margin-top:40px;">📋 История заказов</h2>
 
                     <?php if (empty($orders)): ?>
                         <div class="orders-empty">
@@ -157,7 +241,12 @@ $avatar_url = $user['avatar'] ? 'uploads/' . $user['avatar'] : 'images/default-a
                                 </div>
                                 <div class="order-card-body">
                                     <?php
-                                    $stmt = $pdo->prepare("SELECT name, price, quantity FROM order_items WHERE order_id = ?");
+                                    $stmt = $pdo->prepare("
+                                        SELECT d.name, oi.price, oi.count as quantity
+                                        FROM order_items oi
+                                        JOIN dishes d ON oi.dish_id = d.id
+                                        WHERE oi.order_id = ?
+                                    ");
                                     $stmt->execute([$order['id']]);
                                     $items = $stmt->fetchAll();
                                     ?>
@@ -185,6 +274,38 @@ $avatar_url = $user['avatar'] ? 'uploads/' . $user['avatar'] : 'images/default-a
                                         <button type="submit" name="repeat_order" class="btn btn-small">🔄 Повторить заказ</button>
                                     </form>
                                 </div>
+
+                                <?php if ($order['status'] === 'completed'): ?>
+                                    <?php
+                                    // Проверяем, есть ли уже отзыв
+                                    $stmtFb = $pdo->prepare("SELECT rating, comment FROM order_feedback WHERE order_id = ?");
+                                    $stmtFb->execute([$order['id']]);
+                                    $feedback = $stmtFb->fetch();
+                                    ?>
+                                    <?php if ($feedback): ?>
+                                        <div class="order-feedback-existing">
+                                            <span class="feedback-rating">
+                                                <?= $feedback['rating'] === 'like' ? '👍' : '👎' ?>
+                                            </span>
+                                            <?php if ($feedback['comment']): ?>
+                                                <span class="feedback-comment"><?= htmlspecialchars($feedback['comment']) ?></span>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="order-feedback-form">
+                                            <form method="POST" action="../backend/submitFeedback.php">
+                                                <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
+                                                <div class="feedback-buttons">
+                                                    <button type="submit" name="rating" value="like" class="feedback-btn feedback-like" title="Всё понравилось">👍</button>
+                                                    <button type="submit" name="rating" value="dislike" class="feedback-btn feedback-dislike" title="Что-то не понравилось">👎</button>
+                                                </div>
+                                                <div class="feedback-comment-input">
+                                                    <input type="text" name="comment" placeholder="Напишите комментарий (необязательно)..." maxlength="500">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    <?php endif; ?>
+                                <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
                     <?php endif; ?>
@@ -365,6 +486,68 @@ $avatar_url = $user['avatar'] ? 'uploads/' . $user['avatar'] : 'images/default-a
     .order-total strong {
         color: var(--color-primary);
         font-size: 1.2rem;
+    }
+
+    /* ===== ОБРАТНАЯ СВЯЗЬ ===== */
+    .order-feedback-existing {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 20px;
+        background: rgba(212, 168, 83, 0.08);
+        border-top: 1px solid var(--color-border);
+        font-size: 0.9rem;
+    }
+    .feedback-rating {
+        font-size: 1.3rem;
+    }
+    .feedback-comment {
+        color: var(--color-text-light);
+        font-style: italic;
+    }
+    .order-feedback-form {
+        padding: 12px 20px;
+        background: rgba(255,255,255,0.03);
+        border-top: 1px solid var(--color-border);
+    }
+    .feedback-buttons {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+    .feedback-btn {
+        padding: 6px 16px;
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        background: var(--color-surface);
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: all 0.2s;
+    }
+    .feedback-btn:hover {
+        transform: scale(1.15);
+    }
+    .feedback-like:hover {
+        border-color: #27ae60;
+        background: rgba(39, 174, 96, 0.1);
+    }
+    .feedback-dislike:hover {
+        border-color: #e74c3c;
+        background: rgba(231, 76, 60, 0.1);
+    }
+    .feedback-comment-input input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid var(--color-border);
+        border-radius: 6px;
+        background: var(--color-bg);
+        color: var(--color-text);
+        font-size: 0.85rem;
+        transition: border-color 0.3s;
+    }
+    .feedback-comment-input input:focus {
+        outline: none;
+        border-color: var(--color-primary);
     }
 
     /* ===== АДАПТИВ ===== */

@@ -19,8 +19,14 @@ $allowedStatuses = ['pending', 'confirmed', 'preparing', 'ready', 'completed', '
 if ($id && in_array($status, $allowedStatuses)) {
     $stmt = $pdo->prepare("UPDATE orders SET status = ? WHERE id = ?");
     $stmt->execute([$status, $id]);
+    $success = true;
 }
 
 // Редирект обратно
 $referer = $_SERVER['HTTP_REFERER'] ?? 'admin/index.php?page=orders';
-redirect($referer);
+$separator = (strpos($referer, '?') !== false) ? '&' : '?';
+if (isset($success)) {
+    redirect($referer . $separator . 'success=Статус+заказа+%23' . $id . '+изменён');
+} else {
+    redirect($referer . $separator . 'error=Неверные+параметры');
+}

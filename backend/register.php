@@ -8,6 +8,7 @@ require_once __DIR__ . '/config/session.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone = trim($_POST['phone'] ?? '');
+    $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
     $password_confirm = $_POST['password_confirm'] ?? '';
 
@@ -41,10 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         $stmt = $pdo->prepare("
-            INSERT INTO users (phone, password, access_rights_id)
-            VALUES (?, ?, 2)
+            INSERT INTO users (phone, email, password, access_rights_id)
+            VALUES (?, ?, ?, 2)
         ");
-        $stmt->execute([$phone, $hashedPassword]);
+        $stmt->execute([$phone, $email ?: null, $hashedPassword]);
 
         // Автоматический вход
         $userId = $pdo->lastInsertId();

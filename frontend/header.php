@@ -3,8 +3,20 @@
 // ОБЩАЯ ШАПКА САЙТА (с проверкой авторизации)
 // =============================================
 require_once __DIR__ . '/../backend/config/session.php';
+require_once __DIR__ . '/../backend/config/db.php';
 
 $current_page = basename($_SERVER['SCRIPT_NAME']);
+
+// Получаем аватар пользователя, если авторизован
+$userAvatar = null;
+$userName = null;
+if (isLoggedIn()) {
+    $stmt = $pdo->prepare("SELECT avatar, name FROM users WHERE id = ?");
+    $stmt->execute([$_SESSION['user_id']]);
+    $userData = $stmt->fetch();
+    $userAvatar = $userData['avatar'] ?? null;
+    $userName = $userData['name'] ?? null;
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -36,11 +48,17 @@ $current_page = basename($_SERVER['SCRIPT_NAME']);
             </nav>
             <div class="header-actions">
                 <?php if (isLoggedIn()): ?>
-                    <a href="profile.php" title="Личный кабинет">👤</a>
+                    <a href="profile.php" title="Личный кабинет" class="header-avatar-link">
+                        <?php if ($userAvatar): ?>
+                            <img src="uploads/<?= htmlspecialchars($userAvatar) ?>" alt="Аватар" class="header-avatar">
+                        <?php else: ?>
+                            <span class="header-avatar-placeholder">👤</span>
+                        <?php endif; ?>
+                    </a>
                     <a href="cart.php" class="cart-btn" title="Корзина">
                         🛒 <span id="cart-count" class="cart-count">0</span>
                     </a>
-                    <span class="user-info"><?= htmlspecialchars($_SESSION['user_phone']) ?></span>
+                    <span class="user-info"><?= htmlspecialchars($userName ?: $_SESSION['user_phone']) ?></span>
                     <a href="../backend/logout.php" class="btn-logout">Выйти</a>
                 <?php else: ?>
                     <a href="login.php">Войти</a>

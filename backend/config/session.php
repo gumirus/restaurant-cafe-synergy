@@ -32,6 +32,7 @@ function getCurrentUser(): ?array {
         'id' => $_SESSION['user_id'],
         'phone' => $_SESSION['user_phone'],
         'access_rights' => $_SESSION['access_rights'],
+        'position' => $_SESSION['user_position'] ?? '',
     ];
 }
 

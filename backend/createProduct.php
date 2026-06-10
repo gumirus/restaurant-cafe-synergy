@@ -23,10 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $file = $_FILES['image'];
         $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
         $newName = uniqid('dish_') . '.' . $ext;
-        $uploadPath = __DIR__ . '/uploads/' . $newName;
+        $uploadPath = __DIR__ . '/../frontend/uploads/dishes/' . $newName;
 
         if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
-            $image = $newName;
+            $image = 'uploads/dishes/' . $newName;
         }
     }
 
@@ -36,6 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         VALUES (?, ?, ?, ?, ?, ?)
     ");
     $stmt->execute([$categoryId, $name, $description, $price, $weight, $image]);
+
+    // Добавляем связь с категорией в dish_categories
+    $pdo->prepare("INSERT INTO dish_categories (dish_id, category_id) VALUES (?, ?)")
+        ->execute([$pdo->lastInsertId(), $categoryId]);
 
     redirect('admin/index.php');
 }

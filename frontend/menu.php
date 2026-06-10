@@ -76,6 +76,8 @@
         border-radius: 16px;
         overflow: hidden;
         transition: transform 0.3s, box-shadow 0.3s;
+        display: flex;
+        flex-direction: column;
     }
     .dish-card:hover {
         transform: translateY(-5px);
@@ -86,7 +88,12 @@
         height: 200px;
         object-fit: cover;
     }
-    .dish-card-body { padding: 20px; }
+    .dish-card-body {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
     .dish-card-body h3 {
         color: var(--color-text-white);
         margin-bottom: 8px;
@@ -96,6 +103,7 @@
         color: var(--color-text-light);
         font-size: 0.9rem;
         margin-bottom: 12px;
+        flex: 1;
     }
     .dish-card-body .price {
         color: var(--color-primary);
@@ -126,76 +134,352 @@
     }
     </style>
 
+    <!-- Подключаем данные меню из БД -->
+    <?php
+    require_once __DIR__ . '/../backend/config/db.php';
+
+    // Маппинг названий категорий из БД в data-category для фильтров
+    $catMap = [
+        'Салаты' => 'salads',
+        'Супы' => 'soups',
+        'Горячие блюда' => 'main',
+        'Холодные блюда' => 'sushi',
+        'Десерты' => 'desserts',
+        'Напитки' => 'drinks',
+    ];
+
+    // Получаем все блюда с категориями
+    $stmt = $pdo->query("
+        SELECT d.id, d.name, d.description, d.price, d.weight, d.image, d.ingredients,
+               GROUP_CONCAT(c.name SEPARATOR '||') as category_names
+        FROM dishes d
+        JOIN dish_categories dc ON d.id = dc.dish_id
+        JOIN categories c ON dc.category_id = c.id
+        GROUP BY d.id
+        ORDER BY d.name
+    ");
+    $dishes = $stmt->fetchAll();
+    ?>
+
+    <!-- Модальное окно деталей блюда -->
+    <div id="dish-modal" class="dish-modal-overlay" onclick="if(event.target===this)closeDishModal()">
+        <div class="dish-modal-content">
+            <button class="dish-modal-close" onclick="closeDishModal()">&times;</button>
+            <div class="dish-modal-layout">
+                <div class="dish-modal-image">
+                    <div class="dish-modal-img-wrap">
+                        <img src="" alt="" id="dish-modal-img">
+                        <div class="dish-modal-img-zoom">🔍</div>
+                    </div>
+                </div>
+                <div class="dish-modal-info">
+                    <h2 id="dish-modal-name"></h2>
+                    <div class="dish-modal-meta">
+                        <span class="dish-modal-weight" id="dish-modal-weight"></span>
+                        <span class="dish-modal-price" id="dish-modal-price"></span>
+                    </div>
+                    <div class="dish-modal-desc" id="dish-modal-desc"></div>
+                    <div class="dish-modal-ingredients">
+                        <h4>🧂 Состав:</h4>
+                        <p id="dish-modal-ingredients"></p>
+                    </div>
+                    <button class="btn dish-modal-cart-btn" id="dish-modal-cart-btn">🛒 Добавить в корзину</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    .dish-modal-overlay {
+        position: fixed; inset: 0; z-index: 99999;
+        background: rgba(0,0,0,0.7);
+        display: flex; align-items: center; justify-content: center;
+        visibility: hidden; opacity: 0;
+        transition: all 0.3s ease;
+    }
+    .dish-modal-overlay.active {
+        visibility: visible; opacity: 1;
+    }
+    .dish-modal-content {
+        background: #1a1a2e;
+        border-radius: 20px;
+        max-width: 700px; width: 92%;
+        position: relative;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+        transform: scale(0.9) translateY(20px);
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        overflow: hidden;
+    }
+    .dish-modal-overlay.active .dish-modal-content {
+        transform: scale(1) translateY(0);
+    }
+    .dish-modal-close {
+        position: absolute; top: 12px; right: 18px;
+        background: rgba(0,0,0,0.3); border: none;
+        font-size: 1.8rem; cursor: pointer; color: #fff;
+        line-height: 1; width: 36px; height: 36px;
+        border-radius: 50%; display: flex;
+        align-items: center; justify-content: center;
+        z-index: 2; transition: background 0.2s;
+    }
+    .dish-modal-close:hover { background: rgba(0,0,0,0.6); }
+    .dish-modal-layout {
+        display: flex; flex-wrap: wrap;
+    }
+    .dish-modal-image {
+        flex: 0 0 300px; max-width: 300px;
+        overflow: hidden;
+    }
+    .dish-modal-img-wrap {
+        position: relative;
+        width: 100%; height: 100%;
+    }
+    .dish-modal-img-wrap img {
+        width: 100%; height: 100%; object-fit: cover;
+        display: block; min-height: 280px;
+        cursor: zoom-in;
+    }
+    .dish-modal-img-zoom {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s;
+        background: rgba(0,0,0,0.15);
+        color: #fff;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    .dish-modal-img-wrap:hover .dish-modal-img-zoom {
+        opacity: 1;
+    }
+    .dish-modal-info {
+        flex: 1; padding: 30px;
+        min-width: 250px;
+    }
+    .dish-modal-info h2 {
+        font-size: 1.6rem; color: var(--color-text-white);
+        margin-bottom: 12px;
+    }
+    .dish-modal-meta {
+        display: flex; gap: 15px; align-items: center;
+        margin-bottom: 15px;
+    }
+    .dish-modal-weight {
+        background: rgba(212, 168, 83, 0.15);
+        color: var(--color-primary);
+        padding: 4px 12px; border-radius: 20px;
+        font-size: 0.85rem; font-weight: 600;
+    }
+    .dish-modal-price {
+        font-size: 1.5rem; font-weight: 700;
+        color: var(--color-primary);
+    }
+    .dish-modal-desc {
+        color: var(--color-text-light);
+        font-size: 0.95rem; line-height: 1.7;
+        margin-bottom: 18px;
+    }
+    .dish-modal-ingredients {
+        background: rgba(255,255,255,0.05);
+        border-radius: 12px; padding: 16px;
+        margin-bottom: 20px;
+    }
+    .dish-modal-ingredients h4 {
+        color: var(--color-text-white);
+        font-size: 0.9rem; margin-bottom: 8px;
+    }
+    .dish-modal-ingredients p {
+        color: var(--color-text-light);
+        font-size: 0.85rem; line-height: 1.6;
+        margin: 0;
+    }
+    .dish-modal-cart-btn {
+        width: 100%; padding: 14px;
+        font-size: 1rem;
+    }
+    @media (max-width: 600px) {
+        .dish-modal-image { flex: 0 0 100%; max-width: 100%; }
+        .dish-modal-image img { min-height: 200px; max-height: 220px; }
+        .dish-modal-info { padding: 20px; }
+    }
+    </style>
+
+    <!-- Оверлей для увеличенного фото (открывается только из модалки) -->
+    <div id="dish-img-overlay" class="dish-img-overlay" onclick="this.classList.remove('active')">
+        <button class="dish-img-close" onclick="event.stopPropagation();document.getElementById('dish-img-overlay').classList.remove('active')">&times;</button>
+        <img src="" alt="" id="dish-img-full">
+    </div>
+
+    <style>
+    .dish-img-overlay {
+        position: fixed; inset: 0; z-index: 999999;
+        background: transparent;
+        display: flex; align-items: center; justify-content: center;
+        visibility: hidden; opacity: 0;
+        transition: all 0.3s ease;
+        cursor: zoom-out;
+    }
+    .dish-img-overlay.active {
+        visibility: visible; opacity: 1;
+    }
+    .dish-img-overlay img {
+        width: 90vw;
+        height: 85vh;
+        object-fit: contain;
+        transition: transform 0.3s ease;
+    }
+    .dish-img-close {
+        position: fixed; top: 20px; right: 25px;
+        background: rgba(255,255,255,0.15);
+        border: none; font-size: 2.2rem;
+        cursor: pointer; color: #fff;
+        width: 44px; height: 44px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        z-index: 10; transition: background 0.2s;
+    }
+    .dish-img-close:hover { background: rgba(255,255,255,0.3); }
+    </style>
+
     <script>
+    // Данные блюд (глобально)
+    const dishData = <?= json_encode(array_map(function($d) use ($catMap) {
+        return [
+            'id' => (int)$d['id'],
+            'name' => $d['name'],
+            'price' => (int)$d['price'],
+            'weight' => (int)$d['weight'],
+            'desc' => $d['description'] ?? '',
+            'ingredients' => $d['ingredients'] ?? '',
+            'img' => $d['image'] ? $d['image'] : 'uploads/dishes/placeholder.jpg',
+        ];
+    }, $dishes)) ?>;
+
+    function showToast(msg) {
+        const existing = document.querySelector('.toast');
+        if (existing) existing.remove();
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    }
+
+    // ====== Добавление в корзину (универсальная функция) ======
+    function addToCart(id, btn) {
+        if (!id) { showToast('⚠️ Ошибка: ID блюда не найден'); return; }
+        const item = dishData.find(d => d.id === id);
+        if (!item) { showToast('⚠️ Ошибка: блюдо не найдено'); return; }
+        
+        fetch('../backend/cart_add.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'dish_id=' + id + '&quantity=1'
+        })
+        .then(r => r.json())
+        .then(data => {
+                if (data.success) {
+                const cartCount = document.getElementById('cart-count');
+                if (cartCount) cartCount.textContent = data.cart_count;
+                showToast('✅ ' + item.name + ' добавлен в корзину');
+            } else {
+                showToast('⚠️ ' + (data.error || 'Ошибка'));
+            }
+        })
+        .catch(() => showToast('⚠️ Ошибка соединения'));
+    }
+
+    // ====== Модальное окно деталей блюда ======
+    function openDishModal(id) {
+        const item = dishData.find(d => d.id === id);
+        if (!item) return;
+        document.getElementById('dish-modal-img').src = item.img;
+        document.getElementById('dish-modal-name').textContent = item.name;
+        document.getElementById('dish-modal-price').textContent = item.price + ' ₽';
+        document.getElementById('dish-modal-weight').textContent = item.weight ? item.weight + ' г' : 'Вес не указан';
+        document.getElementById('dish-modal-desc').textContent = item.desc || 'Описание отсутствует';
+        document.getElementById('dish-modal-ingredients').textContent = item.ingredients || 'Состав не указан';
+        document.getElementById('dish-modal-cart-btn').dataset.id = item.id;
+        document.getElementById('dish-modal').classList.add('active');
+    }
+
+    function closeDishModal() {
+        document.getElementById('dish-modal').classList.remove('active');
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const overlay = document.getElementById('dish-img-overlay');
+            if (overlay.classList.contains('active')) {
+                overlay.classList.remove('active');
+            } else {
+                closeDishModal();
+            }
+        }
+    });
+
     document.addEventListener('DOMContentLoaded', function() {
+        // ====== Кнопка в корзину из модального окна ======
+        document.getElementById('dish-modal-cart-btn').addEventListener('click', function() {
+            const id = parseInt(this.dataset.id);
+            addToCart(id);
+            closeDishModal();
+        });
+
+        // ====== Увеличение фото при клике внутри модалки ======
+        document.getElementById('dish-modal-img').addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.getElementById('dish-img-full').src = this.src;
+            document.getElementById('dish-img-overlay').classList.add('active');
+        });
+
+        // ====== Фильтрация и рендер ======
         const filterBtns = document.querySelectorAll('.filter-btn');
         const dishesGrid = document.getElementById('menu-dishes');
         if (!dishesGrid) return;
 
-        // Данные меню
-        const menuItems = [
-            { id: 1, name: 'Цезарь с курицей', price: 450, category: 'salads', desc: 'Классический салат с курицей', img: 'uploads/dishes/1-caesar.jpg' },
-            { id: 2, name: 'Греческий салат', price: 380, category: 'salads', desc: 'Свежие овощи с сыром фета', img: 'uploads/dishes/2-greek.jpg' },
-            { id: 3, name: 'Том Ям', price: 550, category: 'soups', desc: 'Острый тайский суп', img: 'uploads/dishes/3-tom-yam.jpg' },
-            { id: 4, name: 'Борщ', price: 320, category: 'soups', desc: 'Традиционный русский суп', img: 'uploads/dishes/4-borscht.jpg' },
-            { id: 5, name: 'Стейк Рибай', price: 1200, category: 'main', desc: 'Мраморная говядина', img: 'uploads/dishes/5-steak.jpg' },
-            { id: 6, name: 'Паста Карбонара', price: 480, category: 'main', desc: 'Итальянская паста', img: 'uploads/dishes/6-carbonara.jpg' },
-            { id: 7, name: 'Тирамису', price: 350, category: 'desserts', desc: 'Итальянский десерт', img: 'uploads/dishes/7-tiramisu.jpg' },
-            { id: 8, name: 'Чизкейк', price: 320, category: 'desserts', desc: 'Нью-йоркский чизкейк', img: 'uploads/dishes/8-cheesecake.jpg' },
-            { id: 9, name: 'Лимонад', price: 180, category: 'drinks', desc: 'Домашний лимонад', img: 'uploads/dishes/9-lemonade.jpg' },
-            { id: 10, name: 'Кофе', price: 200, category: 'drinks', desc: 'Эспрессо/Капучино/Латте', img: 'uploads/dishes/10-coffee.jpg' },
-            { id: 11, name: 'Боул с киноа', price: 420, category: 'salads', desc: 'Полезный боул с киноа, авокадо и овощами', img: 'uploads/dishes/11-bowl.jpg' },
-            { id: 12, name: 'Пицца Маргарита', price: 550, category: 'main', desc: 'Классическая итальянская пицца с моцареллой', img: 'uploads/dishes/12-pizza.jpg' },
-            { id: 13, name: 'Рамен', price: 480, category: 'soups', desc: 'Японский суп с лапшой, свининой и яйцом', img: 'uploads/dishes/13-ramen.jpg' },
-            { id: 14, name: 'Нисуаз', price: 390, category: 'salads', desc: 'Французский салат с тунцом и яйцом', img: 'uploads/dishes/14-salad.jpg' },
-            { id: 15, name: 'Лосось с овощами', price: 890, category: 'main', desc: 'Запечённый лосось с сезонными овощами', img: 'uploads/dishes/15-fish.jpg' },
-            { id: 16, name: 'Куриный рулет', price: 520, category: 'main', desc: 'Куриный рулет с грибами и сыром', img: 'uploads/dishes/16-chicken.jpg' },
-            { id: 17, name: 'Суши-сет', price: 950, category: 'sushi', desc: 'Ассорти из 8 видов суши и роллов', img: 'uploads/dishes/17-sushi.jpg' },
-            { id: 21, name: 'Холодец', price: 350, category: 'sushi', desc: 'Домашний холодец из говядины с хреном', img: 'uploads/dishes/21-kholodets.jpg' },
-            { id: 22, name: 'Окрошка', price: 280, categories: ['soups', 'sushi'], desc: 'Классическая окрошка на квасе с овощами и колбасой', img: 'uploads/dishes/22-okroshka.jpg' },
-            { id: 18, name: 'Бургер', price: 490, category: 'main', desc: 'Говяжий бургер с сыром и карамелизированным луком', img: 'uploads/dishes/18-burger.jpg' },
-            { id: 19, name: 'Смузи', price: 250, category: 'drinks', desc: 'Ягодный смузи с бананом и мятой', img: 'uploads/dishes/19-smoothie.jpg' },
-            { id: 20, name: 'Мороженое', price: 280, category: 'desserts', desc: 'Пломбир с ягодным топпингом', img: 'uploads/dishes/20-icecream.jpg' },
-        ];
+        const menuItems = <?= json_encode(array_map(function($d) use ($catMap) {
+            $cats = explode('||', $d['category_names']);
+            $catKeys = array_map(function($name) use ($catMap) {
+                return $catMap[$name] ?? 'other';
+            }, $cats);
+            return [
+                'id' => (int)$d['id'],
+                'name' => $d['name'],
+                'price' => (int)$d['price'],
+                'weight' => (int)$d['weight'],
+                'categories' => $catKeys,
+                'desc' => $d['description'] ?? '',
+                'ingredients' => $d['ingredients'] ?? '',
+                'img' => $d['image'] ? $d['image'] : 'uploads/dishes/placeholder.jpg',
+            ];
+        }, $dishes)) ?>;
 
-        // Отобразить все блюда
         function renderDishes(category = 'all') {
             const filtered = category === 'all' 
                 ? menuItems 
-                : menuItems.filter(item => item.category === category || (item.categories && item.categories.includes(category)));
+                : menuItems.filter(item => item.categories.includes(category));
 
             dishesGrid.innerHTML = filtered.map(item => `
                 <div class="dish-card">
-                    <img class="clickable-img" src="${item.img}" alt="${item.name}">
+                    <img src="${item.img}" alt="${item.name}" onclick="openDishModal(${item.id})">
                     <div class="dish-card-body">
                         <h3>${item.name}</h3>
                         <p>${item.desc}</p>
                         <p class="price">${item.price} ₽</p>
-                        <button class="btn add-to-cart" data-id="${item.id}">В корзину</button>
+                        <div style="display:flex; gap:8px;">
+                            <button class="btn" style="flex:1;" onclick="openDishModal(${item.id})">📋 Подробнее</button>
+                            <button class="btn" style="flex:1; background:var(--color-primary);" onclick="addToCart(${item.id}, this)">🛒 В корзину</button>
+                        </div>
                     </div>
                 </div>
             `).join('');
-
-            // Обработчик добавления в корзину — используется из main.js (initCart)
-            // Здесь только обновляем счётчик после добавления
-            document.addEventListener('cart-updated', function(e) {
-                const cartCount = document.getElementById('cart-count');
-                if (cartCount) cartCount.textContent = e.detail.count;
-            });
         }
 
-        // Уведомление
-        function showToast(msg) {
-            const existing = document.querySelector('.toast');
-            if (existing) existing.remove();
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.textContent = msg;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 2500);
-        }
-
-        // Фильтрация
         filterBtns.forEach(btn => {
             btn.addEventListener('click', function() {
                 filterBtns.forEach(b => b.classList.remove('active'));
@@ -204,7 +488,6 @@
             });
         });
 
-        // Начальная загрузка
         renderDishes('all');
     });
     </script>

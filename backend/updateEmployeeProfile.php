@@ -1,12 +1,12 @@
 <?php
 // =============================================
-// ОБНОВЛЕНИЕ ПРОФИЛЯ СОТРУДНИКА
+// ОБНОВЛЕНИЕ ПРОФИЛЯ (админ/сотрудник)
 // =============================================
 
 require_once __DIR__ . '/config/db.php';
 require_once __DIR__ . '/config/session.php';
 
-if (!isEmployee() && !isAdmin()) {
+if (!isStaff()) {
     die('Доступ запрещён');
 }
 
@@ -14,10 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userId = (int)($_POST['user_id'] ?? 0);
     $name = trim($_POST['name'] ?? '');
     $bio = trim($_POST['bio'] ?? '');
+    $position = trim($_POST['position'] ?? '');
 
-    // Проверяем, что сотрудник редактирует свой профиль
+    // Проверяем, что редактирует свой профиль
     if ($userId !== (int)$_SESSION['user_id']) {
-        redirect('employee/index.php?page=profile&error=Нельзя+редактировать+чужой+профиль');
+        $redirectPage = isAdmin() ? 'admin' : 'employee';
+        redirect($redirectPage . '/index.php?page=profile&error=Нельзя+редактировать+чужой+профиль');
     }
 
     // Обработка загрузки аватара
@@ -35,14 +37,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Обновляем БД
     if ($avatar) {
-        $stmt = $pdo->prepare("UPDATE users SET name = ?, bio = ?, avatar = ? WHERE id = ?");
-        $stmt->execute([$name, $bio, $avatar, $userId]);
+        $stmt = $pdo->prepare("UPDATE users SET name = ?, bio = ?, position = ?, avatar = ? WHERE id = ?");
+        $stmt->execute([$name, $bio, $position, $avatar, $userId]);
     } else {
-        $stmt = $pdo->prepare("UPDATE users SET name = ?, bio = ? WHERE id = ?");
-        $stmt->execute([$name, $bio, $userId]);
+        $stmt = $pdo->prepare("UPDATE users SET name = ?, bio = ?, position = ? WHERE id = ?");
+        $stmt->execute([$name, $bio, $position, $userId]);
     }
 
-    redirect('employee/index.php?page=profile&success=Профиль+обновлён');
+    // Редирект обратно
+    $redirectPage = isAdmin() ? 'admin' : 'employee';
+    redirect($redirectPage . '/index.php?page=profile&success=Профиль+обновлён');
 } else {
-    redirect('employee/index.php?page=profile');
+    $redirectPage = isAdmin() ? 'admin' : 'employee';
+    redirect($redirectPage . '/index.php?page=profile');
 }
