@@ -155,15 +155,15 @@ function loadTeam() {
     if (!container) return;
 
     const team = [
-        { name: 'Антонио Бьянки', role: 'Шеф-повар', desc: '15 лет опыта в ресторанах Мишлен' },
-        { name: 'Мария Соколова', role: 'Су-шеф', desc: 'Специалист по итальянской кухне' },
-        { name: 'Дмитрий Волков', role: 'Кондитер', desc: 'Автор уникальных десертов' },
-        { name: 'Елена Преображенская', role: 'Сомелье', desc: 'Эксперт по винным сочетаниям' },
+        { name: 'Антонио Бьянки', role: 'Шеф-повар', desc: '15 лет опыта в ресторанах Мишлен', img: 'uploads/team/1-chef.jpg' },
+        { name: 'Мария Соколова', role: 'Су-шеф', desc: 'Специалист по итальянской кухне', img: 'uploads/team/2-sous-chef.jpg' },
+        { name: 'Дмитрий Волков', role: 'Кондитер', desc: 'Автор уникальных десертов', img: 'uploads/team/3-pastry.jpg' },
+        { name: 'Елена Преображенская', role: 'Сомелье', desc: 'Эксперт по винным сочетаниям', img: 'uploads/team/4-sommelier.jpg' },
     ];
 
     container.innerHTML = team.map(m => `
         <div class="team-card fade-in">
-            <img class="team-card-image" src="images/placeholder.jpg" alt="${m.name}">
+            <img class="team-card-image clickable-img" src="${m.img}" alt="${m.name}">
             <div class="team-card-body">
                 <h3>${m.name}</h3>
                 <div class="team-role">${m.role}</div>
