@@ -50,7 +50,7 @@ foreach ($cart_items as $item) {
                         <?php $subtotal = $item['price'] * $item['quantity']; ?>
                         <div class="cart-row" data-cart-id="<?= $item['id'] ?>">
                             <div class="cart-col cart-col-product">
-                                <img src="images/placeholder.jpg" alt="<?= htmlspecialchars($item['name']) ?>" class="cart-item-image">
+                                <img src="<?= htmlspecialchars($item['image'] ? 'frontend/' . $item['image'] : 'images/placeholder.jpg') ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="cart-item-image">
                                 <span><?= htmlspecialchars($item['name']) ?></span>
                             </div>
                             <div class="cart-col cart-col-price"><?= number_format($item['price'], 2) ?> ₽</div>
