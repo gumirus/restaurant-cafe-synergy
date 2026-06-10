@@ -83,8 +83,9 @@
     .news-card img { width: 100%; height: 200px; object-fit: cover; }
     .news-card-body { padding: 20px; }
     .news-date { color: var(--color-primary); font-size: 0.85rem; font-weight: 500; }
-    .news-card-body h3 { color: var(--color-text-white); margin: 10px 0; font-size: 1.2rem; }
+    .news-card-body h3 { color: var(--color-text); margin: 10px 0; font-size: 1.2rem; }
     .news-card-body p { color: var(--color-text-light); font-size: 0.9rem; margin-bottom: 15px; line-height: 1.6; }
+    .news-card-body .btn { color: #fff; }
     </style>
 
 <?php require_once __DIR__ . '/footer.php'; ?>
