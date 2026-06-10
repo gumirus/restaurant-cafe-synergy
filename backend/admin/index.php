@@ -494,6 +494,7 @@ $page = $_GET['page'] ?? 'dashboard';
                                 <th>ID</th>
                                 <th>Имя</th>
                                 <th>Телефон</th>
+                                <th>Должность</th>
                                 <th>Права доступа</th>
                                 <th>Дата регистрации</th>
                             </tr>
@@ -508,12 +509,13 @@ $page = $_GET['page'] ?? 'dashboard';
                             ");
                             while ($userRow = $stmt->fetch()):
                             ?>
-                                <tr class="user-row" style="cursor:pointer;" onclick="openUserModal(<?= $userRow['id'] ?>, '<?= htmlspecialchars($userRow['name'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['phone'], ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['bio'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['avatar'] ?? '', ENT_QUOTES) ?>', '<?= $userRow['access_name'] ?>', '<?= date('d.m.Y H:i', strtotime($userRow['created_at'])) ?>')">
+                                <tr class="user-row" style="cursor:pointer;" onclick="openUserModal(<?= $userRow['id'] ?>, '<?= htmlspecialchars($userRow['name'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['phone'], ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['position'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['bio'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['avatar'] ?? '', ENT_QUOTES) ?>', '<?= $userRow['access_name'] ?>', '<?= date('d.m.Y H:i', strtotime($userRow['created_at'])) ?>')">
                                     <td><?= $userRow['id'] ?></td>
                                     <td><?= htmlspecialchars($userRow['name'] ?? '—') ?></td>
                                     <td><?= htmlspecialchars($userRow['phone']) ?></td>
+                                    <td><?= htmlspecialchars($userRow['position'] ?? '—') ?></td>
                                     <td>
-                                        <span class="badge <?= $userRow['access_name'] === 'ADMIN' ? 'badge-danger' : 'badge-info' ?>">
+                                        <span class="badge <?= $userRow['access_name'] === 'ADMIN' ? 'badge-danger' : ($userRow['access_name'] === 'EMPLOYEE' ? 'badge-info' : 'badge-warning') ?>">
                                             <?= $userRow['access_name'] ?>
                                         </span>
                                     </td>
@@ -525,6 +527,47 @@ $page = $_GET['page'] ?? 'dashboard';
                 </div>
             </div>
 
+            <!-- Форма создания сотрудника -->
+            <div class="card" style="margin-top: 20px;">
+                <h2>➕ Добавить сотрудника</h2>
+                <form method="POST" action="../createEmployee.php">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Имя сотрудника</label>
+                            <input type="text" name="name" placeholder="Например: Анна" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Телефон</label>
+                            <input type="text" name="phone" placeholder="+79990000000" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Должность</label>
+                            <select name="position" required>
+                                <option value="">Выберите должность</option>
+                                <option value="Шеф-повар">Шеф-повар</option>
+                                <option value="Повар">Повар</option>
+                                <option value="Су-шеф">Су-шеф</option>
+                                <option value="Кондитер">Кондитер</option>
+                                <option value="Официант">Официант</option>
+                                <option value="Старший официант">Старший официант</option>
+                                <option value="Бариста">Бариста</option>
+                                <option value="Бармен">Бармен</option>
+                                <option value="Сомелье">Сомелье</option>
+                                <option value="Менеджер">Менеджер</option>
+                                <option value="Администратор">Администратор</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Пароль</label>
+                            <input type="text" name="password" placeholder="password" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">➕ Создать сотрудника</button>
+                </form>
+            </div>
+
             <!-- Модальное окно пользователя -->
             <div id="user-modal" class="user-modal-overlay" onclick="if(event.target===this)closeUserModal()">
                 <div class="user-modal-content">
@@ -534,6 +577,7 @@ $page = $_GET['page'] ?? 'dashboard';
                             <img src="" alt="Аватар" id="user-modal-img">
                         </div>
                         <h2 id="user-modal-name"></h2>
+                        <div class="user-modal-position" id="user-modal-position"></div>
                         <div class="user-modal-phone" id="user-modal-phone"></div>
                         <div class="user-modal-role" id="user-modal-role"></div>
                         <div class="user-modal-date" id="user-modal-date"></div>
@@ -582,8 +626,11 @@ $page = $_GET['page'] ?? 'dashboard';
             .user-modal-body h2 {
                 font-size: 1.4rem; margin-bottom: 5px; color: #1a1a2e;
             }
+            .user-modal-position {
+                font-size: 0.9rem; color: #d4a853; font-weight: 600; margin-bottom: 5px;
+            }
             .user-modal-phone {
-                font-size: 1rem; color: #d4a853; font-weight: 600; margin-bottom: 8px;
+                font-size: 1rem; color: #555; margin-bottom: 8px;
             }
             .user-modal-role {
                 display: inline-block;
@@ -605,8 +652,9 @@ $page = $_GET['page'] ?? 'dashboard';
             </style>
 
             <script>
-            function openUserModal(id, name, phone, bio, avatar, role, date) {
+            function openUserModal(id, name, phone, position, bio, avatar, role, date) {
                 document.getElementById('user-modal-name').textContent = name || 'Без имени';
+                document.getElementById('user-modal-position').textContent = position || '';
                 document.getElementById('user-modal-phone').textContent = phone;
                 document.getElementById('user-modal-role').textContent = role;
                 document.getElementById('user-modal-date').textContent = 'Зарегистрирован: ' + date;

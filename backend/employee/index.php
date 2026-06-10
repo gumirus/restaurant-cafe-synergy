@@ -48,6 +48,11 @@ $stmt = $pdo->query("
 ");
 $todayBookings = $stmt->fetchAll();
 
+// Получаем данные сотрудника
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->execute([$user['id']]);
+$employee = $stmt->fetch();
+
 $page = $_GET['page'] ?? 'dashboard';
 
 $statusLabels = [
@@ -113,6 +118,10 @@ $statusLabels = [
                 <span class="icon">📅</span>
                 <span>Бронирования</span>
             </a>
+            <a href="?page=profile" class="<?= $page === 'profile' ? 'active' : '' ?>">
+                <span class="icon">👤</span>
+                <span>Мой профиль</span>
+            </a>
             <a href="../logout.php" style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 15px;">
                 <span class="icon">🚪</span>
                 <span>Выйти</span>
@@ -130,6 +139,7 @@ $statusLabels = [
                     'dashboard' => 'Дашборд',
                     'orders' => 'Заказы',
                     'bookings' => 'Бронирования',
+                    'profile' => 'Мой профиль',
                 ];
                 echo $titles[$page] ?? 'Дашборд';
                 ?>
@@ -392,6 +402,42 @@ $statusLabels = [
                             <?php endwhile; ?>
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+        <!-- ==================== PROFILE ==================== -->
+        <?php elseif ($page === 'profile'): ?>
+            <div class="card">
+                <h2>Мой профиль</h2>
+                <div style="display:flex; gap:30px; align-items:flex-start; flex-wrap:wrap;">
+                    <div style="text-align:center; flex-shrink:0;">
+                        <?php if ($employee['avatar']): ?>
+                            <img src="../../frontend/uploads/<?= $employee['avatar'] ?>" alt="" style="width:120px;height:120px;object-fit:cover;border-radius:50%;border:3px solid var(--color-primary);">
+                        <?php else: ?>
+                            <div style="width:120px;height:120px;border-radius:50%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:3rem;color:#ccc;border:3px solid var(--color-primary);">👤</div>
+                        <?php endif; ?>
+                        <p style="margin-top:8px;font-size:0.85rem;color:var(--color-text-light);">
+                            <?= htmlspecialchars($employee['position'] ?? '') ?>
+                        </p>
+                    </div>
+                    <div style="flex:1;min-width:280px;">
+                        <form method="POST" action="../updateEmployeeProfile.php" enctype="multipart/form-data">
+                            <input type="hidden" name="user_id" value="<?= $employee['id'] ?>">
+                            <div class="form-group">
+                                <label>Имя</label>
+                                <input type="text" name="name" value="<?= htmlspecialchars($employee['name'] ?? '') ?>" placeholder="Ваше имя">
+                            </div>
+                            <div class="form-group">
+                                <label>О себе</label>
+                                <textarea name="bio" placeholder="Расскажите о себе" rows="4"><?= htmlspecialchars($employee['bio'] ?? '') ?></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Фото профиля</label>
+                                <input type="file" name="avatar" accept="image/*">
+                            </div>
+                            <button type="submit" class="btn">💾 Сохранить</button>
+                        </form>
+                    </div>
                 </div>
             </div>
 
