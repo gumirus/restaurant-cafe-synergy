@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div class="about-text fade-in">
-                    <h2><span>Наша</span> история</h2>
+                    <h2><span>Наша</span> <span class="history-word">история</span></h2>
                     <p>Bean Scene открыл свои двери в 2011 году. За 15 лет мы прошли путь от небольшого кафе до ресторана премиум-класса, завоевав признание гостей и профессиональные награды.</p>
                     <p>Наша философия — использовать только свежие продукты от местных фермеров, сочетать классические рецепты с современными гастрономическими трендами и создавать атмосферу, в которую хочется возвращаться.</p>
                     <div class="about-features">
@@ -116,6 +116,7 @@
     .about-image-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); }
     .about-text h2 { font-size: 2rem; margin-bottom: 20px; color: var(--color-text-white); }
     .about-text h2 span { color: #4fc3f7; }
+    .about-text h2 .history-word { color: var(--color-primary); }
     .about-text p { color: var(--color-text-light); line-height: 1.8; margin-bottom: 15px; }
     .about-features { display: flex; gap: 20px; margin-top: 30px; flex-wrap: wrap; }
     .about-feature { display: flex; align-items: center; gap: 10px; background: var(--color-surface); padding: 12px 20px; border-radius: 10px; border: 1px solid var(--color-border); }
