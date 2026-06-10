@@ -213,8 +213,8 @@ function loadGallery() {
     ];
 
     container.innerHTML = gallery.map(g => `
-        <div class="gallery-item fade-in">
-            <img class="clickable-img" src="${g.img}" alt="${g.label}">
+        <div class="gallery-item fade-in clickable-img" data-src="${g.img}" data-alt="${g.label}">
+            <img src="${g.img}" alt="${g.label}">
             <div class="gallery-overlay">🔍</div>
         </div>
     `).join('');
@@ -348,8 +348,9 @@ function initImageModal() {
             return;
         }
         e.preventDefault();
-        img.src = target.src;
-        img.alt = target.alt;
+        // Поддержка data-src (для div-контейнеров) и src (для img)
+        img.src = target.dataset.src || target.src;
+        img.alt = target.dataset.alt || target.alt;
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
     });
