@@ -204,17 +204,17 @@ function loadGallery() {
     if (!container) return;
 
     const gallery = [
-        { label: 'Интерьер зала' },
-        { label: 'Авторские блюда' },
-        { label: 'Винная карта' },
-        { label: 'Летняя веранда' },
-        { label: 'Кухня' },
-        { label: 'Десерты' },
+        { label: 'Интерьер зала', img: 'uploads/gallery/1-interior.jpg' },
+        { label: 'Авторские блюда', img: 'uploads/gallery/2-dishes.jpg' },
+        { label: 'Винная карта', img: 'uploads/gallery/3-wine.jpg' },
+        { label: 'Летняя веранда', img: 'uploads/gallery/4-terrace.jpg' },
+        { label: 'Кухня', img: 'uploads/gallery/5-kitchen.jpg' },
+        { label: 'Десерты', img: 'uploads/gallery/6-desserts.jpg' },
     ];
 
     container.innerHTML = gallery.map(g => `
         <div class="gallery-item fade-in">
-            <img src="images/placeholder.jpg" alt="${g.label}">
+            <img class="clickable-img" src="${g.img}" alt="${g.label}">
             <div class="gallery-overlay">🔍</div>
         </div>
     `).join('');
