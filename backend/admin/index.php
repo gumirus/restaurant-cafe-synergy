@@ -494,21 +494,17 @@ $page = $_GET['page'] ?? 'dashboard';
                             <?php
                             if ($activeCat === 'all') {
                                 $stmt = $pdo->query("
-                                    SELECT d.*, GROUP_CONCAT(c.name SEPARATOR ', ') as category_name
+                                    SELECT d.*, c.name as category_name
                                     FROM dishes d
-                                    JOIN dish_categories dc ON d.id = dc.dish_id
-                                    JOIN categories c ON dc.category_id = c.id
-                                    GROUP BY d.id
+                                    JOIN categories c ON d.category_id = c.id
                                     ORDER BY d.name
                                 ");
                             } else {
                                 $stmt = $pdo->prepare("
-                                    SELECT d.*, GROUP_CONCAT(c.name SEPARATOR ', ') as category_name
+                                    SELECT d.*, c.name as category_name
                                     FROM dishes d
-                                    JOIN dish_categories dc ON d.id = dc.dish_id
-                                    JOIN categories c ON dc.category_id = c.id
-                                    WHERE dc.category_id = ?
-                                    GROUP BY d.id
+                                    JOIN categories c ON d.category_id = c.id
+                                    WHERE d.category_id = ?
                                     ORDER BY d.name
                                 ");
                                 $stmt->execute([$activeCat]);
@@ -592,11 +588,10 @@ $page = $_GET['page'] ?? 'dashboard';
             <?php
             $dishId = (int)($_GET['id'] ?? 0);
             $stmt = $pdo->prepare("
-                SELECT d.*, GROUP_CONCAT(dc.category_id SEPARATOR ',') as cat_ids
+                SELECT d.*, c.name as category_name
                 FROM dishes d
-                LEFT JOIN dish_categories dc ON d.id = dc.dish_id
+                JOIN categories c ON d.category_id = c.id
                 WHERE d.id = ?
-                GROUP BY d.id
             ");
             $stmt->execute([$dishId]);
             $dish = $stmt->fetch();
@@ -610,9 +605,7 @@ $page = $_GET['page'] ?? 'dashboard';
                         <a href="?page=menu" class="btn">← Вернуться в меню</a>
                     </div>
                 </div>
-            <?php else:
-                $selectedCats = $dish['cat_ids'] ? explode(',', $dish['cat_ids']) : [];
-            ?>
+            <?php else: ?>
                 <div class="card">
                     <h2>✏️ Редактировать блюдо</h2>
                     <form method="POST" action="../updateProduct.php" enctype="multipart/form-data">
@@ -650,31 +643,19 @@ $page = $_GET['page'] ?? 'dashboard';
                                         <input type="number" name="weight" value="<?= $dish['weight'] ?>">
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Категории (можно выбрать несколько)</label>
-                            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
-                                <?php
-                                $catStmt = $pdo->query("SELECT * FROM categories ORDER BY name");
-                                while ($cat = $catStmt->fetch()):
-                                    $checked = in_array($cat['id'], $selectedCats) ? 'checked' : '';
-                                ?>
-                                    <label style="display:flex; align-items:center; gap:6px; padding:8px 14px; background:var(--color-surface); border-radius:8px; cursor:pointer; border:2px solid <?= $checked ? 'var(--color-primary)' : 'var(--color-border)' ?>; transition:all 0.2s;">
-                                        <input type="checkbox" name="categories[]" value="<?= $cat['id'] ?>" <?= $checked ?> style="accent-color:var(--color-primary);">
-                                        <span style="font-size:0.85rem; font-weight:500;">
-                                            <?= match($cat['name']) {
-                                                'Салаты' => '🥗',
-                                                'Супы' => '🍜',
-                                                'Горячие блюда' => '🔥',
-                                                'Десерты' => '🍰',
-                                                'Напитки' => '🥤',
-                                                default => '🍽'
-                                            } ?> <?= $cat['name'] ?>
-                                        </span>
-                                    </label>
-                                <?php endwhile; ?>
+                                <div class="form-group">
+                                    <label>Категория</label>
+                                    <select name="category_id" required>
+                                        <option value="">Выберите категорию</option>
+                                        <?php
+                                        $catStmt = $pdo->query("SELECT * FROM categories ORDER BY name");
+                                        while ($cat = $catStmt->fetch()):
+                                            $selected = $cat['id'] == $dish['category_id'] ? 'selected' : '';
+                                        ?>
+                                            <option value="<?= $cat['id'] ?>" <?= $selected ?>><?= $cat['name'] ?></option>
+                                        <?php endwhile; ?>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
@@ -693,8 +674,22 @@ $page = $_GET['page'] ?? 'dashboard';
 
         <!-- ==================== ORDERS ==================== -->
         <?php elseif ($page === 'orders'): ?>
+            <?php
+            $orderStatusFilter = $_GET['order_status'] ?? 'all';
+            ?>
             <div class="card">
-                <h2>Все заказы</h2>
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+                    <h2 style="margin:0;">Все заказы</h2>
+                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                        <a href="?page=orders&order_status=all" class="btn btn-sm <?= $orderStatusFilter === 'all' ? '' : '' ?>" style="<?= $orderStatusFilter === 'all' ? 'background:var(--color-primary);color:#fff;' : 'background:var(--color-surface);color:var(--color-text-light);' ?>">Все</a>
+                        <a href="?page=orders&order_status=pending" class="btn btn-sm" style="<?= $orderStatusFilter === 'pending' ? 'background:var(--color-primary);color:#fff;' : 'background:var(--color-surface);color:var(--color-text-light);' ?>">🕐 Ожидает</a>
+                        <a href="?page=orders&order_status=confirmed" class="btn btn-sm" style="<?= $orderStatusFilter === 'confirmed' ? 'background:var(--color-primary);color:#fff;' : 'background:var(--color-surface);color:var(--color-text-light);' ?>">✅ Подтверждён</a>
+                        <a href="?page=orders&order_status=preparing" class="btn btn-sm" style="<?= $orderStatusFilter === 'preparing' ? 'background:var(--color-primary);color:#fff;' : 'background:var(--color-surface);color:var(--color-text-light);' ?>">👨‍🍳 Готовится</a>
+                        <a href="?page=orders&order_status=ready" class="btn btn-sm" style="<?= $orderStatusFilter === 'ready' ? 'background:var(--color-primary);color:#fff;' : 'background:var(--color-surface);color:var(--color-text-light);' ?>">🍽️ Готов</a>
+                        <a href="?page=orders&order_status=completed" class="btn btn-sm" style="<?= $orderStatusFilter === 'completed' ? 'background:var(--color-primary);color:#fff;' : 'background:var(--color-surface);color:var(--color-text-light);' ?>">✔️ Выполнен</a>
+                        <a href="?page=orders&order_status=cancelled" class="btn btn-sm" style="<?= $orderStatusFilter === 'cancelled' ? 'background:var(--color-primary);color:#fff;' : 'background:var(--color-surface);color:var(--color-text-light);' ?>">❌ Отменён</a>
+                    </div>
+                </div>
                 <div class="table-wrapper">
                     <table>
                         <thead>
@@ -712,14 +707,18 @@ $page = $_GET['page'] ?? 'dashboard';
                         </thead>
                         <tbody>
                             <?php
-                            $stmt = $pdo->query("
+                            $orderSql = "
                                 SELECT o.*, u.phone, u.name as user_name, ofb.rating as feedback_rating, ofb.comment as feedback_comment
                                 FROM orders o
                                 JOIN users u ON o.user_id = u.id
                                 LEFT JOIN order_feedback ofb ON ofb.order_id = o.id
                                 WHERE o.status != 'cart'
-                                ORDER BY o.created_at DESC
-                            ");
+                            ";
+                            if ($orderStatusFilter !== 'all') {
+                                $orderSql .= " AND o.status = " . $pdo->quote($orderStatusFilter);
+                            }
+                            $orderSql .= " ORDER BY o.created_at DESC";
+                            $stmt = $pdo->query($orderSql);
                             while ($order = $stmt->fetch()):
                                 $orderClient = $order['user_name'] ? $order['user_name'] . ' (' . $order['phone'] . ')' : $order['phone'];
                             ?>
@@ -785,9 +784,18 @@ $page = $_GET['page'] ?? 'dashboard';
 
         <!-- ==================== BOOKINGS ==================== -->
         <?php elseif ($page === 'bookings'): ?>
+            <?php
+            $bookingStatusFilter = $_GET['booking_status'] ?? 'all';
+            ?>
             <div class="card">
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
                     <h2 style="margin:0;">Все бронирования</h2>
+                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                        <a href="?page=bookings&booking_status=all" class="btn btn-sm" style="<?= $bookingStatusFilter === 'all' ? 'background:var(--color-primary);color:#fff;' : 'background:var(--color-surface);color:var(--color-text-light);' ?>">Все</a>
+                        <a href="?page=bookings&booking_status=pending" class="btn btn-sm" style="<?= $bookingStatusFilter === 'pending' ? 'background:var(--color-primary);color:#fff;' : 'background:var(--color-surface);color:var(--color-text-light);' ?>">🕐 Ожидание</a>
+                        <a href="?page=bookings&booking_status=confirmed" class="btn btn-sm" style="<?= $bookingStatusFilter === 'confirmed' ? 'background:var(--color-primary);color:#fff;' : 'background:var(--color-surface);color:var(--color-text-light);' ?>">✅ Подтверждено</a>
+                        <a href="?page=bookings&booking_status=cancelled" class="btn btn-sm" style="<?= $bookingStatusFilter === 'cancelled' ? 'background:var(--color-primary);color:#fff;' : 'background:var(--color-surface);color:var(--color-text-light);' ?>">❌ Отменено</a>
+                    </div>
                     <div style="display:flex; gap:8px;">
                         <button class="btn btn-sm" style="background:#e74c3c; color:#fff;" onclick="showConfirmModal('cancelled')">🗑 Очистить отменённые</button>
                         <button class="btn btn-sm btn-danger" onclick="showConfirmModal('all')">🗑 Очистить всё</button>
@@ -811,7 +819,12 @@ $page = $_GET['page'] ?? 'dashboard';
                         </thead>
                         <tbody>
                             <?php
-                            $stmt = $pdo->query("SELECT * FROM bookings ORDER BY created_at DESC");
+                            $bookingSql = "SELECT * FROM bookings";
+                            if ($bookingStatusFilter !== 'all') {
+                                $bookingSql .= " WHERE status = " . $pdo->quote($bookingStatusFilter);
+                            }
+                            $bookingSql .= " ORDER BY created_at DESC";
+                            $stmt = $pdo->query($bookingSql);
                             while ($booking = $stmt->fetch()):
                             ?>
                                 <tr class="booking-row" style="cursor:pointer;" onclick="openBookingModal(

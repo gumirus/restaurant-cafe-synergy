@@ -37,9 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ");
     $stmt->execute([$categoryId, $name, $description, $price, $weight, $image]);
 
-    // Добавляем связь с категорией в dish_categories
-    $pdo->prepare("INSERT INTO dish_categories (dish_id, category_id) VALUES (?, ?)")
-        ->execute([$pdo->lastInsertId(), $categoryId]);
-
-    redirect('admin/index.php');
+    header('Location: admin/index.php?page=menu&success=Блюдо+добавлено');
+    exit;
 }
