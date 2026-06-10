@@ -210,7 +210,6 @@ function loadGallery() {
         { label: 'Летняя веранда', img: 'uploads/gallery/4-terrace.jpg' },
         { label: 'Кухня', img: 'uploads/gallery/5-kitchen.jpg' },
         { label: 'Десерты', img: 'uploads/gallery/6-desserts.jpg' },
-        { label: 'Авторский десерт', img: 'uploads/gallery/7-dessert.jpg' },
     ];
 
     container.innerHTML = gallery.map(g => `
