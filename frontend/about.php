@@ -136,8 +136,8 @@
     .faq-question { padding: 18px 24px; cursor: pointer; font-weight: 600; color: var(--color-text-white); display: flex; justify-content: space-between; align-items: center; background: var(--color-surface); }
     .faq-question::after { content: '+'; font-size: 1.3rem; color: var(--color-primary); transition: transform 0.3s; }
     .faq-item.active .faq-question::after { transform: rotate(45deg); }
-    .faq-answer { padding: 0 24px; max-height: 0; overflow: hidden; transition: all 0.3s; color: #444; }
-    .faq-item.active .faq-answer { padding: 18px 24px; max-height: 200px; }
+    .faq-answer { padding: 0 24px; max-height: 0; overflow: hidden; transition: all 0.3s; color: #444; background: #fff; }
+    .faq-item.active .faq-answer { padding: 18px 24px; max-height: 200px; color: #fff; background: var(--color-primary); }
     @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
     </style>
 
