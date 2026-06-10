@@ -11,7 +11,10 @@
         <div class="container">
             <div class="about-grid">
                 <div class="about-image fade-in">
-                    <img src="images/about.jpg" alt="О ресторане">
+                    <div class="about-image-wrapper">
+                        <img src="images/about.jpg" alt="О ресторане">
+                        <div class="about-image-overlay"></div>
+                    </div>
                 </div>
                 <div class="about-text fade-in">
                     <h2>Наша <span>история</span></h2>
@@ -108,7 +111,9 @@
     .page-hero p { color: var(--color-text-light); font-size: 1.1rem; }
     .about { padding: 80px 0; }
     .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-    .about-image img { width: 100%; border-radius: 16px; }
+    .about-image-wrapper { position: relative; border-radius: 16px; overflow: hidden; }
+    .about-image-wrapper img { width: 100%; display: block; }
+    .about-image-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); }
     .about-text h2 { font-size: 2rem; margin-bottom: 20px; color: var(--color-text-white); }
     .about-text h2 span { color: var(--color-primary); }
     .about-text p { color: var(--color-text-light); line-height: 1.8; margin-bottom: 15px; }
