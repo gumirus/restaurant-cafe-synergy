@@ -147,6 +147,7 @@
             { id: 11, name: 'Боул с киноа', price: 420, category: 'salads', desc: 'Полезный боул с киноа, авокадо и овощами', img: 'uploads/dishes/11-bowl.jpg' },
             { id: 12, name: 'Пицца Маргарита', price: 550, category: 'main', desc: 'Классическая итальянская пицца с моцареллой', img: 'uploads/dishes/12-pizza.jpg' },
             { id: 13, name: 'Рамен', price: 480, category: 'soups', desc: 'Японский суп с лапшой, свининой и яйцом', img: 'uploads/dishes/13-ramen.jpg' },
+            { id: 23, name: 'Окрошка', price: 280, category: 'soups', desc: 'Классическая окрошка на квасе с овощами и колбасой', img: 'uploads/dishes/22-okroshka.jpg' },
             { id: 14, name: 'Нисуаз', price: 390, category: 'salads', desc: 'Французский салат с тунцом и яйцом', img: 'uploads/dishes/14-salad.jpg' },
             { id: 15, name: 'Лосось с овощами', price: 890, category: 'main', desc: 'Запечённый лосось с сезонными овощами', img: 'uploads/dishes/15-fish.jpg' },
             { id: 16, name: 'Куриный рулет', price: 520, category: 'main', desc: 'Куриный рулет с грибами и сыром', img: 'uploads/dishes/16-chicken.jpg' },
