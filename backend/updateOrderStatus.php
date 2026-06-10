@@ -1,23 +1,26 @@
 <?php
 // =============================================
-// ОБНОВЛЕНИЕ СТАТУСА ЗАКАЗА (АДМИН)
+// ОБНОВЛЕНИЕ СТАТУСА ЗАКАЗА
 // =============================================
 
 require_once __DIR__ . '/config/db.php';
 require_once __DIR__ . '/config/session.php';
 
-if (!isAdmin()) {
+if (!isStaff()) {
     die('Доступ запрещён');
 }
 
-$id = (int)($_GET['id'] ?? 0);
-$status = $_GET['status'] ?? '';
+// Поддержка GET (админка) и POST (панель сотрудника)
+$id = (int)($_POST['order_id'] ?? $_GET['id'] ?? 0);
+$status = $_POST['status'] ?? $_GET['status'] ?? '';
 
-$allowedStatuses = ['new', 'confirmed', 'cancelled', 'completed'];
+$allowedStatuses = ['pending', 'confirmed', 'preparing', 'ready', 'completed', 'cancelled'];
 
 if ($id && in_array($status, $allowedStatuses)) {
     $stmt = $pdo->prepare("UPDATE orders SET status = ? WHERE id = ?");
     $stmt->execute([$status, $id]);
 }
 
-redirect('admin/index.php?page=orders');
+// Редирект обратно
+$referer = $_SERVER['HTTP_REFERER'] ?? 'admin/index.php?page=orders';
+redirect($referer);

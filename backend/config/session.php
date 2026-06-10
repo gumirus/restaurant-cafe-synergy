@@ -15,6 +15,16 @@ function isAdmin(): bool {
     return isset($_SESSION['access_rights']) && $_SESSION['access_rights'] === 'ADMIN';
 }
 
+// Проверка прав сотрудника
+function isEmployee(): bool {
+    return isset($_SESSION['access_rights']) && $_SESSION['access_rights'] === 'EMPLOYEE';
+}
+
+// Проверка доступа к админке (админ или сотрудник)
+function isStaff(): bool {
+    return isAdmin() || isEmployee();
+}
+
 // Получить текущего пользователя
 function getCurrentUser(): ?array {
     if (!isLoggedIn()) return null;

@@ -31,9 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_phone'] = $user['phone'];
             $_SESSION['access_rights'] = $user['access_rights'];
 
-            // Админа — в админ-панель, пользователя — на главную
+            // Админа — в админ-панель, сотрудника — в панель сотрудника, пользователя — на главную
             if ($user['access_rights'] === 'ADMIN') {
                 redirect('admin/index.php');
+            } elseif ($user['access_rights'] === 'EMPLOYEE') {
+                redirect('employee/index.php');
             } else {
                 redirect('../frontend/index.php');
             }
