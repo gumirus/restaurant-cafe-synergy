@@ -87,6 +87,7 @@
         width: 100%;
         height: 200px;
         object-fit: cover;
+        border-radius: 16px 16px 0 0;
     }
     .dish-card-body {
         padding: 20px;
@@ -151,11 +152,9 @@
     // Получаем все блюда с категориями
     $stmt = $pdo->query("
         SELECT d.id, d.name, d.description, d.price, d.weight, d.image, d.ingredients,
-               GROUP_CONCAT(c.name SEPARATOR '||') as category_names
+               c.name as category_name
         FROM dishes d
-        JOIN dish_categories dc ON d.id = dc.dish_id
-        JOIN categories c ON dc.category_id = c.id
-        GROUP BY d.id
+        JOIN categories c ON d.category_id = c.id
         ORDER BY d.name
     ");
     $dishes = $stmt->fetchAll();
@@ -238,6 +237,7 @@
         width: 100%; height: 100%; object-fit: cover;
         display: block; min-height: 280px;
         cursor: zoom-in;
+        border-radius: 0;
     }
     .dish-modal-img-zoom {
         position: absolute;
@@ -327,10 +327,12 @@
         visibility: visible; opacity: 1;
     }
     .dish-img-overlay img {
-        width: 90vw;
-        height: 85vh;
-        object-fit: contain;
+        width: 45vw;
+        height: 45vh;
+        object-fit: cover;
         transition: transform 0.3s ease;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     }
     .dish-img-close {
         position: fixed; top: 20px; right: 25px;
@@ -443,16 +445,13 @@
         if (!dishesGrid) return;
 
         const menuItems = <?= json_encode(array_map(function($d) use ($catMap) {
-            $cats = explode('||', $d['category_names']);
-            $catKeys = array_map(function($name) use ($catMap) {
-                return $catMap[$name] ?? 'other';
-            }, $cats);
+            $catKey = $catMap[$d['category_name']] ?? 'other';
             return [
                 'id' => (int)$d['id'],
                 'name' => $d['name'],
                 'price' => (int)$d['price'],
                 'weight' => (int)$d['weight'],
-                'categories' => $catKeys,
+                'categories' => [$catKey],
                 'desc' => $d['description'] ?? '',
                 'ingredients' => $d['ingredients'] ?? '',
                 'img' => $d['image'] ? $d['image'] : 'uploads/dishes/placeholder.jpg',

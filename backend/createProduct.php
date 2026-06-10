@@ -30,12 +30,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    $isPopular = isset($_POST['is_popular']) ? 1 : 0;
+    $isSpecial = isset($_POST['is_special']) ? 1 : 0;
+
     // Вставка в БД
     $stmt = $pdo->prepare("
-        INSERT INTO dishes (category_id, name, description, price, weight, image)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO dishes (category_id, name, description, price, weight, image, is_popular, is_special)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     ");
-    $stmt->execute([$categoryId, $name, $description, $price, $weight, $image]);
+    $stmt->execute([$categoryId, $name, $description, $price, $weight, $image, $isPopular, $isSpecial]);
 
     header('Location: admin/index.php?page=menu&success=Блюдо+добавлено');
     exit;

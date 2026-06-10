@@ -45,6 +45,9 @@ ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment_status VARCHAR(20) DEFAULT '
 ALTER TABLE orders ADD COLUMN IF NOT EXISTS booking_id INT DEFAULT NULL AFTER payment_status;
 INSERT IGNORE INTO access_rights (name) VALUES ('EMPLOYEE');
 ALTER TABLE bookings ADD COLUMN user_id INT DEFAULT NULL AFTER id;
+-- Добавление колонок is_popular и is_special (для старых версий MySQL без IF NOT EXISTS)
+ALTER TABLE dishes ADD COLUMN is_popular TINYINT(1) DEFAULT 0 AFTER image;
+ALTER TABLE dishes ADD COLUMN is_special TINYINT(1) DEFAULT 0 AFTER is_popular;
 
 -- ========== 3. КАТЕГОРИИ БЛЮД ==========
 CREATE TABLE categories (
@@ -68,6 +71,8 @@ CREATE TABLE dishes (
     price DECIMAL(10, 2) NOT NULL,
     weight INT DEFAULT 0,          -- вес в граммах
     image VARCHAR(255) DEFAULT NULL,
+    is_popular TINYINT(1) DEFAULT 0,
+    is_special TINYINT(1) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES categories(id)
 ) ENGINE=InnoDB;
@@ -131,7 +136,7 @@ CREATE TABLE orders (
     user_id INT NOT NULL,
     personal_id INT DEFAULT NULL,
     address VARCHAR(255) NOT NULL,
-    status ENUM('cart', 'pending', 'confirmed', 'preparing', 'ready', 'completed', 'cancelled') DEFAULT 'cart',
+    status ENUM('cart', 'pending', 'confirmed', 'preparing', 'ready', 'completed', 'cancelled') DEFAULT 'pending',
     total_price DECIMAL(10, 2) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

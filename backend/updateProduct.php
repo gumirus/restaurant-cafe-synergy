@@ -18,6 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ingredients = trim($_POST['ingredients'] ?? '');
     $price = (float)($_POST['price'] ?? 0);
     $weight = (int)($_POST['weight'] ?? 0);
+    $isPopular = isset($_POST['is_popular']) ? 1 : 0;
+    $isSpecial = isset($_POST['is_special']) ? 1 : 0;
     $image = $_POST['existing_image'] ?? null;
 
     // Обработка нового изображения
@@ -35,10 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Обновление в БД
     $stmt = $pdo->prepare("
         UPDATE dishes 
-        SET category_id = ?, name = ?, description = ?, ingredients = ?, price = ?, weight = ?, image = ?
+        SET category_id = ?, name = ?, description = ?, ingredients = ?, price = ?, weight = ?, image = ?, is_popular = ?, is_special = ?
         WHERE id = ?
     ");
-    $stmt->execute([$categoryId, $name, $description, $ingredients, $price, $weight, $image, $id]);
+    $stmt->execute([$categoryId, $name, $description, $ingredients, $price, $weight, $image, $isPopular, $isSpecial, $id]);
 
     header('Location: admin/index.php?page=menu&success=Блюдо+обновлено');
     exit;

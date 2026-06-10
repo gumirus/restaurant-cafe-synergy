@@ -88,65 +88,71 @@ function animateCounter(element, target) {
     }, stepTime);
 }
 
-// ========== LOAD SPECIAL DISHES (Chef's Picks) ==========
+// ========== LOAD SPECIAL DISHES (Chef's Picks — из БД) ==========
 function loadSpecials() {
     const container = document.getElementById('specials-grid');
     if (!container) return;
 
-    const specials = [
-        { name: 'Стейк Рибай', desc: 'Мраморная говядина с трюфельным соусом', price: 1200, badge: 'Шеф-рекомендует', img: 'uploads/dishes/5-steak.jpg' },
-        { name: 'Тирамису', desc: 'Итальянский десерт с маскарпоне', price: 350, badge: 'Фирменный', img: 'uploads/dishes/7-tiramisu.jpg' },
-        { name: 'Том Ям', desc: 'Острый тайский суп с креветками', price: 550, badge: 'Хит сезона', img: 'uploads/dishes/3-tom-yam.jpg' },
-    ];
+    fetch('../backend/getSpecialDishes.php')
+        .then(r => r.json())
+        .then(dishes => {
+            if (!dishes || dishes.length === 0) {
+                container.innerHTML = '<p style="text-align:center;color:var(--color-text-light);grid-column:1/-1;">Фирменные блюда пока не выбраны шеф-поваром</p>';
+                return;
+            }
 
-    container.innerHTML = specials.map(s => `
-        <div class="special-card fade-in">
-            <img class="special-card-image clickable-img" src="${s.img}" alt="${s.name}">
-            <div class="special-card-body">
-                <span class="special-badge">${s.badge}</span>
-                <h3>${s.name}</h3>
-                <p>${s.desc}</p>
-                <span class="price">${s.price} ₽</span>
-            </div>
-        </div>
-    `).join('');
+            container.innerHTML = dishes.map(dish => `
+                <div class="special-card fade-in">
+                    <img class="special-card-image clickable-img" src="${dish.image || 'uploads/dishes/placeholder.jpg'}" alt="${dish.name}">
+                    <div class="special-card-body">
+                        <span class="special-badge">👨‍🍳 Шеф-рекомендует</span>
+                        <h3>${dish.name}</h3>
+                        <p>${dish.description || ''}</p>
+                        <span class="price">${Number(dish.price).toLocaleString()} ₽</span>
+                        <a href="menu.php" class="btn" style="margin-top:10px;font-size:11px;padding:8px 16px;">🍽 В меню</a>
+                    </div>
+                </div>
+            `).join('');
 
-    setTimeout(initFadeIn, 100);
+            setTimeout(initFadeIn, 100);
+        })
+        .catch(() => {
+            container.innerHTML = '<p style="text-align:center;color:var(--color-text-light);">Не удалось загрузить фирменные блюда</p>';
+        });
 }
 
-// ========== LOAD POPULAR DISHES ==========
+// ========== LOAD POPULAR DISHES (из БД) ==========
 function loadPopularDishes() {
     const container = document.getElementById('popular-dishes');
     if (!container) return;
 
-    const dishes = [
-        { id: 1, name: 'Цезарь с курицей', price: 450, category: 'salads', desc: 'Классический салат с пармезаном', img: 'uploads/dishes/1-caesar.jpg' },
-        { id: 2, name: 'Греческий салат', price: 380, category: 'salads', desc: 'Свежие овощи с сыром фета', img: 'uploads/dishes/2-greek.jpg' },
-        { id: 3, name: 'Том Ям', price: 550, category: 'soups', desc: 'Острый тайский суп с креветками', img: 'uploads/dishes/3-tom-yam.jpg' },
-        { id: 4, name: 'Борщ', price: 320, category: 'soups', desc: 'Традиционный русский суп', img: 'uploads/dishes/4-borscht.jpg' },
-        { id: 5, name: 'Стейк Рибай', price: 1200, category: 'main', desc: 'Мраморная говядина с трюфелем', img: 'uploads/dishes/5-steak.jpg' },
-        { id: 6, name: 'Паста Карбонара', price: 480, category: 'main', desc: 'Итальянская паста с беконом', img: 'uploads/dishes/6-carbonara.jpg' },
-        { id: 7, name: 'Тирамису', price: 350, category: 'desserts', desc: 'Итальянский десерт с маскарпоне', img: 'uploads/dishes/7-tiramisu.jpg' },
-        { id: 8, name: 'Чизкейк', price: 320, category: 'desserts', desc: 'Нью-йоркский чизкейк', img: 'uploads/dishes/8-cheesecake.jpg' },
-        { id: 9, name: 'Лимонад', price: 180, category: 'drinks', desc: 'Домашний лимонад', img: 'uploads/dishes/9-lemonade.jpg' },
-        { id: 10, name: 'Кофе', price: 200, category: 'drinks', desc: 'Эспрессо/Капучино/Латте', img: 'uploads/dishes/10-coffee.jpg' },
-    ];
+    fetch('../backend/getPopularDishes.php')
+        .then(r => r.json())
+        .then(dishes => {
+            if (!dishes || dishes.length === 0) {
+                container.innerHTML = '<p style="text-align:center;color:var(--color-text-light);grid-column:1/-1;">Популярные блюда пока не выбраны шеф-поваром</p>';
+                return;
+            }
 
-    container.innerHTML = dishes.map(dish => `
-        <div class="dish-card fade-in">
-            <img class="dish-card-image clickable-img" src="${dish.img}" alt="${dish.name}">
-            <div class="dish-card-body">
-                <h3>${dish.name}</h3>
-                <p>${dish.desc}</p>
-                <div class="dish-card-footer">
-                    <span class="price">${dish.price} ₽</span>
-                    <button class="btn add-to-cart" data-id="${dish.id}">В корзину</button>
+            container.innerHTML = dishes.map(dish => `
+                <div class="dish-card fade-in">
+                    <img class="dish-card-image clickable-img" src="${dish.image || 'uploads/dishes/placeholder.jpg'}" alt="${dish.name}">
+                    <div class="dish-card-body">
+                        <h3>${dish.name}</h3>
+                        <p>${dish.description || ''}</p>
+                        <div class="dish-card-footer">
+                            <span class="price">${Number(dish.price).toLocaleString()} ₽</span>
+                            <a href="menu.php" class="btn">🍽 В меню</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    `).join('');
+            `).join('');
 
-    setTimeout(initFadeIn, 100);
+            setTimeout(initFadeIn, 100);
+        })
+        .catch(() => {
+            container.innerHTML = '<p style="text-align:center;color:var(--color-text-light);">Не удалось загрузить популярные блюда</p>';
+        });
 }
 
 // ========== LOAD TEAM ==========

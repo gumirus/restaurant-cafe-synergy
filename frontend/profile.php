@@ -181,7 +181,12 @@ $avatar_url = $user['avatar'] ? 'uploads/' . $user['avatar'] : 'images/default-a
 
                 <!-- ===== ПРАВАЯ КОЛОНКА — Заказы ===== -->
                 <div class="profile-orders">
-                    <h2>📅 Мои бронирования</h2>
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                        <h2 style="margin:0;">📅 Мои бронирования</h2>
+                        <?php if (!empty($bookings)): ?>
+                            <a href="javascript:void(0)" class="btn btn-small" style="background:#e74c3c;color:#fff;" onclick="openClearModal('Очистить историю бронирований?', 'Все бронирования будут удалены без возможности восстановления.', '../backend/clearBookingHistory.php')">🗑 Очистить историю</a>
+                        <?php endif; ?>
+                    </div>
 
                     <?php if (empty($bookings)): ?>
                         <div class="orders-empty">
@@ -243,7 +248,12 @@ $avatar_url = $user['avatar'] ? 'uploads/' . $user['avatar'] : 'images/default-a
                         <?php endforeach; ?>
                     <?php endif; ?>
 
-                    <h2 style="margin-top:40px;">📋 История заказов</h2>
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-top:40px;">
+                        <h2 style="margin:0;">📋 История заказов</h2>
+                        <?php if (!empty($orders)): ?>
+                            <a href="javascript:void(0)" class="btn btn-small" style="background:#e74c3c;color:#fff;" onclick="openClearModal('Очистить историю заказов?', 'Все заказы будут удалены без возможности восстановления.', '../backend/clearOrderHistory.php')">🗑 Очистить историю</a>
+                        <?php endif; ?>
+                    </div>
 
                     <?php if (empty($orders)): ?>
                         <div class="orders-empty">
@@ -579,6 +589,79 @@ $avatar_url = $user['avatar'] ? 'uploads/' . $user['avatar'] : 'images/default-a
     }
     </style>
 
+    <!-- ===== МОДАЛКА ПОДТВЕРЖДЕНИЯ ОЧИСТКИ ===== -->
+    <div id="clear-modal" class="clear-modal-overlay" onclick="if(event.target===this)closeClearModal()">
+        <div class="clear-modal-content">
+            <div class="clear-modal-icon" id="clear-modal-icon">🗑️</div>
+            <h2 class="clear-modal-title" id="clear-modal-title">Очистить историю?</h2>
+            <p class="clear-modal-text" id="clear-modal-text">Все записи будут удалены без возможности восстановления.</p>
+            <div class="clear-modal-buttons">
+                <button class="btn clear-btn-cancel" onclick="closeClearModal()">Нет, отмена</button>
+                <a href="#" class="btn clear-btn-yes" id="clear-modal-link">Да, очистить</a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    .clear-modal-overlay {
+        position: fixed; inset: 0; z-index: 999999;
+        background: rgba(0,0,0,0.6);
+        display: flex; align-items: center; justify-content: center;
+        visibility: hidden; opacity: 0;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(4px);
+    }
+    .clear-modal-overlay.active {
+        visibility: visible; opacity: 1;
+    }
+    .clear-modal-content {
+        background: #fff; border-radius: 20px;
+        max-width: 400px; width: 90%;
+        padding: 45px 35px 35px;
+        text-align: center;
+        box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+        transform: scale(0.85) translateY(20px);
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .clear-modal-overlay.active .clear-modal-content {
+        transform: scale(1) translateY(0);
+    }
+    .clear-modal-icon {
+        font-size: 3.5rem; margin-bottom: 15px;
+    }
+    .clear-modal-title {
+        font-size: 1.4rem; color: #1a1a2e;
+        margin-bottom: 10px;
+    }
+    .clear-modal-text {
+        color: #666; font-size: 0.95rem;
+        line-height: 1.6; margin-bottom: 28px;
+    }
+    .clear-modal-buttons {
+        display: flex; gap: 10px; justify-content: center;
+    }
+    .clear-btn-cancel {
+        background: #f0f0f0 !important; color: #555 !important;
+        border: none; padding: 12px 24px; border-radius: 10px;
+        font-size: 0.9rem; font-weight: 600; cursor: pointer;
+        transition: all 0.3s;
+    }
+    .clear-btn-cancel:hover {
+        background: #e0e0e0 !important; transform: translateY(-2px);
+    }
+    .clear-btn-yes {
+        background: #e74c3c !important; color: #fff !important;
+        border: none; padding: 12px 24px; border-radius: 10px;
+        font-size: 0.9rem; font-weight: 600; cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+    .clear-btn-yes:hover {
+        background: #c0392b !important; transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+    }
+    </style>
+
     <script>
     function previewAvatar(event) {
         const reader = new FileReader();
@@ -587,6 +670,22 @@ $avatar_url = $user['avatar'] ? 'uploads/' . $user['avatar'] : 'images/default-a
         };
         reader.readAsDataURL(event.target.files[0]);
     }
+
+    function openClearModal(title, text, link) {
+        document.getElementById('clear-modal-icon').textContent = '🗑️';
+        document.getElementById('clear-modal-title').textContent = title;
+        document.getElementById('clear-modal-text').textContent = text;
+        document.getElementById('clear-modal-link').href = link;
+        document.getElementById('clear-modal').classList.add('active');
+    }
+
+    function closeClearModal() {
+        document.getElementById('clear-modal').classList.remove('active');
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeClearModal();
+    });
     </script>
 
 <?php require_once __DIR__ . '/footer.php'; ?>

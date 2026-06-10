@@ -487,6 +487,8 @@ $page = $_GET['page'] ?? 'dashboard';
                                 <th>Категория</th>
                                 <th>Цена</th>
                                 <th>Вес</th>
+                                <th>Фирменное</th>
+                                <th>Популярное</th>
                                 <th>Действия</th>
                             </tr>
                         </thead>
@@ -524,6 +526,16 @@ $page = $_GET['page'] ?? 'dashboard';
                                     <td><?= htmlspecialchars($dish['category_name']) ?></td>
                                     <td><?= number_format($dish['price'], 0, '', ' ') ?> ₽</td>
                                     <td><?= $dish['weight'] ? $dish['weight'] . ' г' : '—' ?></td>
+                                    <td style="text-align:center;">
+                                        <a href="../toggleSpecial.php?id=<?= $dish['id'] ?>" style="text-decoration:none;font-size:1.3rem;" title="<?= $dish['is_special'] ? 'Убрать из фирменных' : 'Сделать фирменным' ?>">
+                                            <?= $dish['is_special'] ? '👨‍🍳' : '○' ?>
+                                        </a>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <a href="../togglePopular.php?id=<?= $dish['id'] ?>" style="text-decoration:none;font-size:1.3rem;" title="<?= $dish['is_popular'] ? 'Убрать из популярных' : 'Сделать популярным' ?>">
+                                            <?= $dish['is_popular'] ? '⭐' : '☆' ?>
+                                        </a>
+                                    </td>
                                     <td>
                                         <a href="?page=edit-dish&id=<?= $dish['id'] ?>" class="btn btn-sm">✏️</a>
                                         <a href="../deleteProduct.php?id=<?= $dish['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Удалить блюдо?')">🗑</a>
@@ -574,6 +586,18 @@ $page = $_GET['page'] ?? 'dashboard';
                             <label>Вес (грамм)</label>
                             <input type="number" name="weight" placeholder="250">
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                            <input type="checkbox" name="is_special" value="1" style="width:18px;height:18px;cursor:pointer;">
+                            <span>👨‍🍳 Отметить как фирменное блюдо (шеф-рекомендует)</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                            <input type="checkbox" name="is_popular" value="1" style="width:18px;height:18px;cursor:pointer;">
+                            <span>⭐ Отметить как популярное блюдо</span>
+                        </label>
                     </div>
                     <div class="form-group">
                         <label>Фото блюда</label>
@@ -656,6 +680,18 @@ $page = $_GET['page'] ?? 'dashboard';
                                         <?php endwhile; ?>
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding-top:24px;">
+                                        <input type="checkbox" name="is_special" value="1" <?= $dish['is_special'] ? 'checked' : '' ?> style="width:18px;height:18px;cursor:pointer;">
+                                        <span>👨‍🍳 Отметить как фирменное блюдо (шеф-рекомендует)</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding-top:24px;">
+                                        <input type="checkbox" name="is_popular" value="1" <?= $dish['is_popular'] ? 'checked' : '' ?> style="width:18px;height:18px;cursor:pointer;">
+                                        <span>⭐ Отметить как популярное блюдо</span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
 
@@ -688,6 +724,11 @@ $page = $_GET['page'] ?? 'dashboard';
                         <a href="?page=orders&order_status=ready" class="btn btn-sm" style="<?= $orderStatusFilter === 'ready' ? 'background:var(--color-primary);color:#fff;' : 'background:var(--color-surface);color:var(--color-text-light);' ?>">🍽️ Готов</a>
                         <a href="?page=orders&order_status=completed" class="btn btn-sm" style="<?= $orderStatusFilter === 'completed' ? 'background:var(--color-primary);color:#fff;' : 'background:var(--color-surface);color:var(--color-text-light);' ?>">✔️ Выполнен</a>
                         <a href="?page=orders&order_status=cancelled" class="btn btn-sm" style="<?= $orderStatusFilter === 'cancelled' ? 'background:var(--color-primary);color:#fff;' : 'background:var(--color-surface);color:var(--color-text-light);' ?>">❌ Отменён</a>
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn btn-sm" style="background:#e74c3c; color:#fff;" onclick="showConfirmModal('orders-completed')">🗑 Очистить завершённые</button>
+                        <button class="btn btn-sm" style="background:#e67e22; color:#fff;" onclick="showConfirmModal('orders-uncompleted')">🗑 Очистить незавершённые</button>
+                        <button class="btn btn-sm btn-danger" onclick="showConfirmModal('orders-all')">🗑 Очистить всё</button>
                     </div>
                 </div>
                 <div class="table-wrapper">
@@ -1104,6 +1145,21 @@ $page = $_GET['page'] ?? 'dashboard';
                     title.textContent = 'Очистить всё?';
                     text.textContent = 'Будут удалены ВСЕ бронирования без возможности восстановления. Вы уверены?';
                     btn.textContent = 'Да, удалить всё';
+                } else if (action === 'orders-completed') {
+                    icon.textContent = '🗑️';
+                    title.textContent = 'Очистить завершённые заказы?';
+                    text.textContent = 'Будут удалены все заказы со статусом "Выполнен". Это действие нельзя отменить.';
+                    btn.textContent = 'Да, очистить';
+                } else if (action === 'orders-uncompleted') {
+                    icon.textContent = '⚠️';
+                    title.textContent = 'Очистить незавершённые заказы?';
+                    text.textContent = 'Будут удалены все заказы, кроме выполненных и корзин. Это действие нельзя отменить.';
+                    btn.textContent = 'Да, очистить';
+                } else if (action === 'orders-all') {
+                    icon.textContent = '⚠️';
+                    title.textContent = 'Очистить все заказы?';
+                    text.textContent = 'Будут удалены ВСЕ заказы (кроме корзин) без возможности восстановления. Вы уверены?';
+                    btn.textContent = 'Да, удалить всё';
                 }
 
                 confirmAction = action;
@@ -1116,7 +1172,12 @@ $page = $_GET['page'] ?? 'dashboard';
             }
 
             function executeConfirm() {
-                if (confirmAction) {
+                if (!confirmAction) return;
+
+                if (confirmAction.startsWith('orders-')) {
+                    const orderAction = confirmAction.replace('orders-', '');
+                    window.location.href = '../clearOrders.php?action=' + orderAction;
+                } else {
                     window.location.href = '../clearBookings.php?action=' + confirmAction;
                 }
             }
