@@ -1441,6 +1441,19 @@ section {
     .profile-layout { grid-template-columns: 1fr 1fr; gap: 20px; }
 }
 
+/* ========== PORTRAIT MONITOR (монитор вертикально) ========== */
+@media (orientation: portrait) and (min-width: 1025px) {
+    .hero h1 { font-size: 48px; }
+    .hero p { font-size: 1.2rem; }
+    .dishes-grid { grid-template-columns: repeat(3, 1fr); gap: 30px; }
+    .section-title { font-size: 36px; }
+    .profile-layout { grid-template-columns: 1fr; max-width: 700px; margin: 0 auto; }
+    .booking-wrapper { grid-template-columns: 1fr; max-width: 600px; margin: 0 auto; }
+    .about-grid { grid-template-columns: 1fr; max-width: 700px; margin: 0 auto; }
+    .container { max-width: 800px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+
 /* ========== PORTRAIT (телефон вертикально) ========== */
 @media (orientation: portrait) and (max-width: 480px) {
     .header .container { padding: 0 10px; }
