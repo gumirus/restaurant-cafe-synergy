@@ -51,6 +51,15 @@
 
     <script src="js/main.js?v=2"></script>
     <script>
+    function openAboutModal() {
+        document.getElementById('aboutModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeAboutModal() {
+        document.getElementById('aboutModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
     function toggleMobileNav() {
         document.querySelector('.nav').classList.toggle('mobile-open');
         document.getElementById('navOverlay').classList.toggle('active');

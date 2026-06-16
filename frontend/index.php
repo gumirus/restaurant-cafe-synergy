@@ -20,19 +20,56 @@
                 <div class="about-image fade-in">
                     <img src="images/about.jpg" alt="О ресторане">
                 </div>
-                <div class="about-text fade-in">
+                <div class="about-text fade-in collapsible" id="aboutText">
                     <h2>О <span>ресторане</span></h2>
-                    <p>Bean Scene — это не просто ресторан. Это место, где встречаются традиции и современность, где каждое блюдо — произведение искусства.</p>
-                    <p>Мы используем только свежие продукты от местных фермеров, а наши шеф-повара постоянно экспериментируют, чтобы удивлять вас новыми вкусами.</p>
-                    <div class="about-features">
-                        <div class="about-feature">
-                            <span class="feature-icon">🥩</span>
-                            <span>Свежие продукты</span>
+                    <div class="about-text-collapsed">
+                        <p>Bean Scene — это не просто ресторан. Это место, где встречаются традиции и современность...</p>
+                        <a href="javascript:void(0)" class="btn" onclick="openAboutModal()">Подробнее</a>
+                    </div>
+                    <div class="about-text-full">
+                        <p>Bean Scene — это не просто ресторан. Это место, где встречаются традиции и современность, где каждое блюдо — произведение искусства.</p>
+                        <p>Мы используем только свежие продукты от местных фермеров, а наши шеф-повара постоянно экспериментируют, чтобы удивлять вас новыми вкусами.</p>
+                        <div class="about-features">
+                            <div class="about-feature">
+                                <span class="feature-icon">🥩</span>
+                                <span>Свежие продукты</span>
+                            </div>
+                            <div class="about-feature">
+                                <span class="feature-icon">👨‍🍳</span>
+                                <span>Шеф-повара из Европы</span>
+                            </div>
+                            <div class="about-feature">
+                                <span class="feature-icon">🍷</span>
+                                <span>Винная карта</span>
+                            </div>
                         </div>
-                        <div class="about-feature">
-                            <span class="feature-icon">👨‍🍳</span>
-                            <span>Шеф-повара из Европы</span>
+                        <a href="about.php" class="btn">Узнать больше</a>
+                    </div>
+                </div>
+
+                <div class="about-modal-overlay" id="aboutModal" onclick="if(event.target===this)closeAboutModal()">
+                    <div class="about-modal">
+                        <button class="about-modal-close" onclick="closeAboutModal()">×</button>
+                        <h2>О <span>ресторане</span></h2>
+                        <p>Bean Scene — это не просто ресторан. Это место, где встречаются традиции и современность, где каждое блюдо — произведение искусства.</p>
+                        <p>Мы используем только свежие продукты от местных фермеров, а наши шеф-повара постоянно экспериментируют, чтобы удивлять вас новыми вкусами.</p>
+                        <div class="about-features" style="margin:20px 0;">
+                            <div class="about-feature" style="margin-bottom:15px;">
+                                <span class="feature-icon">🥩</span>
+                                <span>Свежие продукты</span>
+                            </div>
+                            <div class="about-feature" style="margin-bottom:15px;">
+                                <span class="feature-icon">👨‍🍳</span>
+                                <span>Шеф-повара из Европы</span>
+                            </div>
+                            <div class="about-feature" style="margin-bottom:15px;">
+                                <span class="feature-icon">🍷</span>
+                                <span>Винная карта</span>
+                            </div>
                         </div>
+                        <a href="about.php" class="btn" style="width:100%;text-align:center;">Узнать больше</a>
+                    </div>
+                </div>
                         <div class="about-feature">
                             <span class="feature-icon">🍷</span>
                             <span>Винная карта</span>
