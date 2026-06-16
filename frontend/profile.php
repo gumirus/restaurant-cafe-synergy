@@ -1,12 +1,14 @@
 <?php
-require_once __DIR__ . '/header.php';
+require_once __DIR__ . '/../backend/config/session.php';
 require_once __DIR__ . '/../backend/config/db.php';
 
-// Проверка авторизации
+// Проверка авторизации — ДО header.php
 if (!isLoggedIn()) {
     header('Location: login.php');
     exit;
 }
+
+require_once __DIR__ . '/header.php';
 
 $user_id = $_SESSION['user_id'];
 
@@ -92,6 +94,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['repeat_order'])) {
 $stmt = $pdo->prepare("SELECT phone, email, name, bio, avatar, created_at FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
+
+if (!$user) {
+    http_response_code(404);
+    echo '<h2>Пользователь не найден</h2><p>Возможно, ваш аккаунт был удалён.</p><a href="index.php">На главную</a>';
+    require __DIR__ . '/footer.php';
+    exit;
+}
 
 // История заказов (исключая корзины)
 $stmt = $pdo->prepare("

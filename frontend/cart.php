@@ -1,12 +1,14 @@
 <?php
-require_once __DIR__ . '/header.php';
 require_once __DIR__ . '/../backend/config/db.php';
+require_once __DIR__ . '/../backend/config/session.php';
 
-// Проверка авторизации
+// Проверка авторизации — ДО header.php (чтобы работал redirect)
 if (!isLoggedIn()) {
     header('Location: login.php');
     exit;
 }
+
+require_once __DIR__ . '/header.php';
 
 $user_id = $_SESSION['user_id'];
 

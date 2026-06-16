@@ -1,12 +1,12 @@
 <?php
 // =============================================
-// ПОДКЛЮЧЕНИЕ К БАЗЕ ДАННЫХ (PDO)
+// ПОДКЛЮЧЕНИЕ К БАЗЕ ДАННЫХ (PDO) — Docker
 // =============================================
 
-$host = 'localhost';
-$dbname = 'restaurant_db';
-$username = 'root';
-$password = '';
+$host = getenv('DB_HOST') ?: 'db';
+$dbname = getenv('DB_NAME') ?: 'restaurant_db';
+$username = getenv('DB_USER') ?: 'user';
+$password = getenv('DB_PASS') ?: 'userpass';
 
 try {
     $pdo = new PDO(

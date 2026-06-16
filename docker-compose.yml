@@ -1,0 +1,55 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: bean-scene-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: restaurant_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpass
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 15
+
+  web:
+    build: .
+    container_name: bean-scene-web
+    restart: unless-stopped
+    ports:
+      - "8080:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./frontend:/app/frontend
+      - ./backend:/app/backend
+      - ./router.php:/app/router.php
+      - ./.env:/app/.env
+    environment:
+      DB_HOST: db
+      DB_NAME: restaurant_db
+      DB_USER: user
+      DB_PASS: userpass
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: bean-scene-pma
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: user
+      PMA_PASSWORD: userpass
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
