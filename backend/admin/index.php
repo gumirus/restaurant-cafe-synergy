@@ -154,8 +154,11 @@ $page = $_GET['page'] ?? 'dashboard';
     <!-- ========== SIDEBAR ========== -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <h2>☕ BEAN SCENE</h2>
-            <p>Админ-панель</p>
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Свернуть/развернуть">☰</button>
+            <div class="sidebar-header-text">
+                <h2>☕ BEAN SCENE</h2>
+                <p>Админ-панель</p>
+            </div>
         </div>
         <nav class="sidebar-nav">
             <a href="?page=dashboard" class="<?= $page === 'dashboard' ? 'active' : '' ?>">
@@ -1427,9 +1430,23 @@ $page = $_GET['page'] ?? 'dashboard';
             .user-row:hover {
                 background: rgba(212, 168, 83, 0.08);
             }
+
             </style>
 
             <script>
+            function toggleSidebar() {
+                document.querySelector('.sidebar').classList.toggle('collapsed');
+                localStorage.setItem('admin_sidebar',
+                    document.querySelector('.sidebar').classList.contains('collapsed') ? 'collapsed' : 'expanded'
+                );
+            }
+            // Восстанавливаем состояние
+            document.addEventListener('DOMContentLoaded', function() {
+                if (localStorage.getItem('admin_sidebar') === 'collapsed') {
+                    document.querySelector('.sidebar').classList.add('collapsed');
+                }
+            });
+
             function openUserModal(id, name, phone, position, bio, avatar, role, date) {
                 document.getElementById('user-modal-name').textContent = name || 'Без имени';
                 document.getElementById('user-modal-position').textContent = position || '';
@@ -1653,6 +1670,20 @@ $page = $_GET['page'] ?? 'dashboard';
         margin-top: 15px; font-size: 1rem;
         opacity: 0.8;
     }
+    /* Sidebar toggle */
+    .sidebar-header { display: flex; align-items: center; gap: 10px; }
+    .sidebar-toggle {
+        background: none; border: none; color: rgba(255,255,255,0.7);
+        font-size: 1.3rem; cursor: pointer; padding: 5px 10px;
+        border-radius: 6px; transition: all 0.3s; flex-shrink: 0;
+    }
+    .sidebar-toggle:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .sidebar.collapsed { width: 60px; min-width: 60px; }
+    .sidebar.collapsed + .main-content { margin-left: 60px; }
+    .sidebar.collapsed .sidebar-header-text { display: none; }
+    .sidebar.collapsed .sidebar-nav a span:not(.icon) { display: none; }
+    .sidebar.collapsed .sidebar-nav a { justify-content: center; padding: 12px 0; }
+    .sidebar.collapsed .sidebar-header { padding: 15px 0; justify-content: center; }
     </style>
 
     <script>
