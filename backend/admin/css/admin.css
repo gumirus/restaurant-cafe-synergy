@@ -379,10 +379,10 @@ table tr:hover td {
     .order-items-table td {
         padding: 5px;
     }
-    table {
-        font-size: 0.8rem;
-    }
-    th, td {
-        padding: 6px 8px;
-    }
+    .card { max-width: 100%; overflow-x: auto; }
+    .main-content { max-width: 100vw; overflow-x: hidden; }
+    table { font-size: 0.8rem; display: block; overflow-x: auto; white-space: nowrap; }
+    th, td { padding: 6px 8px; }
+    .dish-card-body { word-break: break-word; }
+    img { max-width: 100%; height: auto; }
 }

@@ -1442,6 +1442,11 @@ section {
 }
 
 /* ========== PORTRAIT MONITOR (монитор вертикально) ========== */
+@media (orientation: portrait) and (max-width: 1024px) {
+    .header { height: var(--header-height-mobile); }
+    .header .logo img { height: 35px; }
+}
+
 @media (orientation: portrait) and (min-width: 1025px) {
     .hero h1 { font-size: 48px; }
     .hero p { font-size: 1.2rem; }
@@ -1501,6 +1506,12 @@ section {
 @media (max-width: 768px) {
     .burger-btn {
         display: block;
+    }
+    .header {
+        height: var(--header-height-mobile);
+    }
+    .header .logo img {
+        height: 35px;
     }
     .nav {
         position: fixed;

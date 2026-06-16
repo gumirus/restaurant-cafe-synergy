@@ -19,6 +19,7 @@
     /* === Размеры === */
     --container-width: 1200px;
     --header-height: 80px;
+    --header-height-mobile: 60px;
     --border-radius: 8px;
     --shadow-card: 0 2px 15px rgba(0,0,0,0.06);
     --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
