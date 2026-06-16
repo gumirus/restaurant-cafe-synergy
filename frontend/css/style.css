@@ -1431,6 +1431,48 @@ section {
 /* ========== TEAM CARD IMAGE ========== */
 .team-card-image { width: 100%; height: 250px; object-fit: cover; object-position: top; }
 
+/* ========== TABLET (768-1024) ========== */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .dishes-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .hero h1 { font-size: 42px; }
+    .nav ul { gap: 10px; }
+    .nav a { font-size: 13px; padding: 8px 10px; }
+    .header-actions a { padding: 8px 12px; font-size: 11px; }
+    .profile-layout { grid-template-columns: 1fr 1fr; gap: 20px; }
+}
+
+/* ========== PORTRAIT (телефон вертикально) ========== */
+@media (orientation: portrait) and (max-width: 480px) {
+    .header .container { padding: 0 10px; }
+    .header .logo img { height: 32px; }
+    .hero { padding: 100px 15px 40px; }
+    .hero h1 { font-size: 24px; }
+    .hero p { font-size: 0.9rem; }
+    .section-title { font-size: 24px; }
+    .section { padding: 40px 0; }
+    .dish-card-image { height: 150px; }
+    .dish-card-body { padding: 10px; }
+    .dish-card-body h3 { font-size: 0.95rem; }
+    .dish-card-body .price { font-size: 1rem; }
+    .form-group { margin-bottom: 12px; }
+    .btn { padding: 10px 18px; font-size: 0.85rem; }
+    .booking-form { padding: 20px 15px; }
+    .profile-section { padding: 100px 0 30px; }
+    .profile-card { padding: 20px; }
+    .order-card-header,
+    .order-card-body,
+    .order-card-footer { padding: 10px 12px; }
+    .modal-content { padding: 25px 15px; margin: 10px; }
+    .alert { padding: 10px 12px; font-size: 0.85rem; }
+}
+
+/* ========== PORTRAIT TABLET ========== */
+@media (orientation: portrait) and (min-width: 481px) and (max-width: 768px) {
+    .hero h1 { font-size: 34px; }
+    .dishes-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    .profile-layout { grid-template-columns: 1fr; }
+}
+
 /* ========== MOBILE BURGER MENU ========== */
 .burger-btn {
     display: none;
