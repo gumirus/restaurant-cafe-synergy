@@ -27,6 +27,16 @@ if (isLoggedIn()) {
     <link rel="stylesheet" href="css/color.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/svg+xml" href="images/logo.svg">
+    <script>
+    function openAboutModal() {
+        var m = document.getElementById('aboutModal');
+        if (m) { m.classList.add('active'); document.body.style.overflow = 'hidden'; }
+    }
+    function closeAboutModal() {
+        var m = document.getElementById('aboutModal');
+        if (m) { m.classList.remove('active'); document.body.style.overflow = ''; }
+    }
+    </script>
 </head>
 <body>
 
