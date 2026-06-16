@@ -150,6 +150,17 @@ $page = $_GET['page'] ?? 'dashboard';
     <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
+    <script>
+    function toggleSidebar() {
+        document.querySelector('.sidebar').classList.toggle('collapsed');
+        localStorage.setItem('admin_sidebar', document.querySelector('.sidebar').classList.contains('collapsed') ? 'collapsed' : 'expanded');
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        if (localStorage.getItem('admin_sidebar') === 'collapsed') {
+            document.querySelector('.sidebar').classList.add('collapsed');
+        }
+    });
+    </script>
 
     <!-- ========== SIDEBAR ========== -->
     <aside class="sidebar">
@@ -1434,18 +1445,7 @@ $page = $_GET['page'] ?? 'dashboard';
             </style>
 
             <script>
-            function toggleSidebar() {
-                document.querySelector('.sidebar').classList.toggle('collapsed');
-                localStorage.setItem('admin_sidebar',
-                    document.querySelector('.sidebar').classList.contains('collapsed') ? 'collapsed' : 'expanded'
-                );
-            }
-            // Восстанавливаем состояние
-            document.addEventListener('DOMContentLoaded', function() {
-                if (localStorage.getItem('admin_sidebar') === 'collapsed') {
-                    document.querySelector('.sidebar').classList.add('collapsed');
-                }
-            });
+
 
             function openUserModal(id, name, phone, position, bio, avatar, role, date) {
                 document.getElementById('user-modal-name').textContent = name || 'Без имени';
