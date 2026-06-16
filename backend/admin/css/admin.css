@@ -380,6 +380,9 @@ table tr:hover td {
         padding: 5px;
     }
     .card { max-width: 100%; overflow-x: auto; }
+    .main-content > * { max-width: 100%; }
+    .menu-items-grid { grid-template-columns: 1fr; }
+    .stats-cards { grid-template-columns: 1fr; }
     .main-content { max-width: 100vw; overflow-x: hidden; }
     table { font-size: 0.8rem; display: block; overflow-x: auto; white-space: nowrap; }
     th, td { padding: 6px 8px; }
