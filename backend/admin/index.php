@@ -210,11 +210,13 @@ $page = $_GET['page'] ?? 'dashboard';
             </a>
         </nav>
     </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileSidebar()"></div>
 
     <!-- ========== MAIN CONTENT ========== -->
     <main class="main-content">
 
         <div class="page-header">
+            <button class="mobile-menu-btn" onclick="openMobileSidebar()" style="display:none;background:none;border:none;font-size:1.5rem;cursor:pointer;padding:5px;margin-right:10px;">☰</button>
             <h1>
                 <?php
                 $titles = [
@@ -1687,6 +1689,15 @@ $page = $_GET['page'] ?? 'dashboard';
     </style>
 
     <script>
+    function openMobileSidebar() {
+        document.querySelector('.sidebar').classList.add('mobile-open');
+        document.getElementById('sidebarOverlay').classList.add('active');
+    }
+    function closeMobileSidebar() {
+        document.querySelector('.sidebar').classList.remove('mobile-open');
+        document.getElementById('sidebarOverlay').classList.remove('active');
+    }
+
     function openImageModal(src, name) {
         document.getElementById('image-modal-img').src = src;
         document.getElementById('image-modal-caption').textContent = name || '';
