@@ -36,6 +36,8 @@ if (isLoggedIn()) {
             <a href="index.php" class="logo">
                 <img src="images/logo.svg" alt="Bean Scene" height="50">
             </a>
+            <button class="burger-btn" onclick="toggleMobileNav()">☰</button>
+            <div class="nav-overlay" id="navOverlay" onclick="toggleMobileNav()"></div>
             <nav class="nav">
                 <ul>
                     <li><a href="index.php" class="<?= $current_page === 'index.php' ? 'active' : '' ?>">Главная</a></li>

@@ -1430,3 +1430,78 @@ section {
 
 /* ========== TEAM CARD IMAGE ========== */
 .team-card-image { width: 100%; height: 250px; object-fit: cover; object-position: top; }
+
+/* ========== MOBILE BURGER MENU ========== */
+.burger-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: var(--color-text);
+    padding: 5px;
+    line-height: 1;
+}
+
+@media (max-width: 768px) {
+    .burger-btn {
+        display: block;
+    }
+    .nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 280px;
+        background: var(--color-surface);
+        z-index: 1000;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        padding: 80px 30px 30px;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+    }
+    .nav.mobile-open {
+        transform: translateX(0);
+    }
+    .nav ul {
+        flex-direction: column;
+        gap: 5px;
+    }
+    .nav a {
+        display: block;
+        padding: 12px 15px;
+        font-size: 1rem;
+    }
+    .nav-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 999;
+    }
+    .nav-overlay.active {
+        display: block;
+    }
+    .header .container {
+        justify-content: space-between;
+    }
+    .header-actions a {
+        padding: 6px 10px;
+        font-size: 10px;
+    }
+    .dishes-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    .profile-layout { grid-template-columns: 1fr; }
+    .order-card-header,
+    .order-card-footer { flex-direction: column; gap: 8px; }
+    .order-items-table { font-size: 0.8rem; }
+    .order-items-table th,
+    .order-items-table td { padding: 5px; }
+    .dish-card-body { padding: 12px; }
+}
+
+@media (max-width: 480px) {
+    .dishes-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 26px; }
+    .header-actions a { font-size: 9px; padding: 5px 8px; }
+    .header .logo img { height: 35px; }
+}

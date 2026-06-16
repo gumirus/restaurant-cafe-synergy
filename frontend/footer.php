@@ -50,5 +50,12 @@
     </footer>
 
     <script src="js/main.js?v=2"></script>
+    <script>
+    function toggleMobileNav() {
+        document.querySelector('.nav').classList.toggle('mobile-open');
+        document.getElementById('navOverlay').classList.toggle('active');
+        document.body.style.overflow = document.querySelector('.nav').classList.contains('mobile-open') ? 'hidden' : '';
+    }
+    </script>
 </body>
 </html>
