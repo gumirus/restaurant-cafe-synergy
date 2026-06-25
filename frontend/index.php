@@ -20,33 +20,15 @@
                 <div class="about-image fade-in">
                     <img src="images/about.jpg" alt="О ресторане">
                 </div>
-                <div class="about-text fade-in collapsible" id="aboutText">
+                <div class="about-text fade-in" id="aboutText">
                     <h2>О <span>ресторане</span></h2>
                     <div class="about-text-collapsed">
                         <p>Точка Кипения — это не просто ресторан. Это место, где встречаются традиции и современность...</p>
                         <a href="javascript:void(0)" class="btn" onclick="openAboutModal()">Подробнее</a>
                     </div>
-                    <div class="about-text-full">
-                        <p>Точка Кипения — это не просто ресторан. Это место, где встречаются традиции и современность, где каждое блюдо — произведение искусства.</p>
-                        <p>Мы используем только свежие продукты от местных фермеров, а наши шеф-повара постоянно экспериментируют, чтобы удивлять вас новыми вкусами.</p>
-                        <div class="about-features">
-                            <div class="about-feature">
-                                <span class="feature-icon">🥩</span>
-                                <span>Свежие продукты</span>
-                            </div>
-                            <div class="about-feature">
-                                <span class="feature-icon">👨‍🍳</span>
-                                <span>Шеф-повара из Европы</span>
-                            </div>
-                            <div class="about-feature">
-                                <span class="feature-icon">🍷</span>
-                                <span>Винная карта</span>
-                            </div>
-                        </div>
-                        <a href="about.php" class="btn">Узнать больше</a>
-                    </div>
                 </div>
 
+                <!-- ========== ABOUT MODAL ========== -->
                 <div class="about-modal-overlay" id="aboutModal" onclick="if(event.target===this)closeAboutModal()">
                     <div class="about-modal">
                         <button class="about-modal-close" onclick="closeAboutModal()">×</button>
@@ -247,8 +229,9 @@
         visibility: visible; opacity: 1;
     }
     .about-modal {
-        background: var(--color-surface, #1e1e2e);
-        border: 1px solid var(--color-border, #333);
+        position: relative;
+        background: var(--color-bg-section);
+        border: 1px solid var(--color-border);
         border-radius: 20px;
         max-width: 500px; width: 90%;
         padding: 40px;
@@ -260,17 +243,44 @@
     .about-modal-overlay.active .about-modal {
         transform: scale(1) translateY(0);
     }
+    .about-modal h2 {
+        font-family: var(--font-heading);
+        font-size: 1.8rem;
+        color: var(--color-text);
+        margin-bottom: 16px;
+    }
+    .about-modal h2 span {
+        color: var(--color-primary);
+    }
+    .about-modal p {
+        color: var(--color-text-light);
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin-bottom: 14px;
+    }
+    .about-modal .about-features {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin: 20px 0;
+    }
+    .about-modal .about-feature {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--color-bg);
+        padding: 12px 18px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+    }
     .about-modal-close {
         position: absolute; top: 15px; right: 20px;
         background: none; border: none;
-        font-size: 2rem; color: #aaa;
+        font-size: 2rem; color: var(--color-text-light);
         cursor: pointer; transition: color 0.3s;
-    }
-    .about-modal-close:hover {
-        color: #fff;
-    }
-    .about-modal {
-        position: relative;
     }
     .booking-modal-overlay {
         position: fixed; inset: 0; z-index: 99999;
