@@ -17,7 +17,6 @@ $user_id = $_SESSION['user_id'];
 // Обновление профиля
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     $name = trim($_POST['name'] ?? '');
-    $email = trim($_POST['email'] ?? '');
     $bio = trim($_POST['bio'] ?? '');
 
     // Загрузка аватара
@@ -31,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
         }
     }
 
-    $sql = "UPDATE users SET name = ?, email = ?, bio = ?" . ($avatar ? ", avatar = ?" : "") . " WHERE id = ?";
-    $params = [$name, $email ?: null, $bio];
+    $sql = "UPDATE users SET name = ?, bio = ?" . ($avatar ? ", avatar = ?" : "") . " WHERE id = ?";
+    $params = [$name, $bio];
     if ($avatar) $params[] = $avatar;
     $params[] = $user_id;
 
@@ -91,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['repeat_order'])) {
 // ========== ПОЛУЧЕНИЕ ДАННЫХ ==========
 
 // Информация о пользователе
-$stmt = $pdo->prepare("SELECT phone, email, name, bio, avatar, created_at FROM users WHERE id = ?");
+$stmt = $pdo->prepare("SELECT phone, name, bio, avatar, created_at FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
 
@@ -172,11 +171,6 @@ $avatar_url = $user['avatar'] ? 'uploads/' . $user['avatar'] : 'images/default-a
                         <div class="form-group">
                             <label>Имя</label>
                             <input type="text" name="name" value="<?= htmlspecialchars($user['name'] ?? '') ?>" placeholder="Ваше имя">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" name="email" value="<?= htmlspecialchars($user['email'] ?? '') ?>" placeholder="your@email.com">
                         </div>
 
                         <div class="form-group">
