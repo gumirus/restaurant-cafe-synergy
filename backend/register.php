@@ -66,22 +66,7 @@ if (!empty($errors)) {
     exit;
 }
 
-// Проверяем верификацию
-$verifiedField = ($verify_method === 'email') ? 'verified_email' : 'verified_phone';
-$verifiedValue = ($verify_method === 'email') ? $email : $phone;
-
-if (empty($_SESSION[$verifiedField]) || $_SESSION[$verifiedField] !== $verifiedValue) {
-    echo json_encode([
-        'success' => false,
-        'require_verification' => true,
-        'message' => 'Требуется подтверждение',
-        'method' => $verify_method,
-        'value' => $verifiedValue,
-    ]);
-    exit;
-}
-
-// Всё ок — регистрируем
+// Регистрируем
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
 $stmt = $pdo->prepare("
