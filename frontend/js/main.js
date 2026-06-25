@@ -490,95 +490,93 @@ function showToast(msg) {
     }, 2500);
 }
 
-// ========== УНИВЕРСАЛЬНЫЙ СЛАЙДЕР (бесконечный цикл) ==========
+// ========== СЛАЙДЕР (бесконечный, плавный, без gap) ==========
 function initSlider(container, sliderSelector, dotsSelector, dotClass) {
     const wrap = container.querySelector(sliderSelector);
-    const dotsContainer = container.querySelector(dotsSelector);
+    const dotsEl = container.querySelector(dotsSelector);
     if (!wrap || wrap.children.length === 0) return;
 
-    // Оборачиваем в track для translateX
+    // Убираем gap у wrap (будем использовать margin на карточках)
+    wrap.style.cssText = 'overflow:hidden';
+
+    // Создаём track для translateX
     const track = document.createElement('div');
-    track.style.cssText = 'display:flex;gap:25px;transition:transform 0.4s ease';
+    track.style.cssText = 'display:flex;transition:transform 0.5s ease';
     while (wrap.firstChild) track.appendChild(wrap.firstChild);
-    wrap.innerHTML = '';
-    wrap.style.cssText = 'overflow:hidden;display:flex';
     wrap.appendChild(track);
+
+    // Делаем каждую карточку шириной wrap
+    function resizeCards() {
+        const w = wrap.clientWidth;
+        for (let c of track.children) {
+            c.style.cssText = 'min-width:' + w + 'px;flex-shrink:0;box-sizing:border-box';
+        }
+    }
+    resizeCards();
+    window.addEventListener('resize', resizeCards);
 
     const originals = [...track.children];
     const total = originals.length;
     if (total <= 1) return;
 
-    // Бесконечный цикл: клонируем первую и последнюю
-    const firstClone = originals[0].cloneNode(true);
-    const lastClone = originals[total - 1].cloneNode(true);
-    track.appendChild(firstClone);  // копия первой в конце
-    track.insertBefore(lastClone, track.firstChild); // копия последней в начале
+    // Клонируем для бесконечности
+    track.appendChild(originals[0].cloneNode(true));
+    track.insertBefore(originals[total - 1].cloneNode(true), track.firstChild);
 
     const allItems = track.children;
-    const allTotal = allItems.length;
+    let current = 1;
+    let animating = false;
 
-    let current = 1; // начинаем с реального первого (индекс 1 = оригинальный 0)
-
-    // Кнопки
-    function createBtn(className, html) {
-        const btn = document.createElement('button');
-        btn.className = 'slider-arrow ' + className;
-        btn.innerHTML = html;
-        container.appendChild(btn);
-        return btn;
+    // Стрелки
+    function btn(cl, html) {
+        const b = document.createElement('button');
+        b.className = 'slider-arrow ' + cl;
+        b.innerHTML = html;
+        container.appendChild(b);
+        return b;
     }
-    createBtn('slider-prev', '‹');
-    createBtn('slider-next', '›');
+    btn('slider-prev', '‹');
+    btn('slider-next', '›');
 
-    // Точки (только для реальных элементов)
+    // Точки
     for (let i = 0; i < total; i++) {
-        const dot = document.createElement('button');
-        dot.className = dotClass + (i === 0 ? ' active' : '');
-        dot.onclick = () => goTo(i + 1); // +1 из-за клона в начале
-        dotsContainer.appendChild(dot);
+        const d = document.createElement('button');
+        d.className = dotClass + (i === 0 ? ' active' : '');
+        d.onclick = () => goTo(i + 1);
+        dotsEl.appendChild(d);
     }
 
-    function getItemWidth() { return allItems[0].offsetWidth + 25; }
+    function slideTo(index) {
+        if (animating) return;
+        animating = true;
 
-    function goTo(index) {
-        // Если ушли на клон в конце — прыгаем на реальный первый
-        if (index >= allTotal - 1) {
-            current = 1;
-            track.style.transition = 'none';
-            track.style.transform = 'translateX(-' + (current * getItemWidth()) + 'px)';
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    track.style.transition = 'transform 0.4s ease';
-                });
-            });
-        }
-        // Если ушли на клон в начале — прыгаем на реальный последний
-        else if (index <= 0) {
-            current = total;
-            track.style.transition = 'none';
-            track.style.transform = 'translateX(-' + (current * getItemWidth()) + 'px)';
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    track.style.transition = 'transform 0.4s ease';
-                });
-            });
-        } else {
-            current = index;
-            track.style.transform = 'translateX(-' + (current * getItemWidth()) + 'px)';
-        }
+        const w = wrap.clientWidth;
+        current = index;
+        track.style.transform = 'translateX(-' + (current * w) + 'px)';
 
-        // Обновляем точки (index - 1 = real index)
+        // Обновляем точки
         const realIdx = current - 1;
-        dotsContainer.querySelectorAll('.' + dotClass).forEach((d, i) => {
-            d.classList.toggle('active', i === realIdx);
-        });
+        dotsEl.querySelectorAll('.' + dotClass).forEach((d, i) => d.classList.toggle('active', i === (realIdx + total) % total));
+
+        // Проверяем, не ушли ли на клон
+        setTimeout(() => {
+            animating = false;
+            if (current >= allItems.length - 1) { // на клоне первой
+                track.style.transition = 'none';
+                current = 1;
+                track.style.transform = 'translateX(-' + (current * w) + 'px)';
+                requestAnimationFrame(() => requestAnimationFrame(() => { track.style.transition = 'transform 0.5s ease'; }));
+            } else if (current <= 0) { // на клоне последней
+                track.style.transition = 'none';
+                current = total;
+                track.style.transform = 'translateX(-' + (current * w) + 'px)';
+                requestAnimationFrame(() => requestAnimationFrame(() => { track.style.transition = 'transform 0.5s ease'; }));
+            }
+        }, 550);
     }
 
-    // Клики
-    const prevBtn = container.querySelector('.slider-prev');
-    const nextBtn = container.querySelector('.slider-next');
-    prevBtn.onclick = () => goTo(current - 1);
-    nextBtn.onclick = () => goTo(current + 1);
+    container.querySelector('.slider-prev').onclick = () => slideTo(current - 1);
+    container.querySelector('.slider-next').onclick = () => slideTo(current + 1);
 
-    goTo(1);
+    slideTo(1);
 }
