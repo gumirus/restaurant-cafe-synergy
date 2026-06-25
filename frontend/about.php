@@ -128,15 +128,8 @@
     .about-features { display: flex; gap: 20px; margin-top: 30px; flex-wrap: wrap; }
     .about-feature { display: flex; align-items: center; gap: 10px; background: var(--color-surface); padding: 12px 20px; border-radius: 10px; border: 1px solid var(--color-border); }
     .feature-icon { font-size: 1.5rem; }
-    .team-section { padding: 80px 0; background: var(--color-surface); }
-    .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; margin-top: 50px; }
-    .team-card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 16px; overflow: hidden; text-align: center; transition: transform 0.3s; }
-    .team-card:hover { transform: translateY(-5px); }
-    .team-card-image { width: 100%; height: 250px; object-fit: cover; object-position: top; }
-    .team-card-body { padding: 20px; }
-    .team-card-body h3 { color: #444; margin-bottom: 5px; }
-    .team-role { color: var(--color-primary); font-weight: 600; margin-bottom: 10px; }
-    .team-card-body p { color: #666; font-size: 0.9rem; }
+    .team-section { padding: 80px 0; }
+    .team-grid { margin-top: 50px; padding: 0 20px; }
     .reviews { padding: 80px 0; }
     .faq-list { max-width: 700px; margin: 40px auto 0; }
     .faq-item { border: 1px solid var(--color-border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }

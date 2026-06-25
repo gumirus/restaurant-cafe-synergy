@@ -1037,12 +1037,8 @@ section {
     align-items: center;
     justify-content: center;
     transition: all 0.3s;
-    opacity: 0;
+    opacity: 1;
 }
-.team-grid:hover .slider-arrow,
-.reviews-grid:hover .slider-arrow,
-.news-grid:hover .slider-arrow,
-.menu-section:hover .slider-arrow { opacity: 1; }
 .slider-arrow:hover {
     background: var(--color-primary);
     color: #fff;
