@@ -116,6 +116,14 @@
         width: 100%;
         text-align: center;
     }
+    .dish-card-body .btn:last-child {
+        margin-top: auto;
+    }
+    .dish-card-actions {
+        margin-top: auto;
+        display: flex;
+        gap: 8px;
+    }
     .toast {
         position: fixed;
         bottom: 30px;
@@ -497,7 +505,7 @@
                         <h3>${item.name}</h3>
                         <p>${item.desc}</p>
                         <p class="price">${item.price} ₽</p>
-                        <div style="display:flex; gap:8px;">
+                        <div class="dish-card-actions">
                             <button class="btn" style="flex:1;" onclick="openDishModal(${item.id})">📋 Подробнее</button>
                             <button class="btn" style="flex:1; background:var(--color-primary);" onclick="addToCart(${item.id}, this)">🛒 В корзину</button>
                         </div>

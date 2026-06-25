@@ -109,7 +109,7 @@ function loadSpecials() {
                         <h3>${dish.name}</h3>
                         <p>${dish.description || ''}</p>
                         <span class="price">${Number(dish.price).toLocaleString()} ₽</span>
-                        <a href="menu.php" class="btn" style="margin-top:10px;font-size:11px;padding:8px 16px;">🍽 В меню</a>
+                        <a href="menu.php" class="btn" style="margin-top:auto;font-size:11px;padding:8px 16px;">🍽 В меню</a>
                     </div>
                 </div>
             `).join('');

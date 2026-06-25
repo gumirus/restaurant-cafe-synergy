@@ -462,7 +462,7 @@ section {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    flex: 1;
 }
 
 .special-card-body h3 {
@@ -596,6 +596,9 @@ section {
 
 .dish-card-body {
     padding: 25px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .dish-card-body h3 {
@@ -608,6 +611,7 @@ section {
     color: var(--color-text-light);
     font-size: 14px;
     margin-bottom: 15px;
+    flex: 1;
 }
 
 .dish-card-footer {
