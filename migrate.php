@@ -118,6 +118,26 @@ if ($stmt->fetchColumn() == 0) {
     echo "✅ 'Холодные блюда' already exists\n";
 }
 
+// Create verification_codes table if missing
+try {
+    $pdo->query("SELECT 1 FROM verification_codes LIMIT 1");
+} catch (Exception $e) {
+    echo "📦 Creating verification_codes table...\n";
+    $pdo->exec("CREATE TABLE IF NOT EXISTS verification_codes (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        phone VARCHAR(20) DEFAULT NULL,
+        email VARCHAR(255) DEFAULT NULL,
+        code VARCHAR(6) NOT NULL,
+        method ENUM('email', 'sms') NOT NULL,
+        verified TINYINT(1) DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        expires_at TIMESTAMP NOT NULL,
+        INDEX idx_phone (phone),
+        INDEX idx_email (email)
+    ) ENGINE=InnoDB");
+    echo "   ✅ verification_codes table created\n";
+}
+
 // Add images to dishes that have NULL image
 echo "📦 Checking dish images...\n";
 $noImg = $pdo->query("SELECT COUNT(*) FROM dishes WHERE image IS NULL OR image = ''")->fetchColumn();

@@ -261,6 +261,20 @@ CREATE TABLE booking_feedback (
     FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+-- ========== 15. ВЕРИФИКАЦИЯ КОДОВ ==========
+CREATE TABLE verification_codes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    phone VARCHAR(20) DEFAULT NULL,
+    email VARCHAR(255) DEFAULT NULL,
+    code VARCHAR(6) NOT NULL,
+    method ENUM('email', 'sms') NOT NULL,
+    verified TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL,
+    INDEX idx_phone (phone),
+    INDEX idx_email (email)
+) ENGINE=InnoDB;
+
 -- ========== ТЕСТОВЫЙ АДМИН (Шеф-повар) ==========
 -- Логин: +79990000001
 -- Пароль: admin123
