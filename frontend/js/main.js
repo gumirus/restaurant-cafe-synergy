@@ -159,6 +159,8 @@ function loadPopularDishes() {
 function loadTeam() {
     const container = document.getElementById('team-grid');
     if (!container) return;
+    // Не заменяем, если уже есть слайдер (страница "О нас")
+    if (container.querySelector('.team-slider')) return;
 
     const team = [
         { name: 'Антонио Бьянки', role: 'Шеф-повар', desc: '15 лет опыта в ресторанах Мишлен', img: 'uploads/team/1-chef.jpg' },
@@ -192,6 +194,7 @@ function loadTeam() {
 function loadReviews() {
     const container = document.getElementById('reviews-grid');
     if (!container) return;
+    if (container.querySelector('.reviews-slider')) return;
 
     const reviews = [
         { name: 'Анна', text: 'Потрясающее место! Обслуживание на высшем уровне, а стейк — просто божественный. Обязательно вернусь!', rating: 5 },
@@ -245,6 +248,7 @@ function loadGallery() {
 function loadNews() {
     const container = document.getElementById('news-grid');
     if (!container) return;
+    if (container.querySelector('.news-slider')) return;
 
     const news = [
         { title: 'Новое сезонное меню', date: '01.06.2026', desc: 'Попробуйте наши новые летние блюда из свежих сезонных продуктов', img: 'uploads/news/1-seasonal-menu.jpg' },
