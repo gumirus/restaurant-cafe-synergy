@@ -5,8 +5,10 @@
 
 define('SMTP_HOST', 'smtp.yandex.ru');
 define('SMTP_PORT', 465);
-define('SMTP_USER', getenv('SMTP_USER') ?: '');
-define('SMTP_PASS', getenv('SMTP_PASSWORD') ?: '');
+$smtpUser = getenv('SMTP_USER') ?: ($_ENV['SMTP_USER'] ?? ($_SERVER['SMTP_USER'] ?? ''));
+$smtpPass = getenv('SMTP_PASSWORD') ?: ($_ENV['SMTP_PASSWORD'] ?? ($_SERVER['SMTP_PASSWORD'] ?? ''));
+define('SMTP_USER', $smtpUser);
+define('SMTP_PASS', $smtpPass);
 
 function sendMail(string $to, string $subject, string $body): bool {
     if (empty(SMTP_USER) || empty(SMTP_PASS)) {
@@ -42,24 +44,33 @@ function sendSmtpMail(string $to, string $subject, string $body): bool {
 
     if (!$sock) {
         error_log("SMTP connection failed: $errstr ($errno)");
-        return sendMail($to, $subject, $body); // fallback
+        return false; // don't fallback to mail(), it won't work on Railway
     }
 
     $resp = fgets($sock, 512);
-    
+
     fwrite($sock, "EHLO server\r\n");
     while ($line = fgets($sock, 512)) {
         if (substr($line, 3, 1) === ' ') break;
     }
 
-    fwrite($sock, "AUTH LOGIN\r\n"); fgets($sock, 512);
-    fwrite($sock, base64_encode(SMTP_USER) . "\r\n"); fgets($sock, 512);
-    fwrite($sock, base64_encode(SMTP_PASS) . "\r\n"); $resp = fgets($sock, 512);
+    fwrite($sock, "AUTH LOGIN\r\n"); $resp = fgets($sock, 512);
+    if (substr($resp, 0, 3) !== '334') {
+        error_log("SMTP AUTH LOGIN failed: $resp");
+        fclose($sock); return false;
+    }
 
+    fwrite($sock, base64_encode(SMTP_USER) . "\r\n"); $resp = fgets($sock, 512);
+    if (substr($resp, 0, 3) !== '334') {
+        error_log("SMTP USER failed: $resp");
+        fclose($sock); return false;
+    }
+
+    fwrite($sock, base64_encode(SMTP_PASS) . "\r\n"); $resp = fgets($sock, 512);
     if (substr($resp, 0, 3) !== '235') {
         error_log("SMTP auth failed: $resp");
         fclose($sock);
-        return sendMail($to, $subject, $body);
+        return false;
     }
 
     fwrite($sock, "MAIL FROM:<" . SMTP_USER . ">\r\n"); fgets($sock, 512);
