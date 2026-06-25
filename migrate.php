@@ -77,7 +77,7 @@ if (!$hasCategories) {
             'bio' => 'TEXT DEFAULT NULL AFTER name',
             'avatar' => "VARCHAR(255) DEFAULT NULL AFTER bio",
             'position' => "VARCHAR(100) DEFAULT NULL AFTER avatar",
-            'updated_at' => "TIMESTAMP DEFAULT CURRENTESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER created_at",
+            'updated_at' => "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER created_at",
         ],
         'dishes' => [
             'ingredients' => 'TEXT DEFAULT NULL AFTER description',
@@ -138,8 +138,7 @@ if ($noImg > 0) {
     ];
     $updated = 0;
     foreach ($images as $name => $img) {
-        $pdo->exec("UPDATE dishes SET image = '$img' WHERE name = '$name' AND (image IS NULL OR image = '')");
-        $updated += $pdo->rowCount();
+        $updated += $pdo->exec("UPDATE dishes SET image = '$img' WHERE name = '$name' AND (image IS NULL OR image = '')");
     }
     echo "   ✅ $updated dishes updated with images\n";
 } else {
