@@ -209,7 +209,7 @@ function loadTeam() {
     setTimeout(initFadeIn, 100);
 }
 
-// ========== LOAD REVIEWS ==========
+// ========== LOAD REVIEWS (slider) ==========
 function loadReviews() {
     const container = document.getElementById('reviews-grid');
     if (!container) return;
@@ -220,14 +220,39 @@ function loadReviews() {
         { name: 'Мария', text: 'Лучший ресторан в городе! Каждое блюдо — шедевр. Особенно рекомендую десерты.', rating: 5 },
     ];
 
-    container.innerHTML = reviews.map(r => `
-        <div class="review-card fade-in">
-            <div class="quote">"</div>
-            <p>${r.text}</p>
-            <div class="reviewer-name">— ${r.name}</div>
-            <div class="rating">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+    container.innerHTML = `
+        <div class="reviews-slider">
+            ${reviews.map(r => `
+                <div class="review-card">
+                    <div class="quote">"</div>
+                    <p>${r.text}</p>
+                    <div class="reviewer-name">— ${r.name}</div>
+                    <div class="rating">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+                </div>
+            `).join('')}
         </div>
-    `).join('');
+        <div class="reviews-slider-dots"></div>
+    `;
+
+    // Слайдер навигация
+    const slider = container.querySelector('.reviews-slider');
+    const dotsContainer = container.querySelector('.reviews-slider-dots');
+
+    reviews.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'review-dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => {
+            slider.scrollTo({ left: slider.children[i].offsetLeft - slider.offsetLeft, behavior: 'smooth' });
+        };
+        dotsContainer.appendChild(dot);
+    });
+
+    slider.addEventListener('scroll', () => {
+        const idx = Math.round(slider.scrollLeft / (slider.children[0].offsetWidth + 25));
+        dotsContainer.querySelectorAll('.review-dot').forEach((d, i) => {
+            d.classList.toggle('active', i === Math.min(idx, reviews.length - 1));
+        });
+    });
 
     setTimeout(initFadeIn, 100);
 }
