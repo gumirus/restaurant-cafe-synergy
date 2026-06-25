@@ -633,18 +633,31 @@ section {
     font-size: 11px;
 }
 
-/* ========== TEAM ========== */
+/* ========== TEAM (horizontal slider) ========== */
 .team-section {
     background: var(--color-bg-section);
+    overflow: hidden;
 }
 
 .team-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 25px;
+    position: relative;
 }
 
+.team-slider {
+    display: flex;
+    gap: 25px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 20px;
+}
+.team-slider::-webkit-scrollbar { display: none; }
+
 .team-card {
+    flex: 0 0 calc(33.333% - 17px);
+    min-width: 280px;
+    scroll-snap-align: start;
     background: var(--color-bg-card);
     border-radius: var(--border-radius);
     overflow: hidden;
@@ -661,8 +674,9 @@ section {
 
 .team-card-image {
     width: 100%;
-    height: 280px;
+    height: 320px;
     object-fit: cover;
+    object-position: top;
 }
 
 .team-card-body {
@@ -687,6 +701,35 @@ section {
 .team-card-body p {
     color: var(--color-text-light);
     font-size: 14px;
+}
+
+/* Точки навигации */
+.team-slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+}
+.team-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 1px solid var(--color-primary);
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s;
+}
+.team-dot.active {
+    background: var(--color-primary);
+    transform: scale(1.3);
+}
+
+@media (max-width: 768px) {
+    .team-card {
+        flex: 0 0 85%;
+        min-width: 260px;
+    }
+    .team-card-image { height: 260px; }
 }
 
 /* ========== BOOKING ========== */
@@ -1432,8 +1475,6 @@ section {
     opacity: 1;
 }
 
-/* ========== TEAM CARD IMAGE ========== */
-.team-card-image { width: 100%; height: 250px; object-fit: cover; object-position: top; }
 
 /* ========== MOBILE BURGER MENU ========== */
 .burger-btn {

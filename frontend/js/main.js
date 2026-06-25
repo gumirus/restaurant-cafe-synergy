@@ -155,7 +155,7 @@ function loadPopularDishes() {
         });
 }
 
-// ========== LOAD TEAM ==========
+// ========== LOAD TEAM (horizontal slider) ==========
 function loadTeam() {
     const container = document.getElementById('team-grid');
     if (!container) return;
@@ -167,16 +167,44 @@ function loadTeam() {
         { name: 'Елена Преображенская', role: 'Сомелье', desc: 'Эксперт по винным сочетаниям', img: 'uploads/team/4-sommelier.jpg' },
     ];
 
-    container.innerHTML = team.map(m => `
-        <div class="team-card fade-in">
-            <img class="team-card-image clickable-img" src="${m.img}" alt="${m.name}">
-            <div class="team-card-body">
-                <h3>${m.name}</h3>
-                <div class="team-role">${m.role}</div>
-                <p>${m.desc}</p>
-            </div>
+    // Создаём слайдер с портретными карточками
+    container.innerHTML = `
+        <div class="team-slider">
+            ${team.map(m => `
+                <div class="team-card">
+                    <img class="team-card-image clickable-img" src="${m.img}" alt="${m.name}">
+                    <div class="team-card-body">
+                        <h3>${m.name}</h3>
+                        <div class="team-role">${m.role}</div>
+                        <p>${m.desc}</p>
+                    </div>
+                </div>
+            `).join('')}
         </div>
-    `).join('');
+        <div class="team-slider-dots"></div>
+    `;
+
+    // Слайдер навигация (кнопки)
+    const slider = container.querySelector('.team-slider');
+    const dotsContainer = container.querySelector('.team-slider-dots');
+
+    // Создаём точки
+    team.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'team-dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => {
+            slider.scrollTo({ left: slider.children[i].offsetLeft - slider.offsetLeft, behavior: 'smooth' });
+        };
+        dotsContainer.appendChild(dot);
+    });
+
+    // Обновляем активную точку при скролле
+    slider.addEventListener('scroll', () => {
+        const index = Math.round(slider.scrollLeft / (slider.children[0].offsetWidth + 20));
+        dotsContainer.querySelectorAll('.team-dot').forEach((d, i) => {
+            d.classList.toggle('active', i === Math.min(index, team.length - 1));
+        });
+    });
 
     setTimeout(initFadeIn, 100);
 }
