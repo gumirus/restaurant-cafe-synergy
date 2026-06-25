@@ -70,13 +70,6 @@
                         <a href="about.php" class="btn" style="width:100%;text-align:center;">Узнать больше</a>
                     </div>
                 </div>
-                        <div class="about-feature">
-                            <span class="feature-icon">🍷</span>
-                            <span>Винная карта</span>
-                        </div>
-                    </div>
-                    <a href="about.php" class="btn">Узнать больше</a>
-                </div>
             </div>
         </div>
     </section>
