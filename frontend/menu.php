@@ -238,7 +238,7 @@
         width: 100%; height: 100%; object-fit: cover;
         display: block; min-height: 280px;
         cursor: zoom-in;
-        border-radius: 0;
+        border-radius: 16px 0 0 16px;
     }
     .dish-modal-img-zoom {
         position: absolute;
@@ -306,7 +306,7 @@
     }
     @media (max-width: 600px) {
         .dish-modal-image { flex: 0 0 100%; max-width: 100%; }
-        .dish-modal-image img { min-height: 200px; max-height: 220px; }
+        .dish-modal-image img { min-height: 200px; max-height: 220px; border-radius: 16px 16px 0 0; }
         .dish-modal-info { padding: 20px; }
     }
     </style>
