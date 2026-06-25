@@ -1259,7 +1259,9 @@ $page = $_GET['page'] ?? 'dashboard';
                                     <tr class="user-row" style="cursor:pointer;" onclick="openUserModal(<?= $userRow['id'] ?>, '<?= htmlspecialchars($userRow['name'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['phone'], ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['position'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['bio'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['avatar'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['avatar_data'] ?? '', ENT_QUOTES) ?>', '<?= $userRow['access_name'] ?>', '<?= date('d.m.Y H:i', strtotime($userRow['created_at'])) ?>')">
                                         <td><?= $userRow['id'] ?></td>
                                         <td>
-                                            <?php if ($userRow['avatar']): ?>
+                                            <?php if ($userRow['avatar_data']): ?>
+                                                <img src="<?= $userRow['avatar_data'] ?>" alt="" style="width:36px;height:36px;object-fit:cover;border-radius:50%;">
+                                            <?php elseif ($userRow['avatar']): ?>
                                                 <img src="../../frontend/uploads/<?= $userRow['avatar'] ?>" alt="" style="width:36px;height:36px;object-fit:cover;border-radius:50%;">
                                             <?php else: ?>
                                                 <span style="font-size:1.3rem;"><?= $userRow['access_name'] === 'ADMIN' ? '👨‍🍳' : '👤' ?></span>
@@ -1310,7 +1312,9 @@ $page = $_GET['page'] ?? 'dashboard';
                                     <tr class="user-row" style="cursor:pointer;" onclick="openUserModal(<?= $userRow['id'] ?>, '<?= htmlspecialchars($userRow['name'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['phone'], ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['position'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['bio'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['avatar'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['avatar_data'] ?? '', ENT_QUOTES) ?>', '<?= $userRow['access_name'] ?>', '<?= date('d.m.Y H:i', strtotime($userRow['created_at'])) ?>')">
                                         <td><?= $userRow['id'] ?></td>
                                         <td>
-                                            <?php if ($userRow['avatar']): ?>
+                                            <?php if ($userRow['avatar_data']): ?>
+                                                <img src="<?= $userRow['avatar_data'] ?>" alt="" style="width:36px;height:36px;object-fit:cover;border-radius:50%;">
+                                            <?php elseif ($userRow['avatar']): ?>
                                                 <img src="../../frontend/uploads/<?= $userRow['avatar'] ?>" alt="" style="width:36px;height:36px;object-fit:cover;border-radius:50%;">
                                             <?php else: ?>
                                                 <span style="font-size:1.3rem;">🧑</span>
