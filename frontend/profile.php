@@ -636,13 +636,14 @@ $avatar_url = $user['avatar_data'] ?: ($user['avatar'] ? 'uploads/' . $user['ava
         visibility: visible; opacity: 1;
     }
     .clear-modal-content {
-        background: #fff; border-radius: 20px;
+        background: var(--color-bg-section); border-radius: 20px;
         max-width: 400px; width: 90%;
         padding: 45px 35px 35px;
         text-align: center;
         box-shadow: 0 25px 80px rgba(0,0,0,0.4);
         transform: scale(0.85) translateY(20px);
         transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
     }
     .clear-modal-overlay.active .clear-modal-content {
         transform: scale(1) translateY(0);
@@ -651,11 +652,11 @@ $avatar_url = $user['avatar_data'] ?: ($user['avatar'] ? 'uploads/' . $user['ava
         font-size: 3.5rem; margin-bottom: 15px;
     }
     .clear-modal-title {
-        font-size: 1.4rem; color: #1a1a2e;
+        font-size: 1.4rem; color: var(--color-text);
         margin-bottom: 10px;
     }
     .clear-modal-text {
-        color: #666; font-size: 0.95rem;
+        color: var(--color-text-light); font-size: 0.95rem;
         line-height: 1.6; margin-bottom: 28px;
     }
     .clear-modal-buttons {
@@ -711,13 +712,11 @@ $avatar_url = $user['avatar_data'] ?: ($user['avatar'] ? 'uploads/' . $user['ava
 
     <!-- ===== МОДАЛКА УДАЛЕНИЯ АККАУНТА ===== -->
     <div id="delete-modal" class="clear-modal-overlay" onclick="if(event.target===this)closeDeleteModal()">
-        <div class="clear-modal" onclick="event.stopPropagation()" style="max-width:420px;">
-            <button class="clear-modal-close" onclick="closeDeleteModal()">×</button>
-            <div style="font-size:3rem;margin-bottom:10px;">😱</div>
-            <h2 style="font-family:var(--font-heading);font-size:1.5rem;margin-bottom:10px;">Удаление аккаунта</h2>
-            <p style="color:var(--color-text-light);font-size:0.9rem;margin-bottom:20px;">
-                Все ваши данные (заказы, бронирования, отзывы) будут <strong>безвозвратно удалены</strong>.
-            </p>
+        <div class="clear-modal-content" onclick="event.stopPropagation()" style="max-width:420px;position:relative;">
+            <button onclick="closeDeleteModal()" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:1.8rem;color:var(--color-text-light);cursor:pointer;line-height:1;">×</button>
+            <div class="clear-modal-icon">😱</div>
+            <h2 class="clear-modal-title">Удаление аккаунта</h2>
+            <p class="clear-modal-text">Все ваши данные (заказы, бронирования, отзывы) будут <strong>безвозвратно удалены</strong>.</p>
             <form id="delete-form">
                 <input type="password" name="password" placeholder="Введите пароль" required
                        style="width:100%;padding:12px;border:1px solid var(--color-border);border-radius:8px;margin-bottom:12px;font-size:0.95rem;">
