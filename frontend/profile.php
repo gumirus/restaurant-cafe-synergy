@@ -388,7 +388,7 @@ $avatar_url = $user['avatar_data'] ?: ($user['avatar'] ? 'uploads/' . $user['ava
 
     /* ===== КАРТОЧКА ПРОФИЛЯ ===== */
     .profile-card {
-        background: var(--color-surface);
+        background: var(--color-bg-card);
         border: 1px solid var(--color-border);
         border-radius: 12px;
         padding: 30px;
@@ -609,7 +609,23 @@ $avatar_url = $user['avatar_data'] ?: ($user['avatar'] ? 'uploads/' . $user['ava
     @media (max-width: 768px) {
         .profile-layout {
             grid-template-columns: 1fr;
+            gap: 20px;
         }
+        .profile-section { padding: 100px 0 40px; }
+        .profile-card { padding: 20px; }
+        .profile-orders h2 { font-size: 1.2rem; }
+        .order-card { padding: 15px; }
+        .order-card-header { flex-direction: column; gap: 6px; align-items: flex-start; }
+        .order-card-body > div { flex-direction: column; gap: 6px; }
+        .order-items-table { font-size: 0.8rem; }
+        .order-items-table th, .order-items-table td { padding: 6px 4px; }
+        .avatar-section { flex-direction: column; text-align: center; }
+        .profile-form .form-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+        .profile-section { padding: 90px 0 30px; }
+        .profile-card { padding: 15px; }
+        .profile-card h2 { font-size: 1.1rem; }
     }
     </style>
 
