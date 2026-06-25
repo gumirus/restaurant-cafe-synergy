@@ -24,21 +24,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Обработка загрузки аватара
     $avatar = null;
+    $avatarData = null;
     if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = __DIR__ . '/../frontend/uploads/';
-        $ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION);
-        $filename = 'avatar_' . $userId . '_' . time() . '.' . $ext;
-        $destPath = $uploadDir . $filename;
+        $file = $_FILES['avatar'];
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (in_array($file['type'], $allowedTypes)) {
+            // Сохраняем файл (для совместимости)
+            $uploadDir = __DIR__ . '/../frontend/uploads/';
+            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filename = 'avatar_' . $userId . '_' . time() . '.' . $ext;
+            $destPath = $uploadDir . $filename;
+            if (move_uploaded_file($file['tmp_name'], $destPath)) {
+                $avatar = $filename;
+            }
 
-        if (move_uploaded_file($_FILES['avatar']['tmp_name'], $destPath)) {
-            $avatar = $filename;
+            // Сохраняем в БД как base64 (для Railway — переживает деплои)
+            $imageData = file_get_contents($file['tmp_name']);
+            if ($imageData !== false) {
+                $avatarData = 'data:' . $file['type'] . ';base64,' . base64_encode($imageData);
+            }
         }
     }
 
     // Обновляем БД
     if ($avatar) {
-        $stmt = $pdo->prepare("UPDATE users SET name = ?, bio = ?, position = ?, avatar = ? WHERE id = ?");
-        $stmt->execute([$name, $bio, $position, $avatar, $userId]);
+        $stmt = $pdo->prepare("UPDATE users SET name = ?, bio = ?, position = ?, avatar = ?, avatar_data = ? WHERE id = ?");
+        $stmt->execute([$name, $bio, $position, $avatar, $avatarData, $userId]);
     } else {
         $stmt = $pdo->prepare("UPDATE users SET name = ?, bio = ?, position = ? WHERE id = ?");
         $stmt->execute([$name, $bio, $position, $userId]);

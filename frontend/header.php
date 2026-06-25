@@ -9,12 +9,14 @@ $current_page = basename($_SERVER['SCRIPT_NAME']);
 
 // Получаем аватар пользователя, если авторизован
 $userAvatar = null;
+$userAvatarData = null;
 $userName = null;
 if (isLoggedIn()) {
-    $stmt = $pdo->prepare("SELECT avatar, name FROM users WHERE id = ?");
+    $stmt = $pdo->prepare("SELECT avatar, avatar_data, name FROM users WHERE id = ?");
     $stmt->execute([$_SESSION['user_id']]);
     $userData = $stmt->fetch();
     $userAvatar = $userData['avatar'] ?? null;
+    $userAvatarData = $userData['avatar_data'] ?? null;
     $userName = $userData['name'] ?? null;
 }
 ?>
@@ -64,7 +66,9 @@ if (isLoggedIn()) {
             <div class="header-actions">
                 <?php if (isLoggedIn()): ?>
                     <a href="profile.php" title="Личный кабинет" class="header-avatar-link">
-                        <?php if ($userAvatar): ?>
+                        <?php if ($userAvatarData): ?>
+                            <img src="<?= htmlspecialchars($userAvatarData) ?>" alt="Аватар" class="header-avatar">
+                        <?php elseif ($userAvatar): ?>
                             <img src="uploads/<?= htmlspecialchars($userAvatar) ?>" alt="Аватар" class="header-avatar">
                         <?php else: ?>
                             <span class="header-avatar-placeholder">👤</span>

@@ -258,7 +258,9 @@ $page = $_GET['page'] ?? 'dashboard';
             <div class="card" style="margin-bottom:20px;">
                 <div style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
                     <div style="flex-shrink:0; text-align:center;">
-                        <?php if ($adminProfile['avatar']): ?>
+                        <?php if ($adminProfile['avatar_data']): ?>
+                            <img src="<?= htmlspecialchars($adminProfile['avatar_data']) ?>" alt="" style="width:80px;height:80px;object-fit:cover;border-radius:50%;border:3px solid var(--color-primary);">
+                        <?php elseif ($adminProfile['avatar']): ?>
                             <img src="../../frontend/uploads/<?= $adminProfile['avatar'] ?>" alt="" style="width:80px;height:80px;object-fit:cover;border-radius:50%;border:3px solid var(--color-primary);">
                         <?php else: ?>
                             <div style="width:80px;height:80px;border-radius:50%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:#ccc;border:3px solid var(--color-primary);">👨‍🍳</div>
@@ -1589,7 +1591,9 @@ $page = $_GET['page'] ?? 'dashboard';
                 <h2>Редактировать профиль</h2>
                 <div style="display:flex; gap:30px; align-items:flex-start; flex-wrap:wrap;">
                     <div style="text-align:center; flex-shrink:0;">
-                        <?php if ($adminProfile['avatar']): ?>
+                        <?php if ($adminProfile['avatar_data']): ?>
+                            <img src="<?= htmlspecialchars($adminProfile['avatar_data']) ?>" alt="" style="width:120px;height:120px;object-fit:cover;border-radius:50%;border:3px solid var(--color-primary);">
+                        <?php elseif ($adminProfile['avatar']): ?>
                             <img src="../../frontend/uploads/<?= $adminProfile['avatar'] ?>" alt="" style="width:120px;height:120px;object-fit:cover;border-radius:50%;border:3px solid var(--color-primary);">
                         <?php else: ?>
                             <div style="width:120px;height:120px;border-radius:50%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:3rem;color:#ccc;border:3px solid var(--color-primary);">👨‍🍳</div>

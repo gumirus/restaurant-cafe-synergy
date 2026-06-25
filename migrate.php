@@ -74,6 +74,7 @@ if (!$hasCategories) {
         ],
         'users' => [
             'email' => "VARCHAR(255) DEFAULT NULL AFTER phone",
+            'avatar_data' => "LONGTEXT DEFAULT NULL AFTER avatar",
             'name' => "VARCHAR(100) DEFAULT NULL AFTER email",
             'bio' => 'TEXT DEFAULT NULL AFTER name',
             'avatar' => "VARCHAR(255) DEFAULT NULL AFTER bio",

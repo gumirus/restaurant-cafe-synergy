@@ -26,6 +26,7 @@ CREATE TABLE users (
     name VARCHAR(100) DEFAULT NULL,
     bio TEXT DEFAULT NULL,
     avatar VARCHAR(255) DEFAULT NULL,
+    avatar_data LONGTEXT DEFAULT NULL,
     position VARCHAR(100) DEFAULT NULL,
     password VARCHAR(255) NOT NULL,
     access_rights_id INT NOT NULL DEFAULT 2,
