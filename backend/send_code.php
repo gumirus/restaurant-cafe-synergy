@@ -66,10 +66,3 @@ echo json_encode([
     'message' => $message,
     'demo_code' => $demoCode,
 ]);
-
-echo json_encode([
-    'success' => $sent,
-    'message' => $message,
-    'demo_code' => $demoCode,
-    'debug_info' => $sent ? null : 'SMTP не настроен. Укажите SMTP_USER и SMTP_PASSWORD в .env'
-]);
