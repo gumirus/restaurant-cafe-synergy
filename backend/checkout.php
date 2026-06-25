@@ -25,6 +25,7 @@ $booking_date = $_POST['booking_date'] ?? '';
 $booking_time = $_POST['booking_time'] ?? '';
 $guests = (int)($_POST['guests'] ?? 1);
 $comment = trim($_POST['comment'] ?? '');
+$booking_id_from_form = (int)($_POST['booking_id'] ?? 0);
 
 // Ищем активный заказ (status='cart')
 $stmt = $pdo->prepare("SELECT id, total_price FROM orders WHERE user_id = ? AND status = 'cart' LIMIT 1");
@@ -52,29 +53,38 @@ if ($itemCount === 0) {
 try {
     $pdo->beginTransaction();
 
-    $booking_id = null;
+    $booking_id = $booking_id_from_form ?: null;
 
-    // Если бронь — создаём бронирование
+    // Если бронь — создаём новую или используем существующую
     if ($type === 'booking') {
-        if (empty($booking_date) || empty($booking_time)) {
-            throw new Exception('Укажите дату и время бронирования');
+        if ($booking_id) {
+            // Используем существующую бронь
+            $stmt = $pdo->prepare("SELECT id FROM bookings WHERE id = ? AND user_id = ?");
+            $stmt->execute([$booking_id, $user_id]);
+            if (!$stmt->fetch()) {
+                throw new Exception('Бронь не найдена');
+            }
+        } else {
+            if (empty($booking_date) || empty($booking_time)) {
+                throw new Exception('Укажите дату и время бронирования');
+            }
+            $stmt = $pdo->prepare("
+                INSERT INTO bookings (name, phone, guests, booking_date, booking_time, comment, status)
+                VALUES (?, ?, ?, ?, ?, ?, 'pending')
+            ");
+            $userStmt = $pdo->prepare("SELECT name, phone FROM users WHERE id = ?");
+            $userStmt->execute([$user_id]);
+            $userData = $userStmt->fetch();
+            $stmt->execute([
+                $userData['name'] ?: 'Клиент #' . $user_id,
+                $userData['phone'],
+                $guests,
+                $booking_date,
+                $booking_time,
+                $comment
+            ]);
+            $booking_id = $pdo->lastInsertId();
         }
-        $stmt = $pdo->prepare("
-            INSERT INTO bookings (name, phone, guests, booking_date, booking_time, comment, status)
-            VALUES (?, ?, ?, ?, ?, ?, 'pending')
-        ");
-        $userStmt = $pdo->prepare("SELECT name, phone FROM users WHERE id = ?");
-        $userStmt->execute([$user_id]);
-        $userData = $userStmt->fetch();
-        $stmt->execute([
-            $userData['name'] ?: 'Клиент #' . $user_id,
-            $userData['phone'],
-            $guests,
-            $booking_date,
-            $booking_time,
-            $comment
-        ]);
-        $booking_id = $pdo->lastInsertId();
     }
 
     // Меняем статус заказа с 'cart' на 'pending'

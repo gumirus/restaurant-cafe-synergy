@@ -17,6 +17,11 @@ $stmt = $pdo->prepare("SELECT id FROM orders WHERE user_id = ? AND status = 'car
 $stmt->execute([$user_id]);
 $order = $stmt->fetch();
 
+// Получаем брони пользователя
+$stmt = $pdo->prepare("SELECT id, booking_date, booking_time, guests, occasion FROM bookings WHERE user_id = ? AND status IN ('pending', 'confirmed') ORDER BY booking_date DESC");
+$stmt->execute([$user_id]);
+$userBookings = $stmt->fetchAll();
+
 $cart_items = [];
 $total = 0;
 
@@ -132,7 +137,22 @@ if ($order) {
 
                 <!-- Поля для брони -->
                 <div id="checkout-booking-fields" class="checkout-fields" style="display:none;">
-                    <div class="form-row">
+                    <?php if (count($userBookings) > 0): ?>
+                        <div class="form-group">
+                            <label>📋 Выберите бронь</label>
+                            <select id="checkout-select-booking" style="width:100%;padding:12px;border:1px solid var(--color-border);border-radius:10px;font-size:0.95rem;background:var(--color-bg);color:var(--color-text);" onchange="fillBooking()">
+                                <option value="">— Выберите бронь —</option>
+                                <?php foreach ($userBookings as $b): ?>
+                                    <option value="<?= $b['id'] ?>" data-date="<?= $b['booking_date'] ?>" data-time="<?= $b['booking_time'] ?>" data-guests="<?= $b['guests'] ?>" data-occasion="<?= htmlspecialchars($b['occasion'] ?? '') ?>">
+                                        📅 <?= date('d.m.Y', strtotime($b['booking_date'])) ?> в <?= substr($b['booking_time'], 0, 5) ?>
+                                        <?= $b['occasion'] ? '· ' . $b['occasion'] : '' ?>
+                                        · 👥 <?= $b['guests'] ?> чел
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    <?php endif; ?>
+                    <div class="form-row" id="booking-manual-fields">
                         <div class="form-group">
                             <label>📅 Дата</label>
                             <input type="date" id="checkout-date">
@@ -150,6 +170,7 @@ if ($order) {
                         <label>💬 Пожелания</label>
                         <textarea id="checkout-comment" placeholder="Особые пожелания..." rows="2"></textarea>
                     </div>
+                    <input type="hidden" id="checkout-booking-id">
                 </div>
 
                 <button class="btn" id="checkout-next-btn" style="width:100%;margin-top:20px;" onclick="goToPayment()">Продолжить →</button>
@@ -554,6 +575,24 @@ if ($order) {
         document.getElementById('checkout-booking-fields').style.display = type === 'booking' ? 'block' : 'none';
     }
 
+    function fillBooking() {
+        const sel = document.getElementById('checkout-select-booking');
+        const opt = sel.options[sel.selectedIndex];
+        if (!opt || !opt.value) {
+            document.getElementById('checkout-date').value = '';
+            document.getElementById('checkout-time').value = '';
+            document.getElementById('checkout-guests').value = 2;
+            document.getElementById('checkout-booking-id').value = '';
+            document.getElementById('booking-manual-fields').style.display = 'flex';
+            return;
+        }
+        document.getElementById('checkout-date').value = opt.dataset.date;
+        document.getElementById('checkout-time').value = opt.dataset.time;
+        document.getElementById('checkout-guests').value = opt.dataset.guests;
+        document.getElementById('checkout-booking-id').value = opt.value;
+        document.getElementById('booking-manual-fields').style.display = 'none';
+    }
+
     function goToPayment() {
         // Валидация
         if (currentType === 'delivery') {
@@ -625,6 +664,7 @@ if ($order) {
         formData.append('booking_time', document.getElementById('checkout-time').value);
         formData.append('guests', document.getElementById('checkout-guests').value);
         formData.append('comment', document.getElementById('checkout-comment').value);
+        formData.append('booking_id', document.getElementById('checkout-booking-id').value);
 
         try {
             const resp = await fetch('../backend/checkout.php', {
