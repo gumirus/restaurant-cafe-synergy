@@ -162,8 +162,23 @@ http://localhost:8000/frontend/index.html
 - [x] Деплой на GitHub
 - [x] Отчёт-презентация
 
+## 🌐 Демонстрация сайта
+
+Сайт задеплоен на Railway и доступен по ссылке:
+
+**👉 https://divine-communication-production.up.railway.app/**
+
+### Скриншоты
+
+| Главная страница | Меню |
+|:---:|:---:|
+| ![Главная](https://divine-communication-production.up.railway.app/images/logo.svg) | _(скриншот меню)_ |
+
+> Сайт полностью рабочий: регистрация, авторизация, корзина, оформление заказов, бронирование столиков, админ-панель.
+
 ## 🔗 Полезные ссылки
 - **GitHub** — https://github.com/gumirus/restaurant-cafe-synergy
+- **Демо** — https://divine-communication-production.up.railway.app/
 - **Figma** — figma.com
 - **draw.io** — draw.io
 - **phpMyAdmin** — localhost/phpmyadmin
