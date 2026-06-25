@@ -354,6 +354,23 @@
             height: 60vh;
         }
     }
+
+    /* Mobile dish cards with rounded images */
+    @media (max-width: 768px) {
+        .dish-card img {
+            border-radius: 12px 12px 0 0;
+            height: 180px;
+        }
+        .dish-card-body { padding: 14px; }
+        .dish-card-body h3 { font-size: 1rem; }
+        .dish-card-body p { font-size: 0.8rem; }
+    }
+    @media (max-width: 480px) {
+        .dish-card img {
+            border-radius: 12px 12px 0 0;
+            height: 160px;
+        }
+    }
     </style>
 
     <script>
