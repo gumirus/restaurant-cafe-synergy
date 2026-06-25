@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['repeat_order'])) {
 // ========== ПОЛУЧЕНИЕ ДАННЫХ ==========
 
 // Информация о пользователе
-$stmt = $pdo->prepare("SELECT phone, name, bio, avatar, created_at FROM users WHERE id = ?");
+$stmt = $pdo->prepare("SELECT phone, name, bio, avatar, avatar_data, created_at FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
 
@@ -148,7 +148,7 @@ $booking_labels = [
     'cancelled' => '❌ Отменено',
 ];
 
-$avatar_url = $user['avatar'] ? 'uploads/' . $user['avatar'] : 'images/default-avatar.svg';
+$avatar_url = $user['avatar_data'] ?: ($user['avatar'] ? 'uploads/' . $user['avatar'] : 'images/default-avatar.svg');
 ?>
 
     <!-- ========== PROFILE ========== -->
