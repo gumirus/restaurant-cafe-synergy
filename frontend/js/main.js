@@ -527,8 +527,7 @@ function initSlider(container, sliderSelector, dotsSelector, dotClass) {
         if (index < 0 || index >= items.length) return;
         const target = items[index];
         if (target) {
-            const left = target.offsetLeft - slider.offsetLeft;
-            slider.scrollTo({ left: left, behavior: 'smooth' });
+            slider.scrollLeft = target.offsetLeft - slider.offsetLeft;
         }
     }
 
