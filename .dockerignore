@@ -1,6 +1,8 @@
 .git
 .gitignore
-*.md
-node_modules
 .docker
 .docker/
+*.md
+node_modules
+.DS_Store
+.gitattributes
