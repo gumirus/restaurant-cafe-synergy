@@ -6,7 +6,16 @@
 require_once __DIR__ . '/config/db.php';
 require_once __DIR__ . '/config/session.php';
 
+$isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+if ($isAjax) {
+    header('Content-Type: application/json; charset=utf-8');
+}
+
 if (!isLoggedIn()) {
+    if ($isAjax) {
+        echo json_encode(['success' => false, 'message' => 'Не авторизован']);
+        exit;
+    }
     header('Location: ../frontend/login.php');
     exit;
 }
@@ -17,12 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errors = [];
 
-    // Проверка подтверждения
     if (trim($confirm_text) !== 'УДАЛИТЬ') {
         $errors[] = 'Введите слово УДАЛИТЬ для подтверждения';
     }
 
-    // Проверка пароля
     if (empty($password)) {
         $errors[] = 'Введите пароль';
     }
@@ -38,13 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errors)) {
-        // Удаляем корзину, заказы, бронирования, отзывы пользователя
         $pdo->prepare("DELETE FROM shopping_cart WHERE user_id = ?")->execute([$_SESSION['user_id']]);
         $pdo->prepare("DELETE FROM order_feedback WHERE user_id = ?")->execute([$_SESSION['user_id']]);
         $pdo->prepare("DELETE FROM bookings WHERE user_id = ?")->execute([$_SESSION['user_id']]);
         $pdo->prepare("DELETE FROM booking_feedback WHERE booking_id IN (SELECT id FROM bookings WHERE user_id = ?)")->execute([$_SESSION['user_id']]);
 
-        // Получаем заказы пользователя для удаления связанных данных
         $orders = $pdo->prepare("SELECT id FROM orders WHERE user_id = ?");
         $orders->execute([$_SESSION['user_id']]);
         foreach ($orders as $order) {
@@ -52,18 +57,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $pdo->prepare("DELETE FROM orders WHERE user_id = ?")->execute([$_SESSION['user_id']]);
 
-        // Удаляем самого пользователя
         $pdo->prepare("DELETE FROM users WHERE id = ?")->execute([$_SESSION['user_id']]);
 
-        // Очищаем сессию
         session_destroy();
 
-        // Редирект на главную
+        if ($isAjax) {
+            echo json_encode(['success' => true, 'redirect' => '../frontend/index.php']);
+            exit;
+        }
         redirect('../frontend/index.php');
     }
 
     // Если есть ошибки
     if (!empty($errors)) {
+        if ($isAjax) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'errors' => $errors]);
+            exit;
+        }
         echo '<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Ошибка — Bean Scene</title>

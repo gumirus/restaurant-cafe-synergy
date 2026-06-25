@@ -196,14 +196,7 @@ $avatar_url = $user['avatar_data'] ?: ($user['avatar'] ? 'uploads/' . $user['ava
                     <div style="margin-top:40px;padding-top:25px;border-top:1px solid var(--color-border);">
                         <h3 style="font-size:1rem;color:var(--color-text);margin-bottom:12px;">🚫 Удаление аккаунта</h3>
                         <p style="font-size:0.85rem;color:var(--color-text-light);margin-bottom:12px;">Все ваши данные будут безвозвратно удалены. Отменить это действие невозможно.</p>
-                        <form method="POST" action="../backend/delete_account.php" onsubmit="return confirm('Удалить аккаунт? Это действие необратимо.')">
-                            <input type="password" name="password" placeholder="Введите пароль" required style="width:100%;padding:10px 12px;border:1px solid var(--color-border);border-radius:6px;margin-bottom:10px;font-size:0.9rem;">
-                            <div style="margin-bottom:10px;">
-                                <label style="font-size:0.85rem;color:var(--color-text-light);">Введите <strong>УДАЛИТЬ</strong> для подтверждения:</label>
-                                <input type="text" name="confirm_text" placeholder="УДАЛИТЬ" required style="width:100%;padding:10px 12px;border:1px solid #fecaca;border-radius:6px;font-size:0.9rem;background:#fef2f2;">
-                            </div>
-                            <button type="submit" class="btn" style="background:#dc2626;width:100%;">🚫 Удалить аккаунт</button>
-                        </form>
+                        <button class="btn" style="background:#dc2626;width:100%;" onclick="openDeleteModal()">🚫 Удалить аккаунт</button>
                     </div>
                 </div>
 
@@ -714,6 +707,69 @@ $avatar_url = $user['avatar_data'] ?: ($user['avatar'] ? 'uploads/' . $user['ava
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') closeClearModal();
     });
+    </script>
+
+    <!-- ===== МОДАЛКА УДАЛЕНИЯ АККАУНТА ===== -->
+    <div id="delete-modal" class="clear-modal-overlay" onclick="if(event.target===this)closeDeleteModal()">
+        <div class="clear-modal" onclick="event.stopPropagation()" style="max-width:420px;">
+            <button class="clear-modal-close" onclick="closeDeleteModal()">×</button>
+            <div style="font-size:3rem;margin-bottom:10px;">😱</div>
+            <h2 style="font-family:var(--font-heading);font-size:1.5rem;margin-bottom:10px;">Удаление аккаунта</h2>
+            <p style="color:var(--color-text-light);font-size:0.9rem;margin-bottom:20px;">
+                Все ваши данные (заказы, бронирования, отзывы) будут <strong>безвозвратно удалены</strong>.
+            </p>
+            <form id="delete-form">
+                <input type="password" name="password" placeholder="Введите пароль" required
+                       style="width:100%;padding:12px;border:1px solid var(--color-border);border-radius:8px;margin-bottom:12px;font-size:0.95rem;">
+                <div style="margin-bottom:15px;">
+                    <label style="font-size:0.85rem;color:var(--color-text-light);">Введите <strong style="color:#dc2626;">УДАЛИТЬ</strong> для подтверждения:</label>
+                    <input type="text" name="confirm_text" placeholder="УДАЛИТЬ" required
+                           style="width:100%;padding:12px;border:1px solid #fecaca;border-radius:8px;font-size:0.95rem;background:#fef2f2;text-align:center;font-weight:700;">
+                </div>
+                <div id="delete-error" style="display:none;margin-bottom:12px;padding:10px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;color:#dc2626;font-size:0.85rem;"></div>
+                <button type="submit" class="btn" style="background:#dc2626;width:100%;">🚫 Удалить навсегда</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    function openDeleteModal() {
+        document.getElementById('delete-modal').classList.add('active');
+    }
+    function closeDeleteModal() {
+        document.getElementById('delete-modal').classList.remove('active');
+    }
+    // AJAX submit delete form
+    document.getElementById('delete-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const btn = this.querySelector('button[type="submit"]');
+        const originalText = btn.textContent;
+        btn.textContent = '⏳...';
+        btn.disabled = true;
+
+        try {
+            const resp = await fetch(this.action, {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                body: formData
+            });
+            const data = await resp.json();
+            if (data.success) {
+                window.location.href = data.redirect || '../frontend/index.php';
+            } else {
+                const msg = data.errors ? data.errors.join('<br>') : (data.message || 'Ошибка');
+                document.getElementById('delete-error').innerHTML = msg;
+                document.getElementById('delete-error').style.display = 'block';
+            }
+        } catch(e) {
+            showModalError('Ошибка соединения');
+        }
+
+        btn.textContent = originalText;
+        btn.disabled = false;
+    });
+
     </script>
 
 <?php require_once __DIR__ . '/footer.php'; ?>
