@@ -490,41 +490,49 @@ function showToast(msg) {
     }, 2500);
 }
 
-// ========== СЛАЙДЕР (бесконечный, плавный, без gap) ==========
+// ========== СЛАЙДЕР (адаптивный, несколько карточек) ==========
 function initSlider(container, sliderSelector, dotsSelector, dotClass) {
     const wrap = container.querySelector(sliderSelector);
     const dotsEl = container.querySelector(dotsSelector);
     if (!wrap || wrap.children.length === 0) return;
 
-    // Убираем gap у wrap (будем использовать margin на карточках)
     wrap.style.cssText = 'overflow:hidden';
 
-    // Создаём track для translateX
     const track = document.createElement('div');
     track.style.cssText = 'display:flex;transition:transform 0.5s ease';
     while (wrap.firstChild) track.appendChild(wrap.firstChild);
     wrap.appendChild(track);
 
-    // Делаем каждую карточку шириной wrap
-    function resizeCards() {
+    function getCardsPerView() {
         const w = wrap.clientWidth;
-        for (let c of track.children) {
-            c.style.cssText = 'min-width:' + w + 'px;flex-shrink:0;box-sizing:border-box';
-        }
+        if (w < 600) return 1;
+        if (w < 900) return 2;
+        if (w < 1200) return 3;
+        return 4;
     }
-    resizeCards();
-    window.addEventListener('resize', resizeCards);
+
+    function layoutCards() {
+        const perView = getCardsPerView();
+        const w = wrap.clientWidth;
+        const cardW = w / perView;
+        for (let c of track.children) {
+            c.style.cssText = 'min-width:' + cardW + 'px;flex-shrink:0;box-sizing:border-box';
+        }
+        return { perView, cardW };
+    }
+
+    let { perView, cardW } = layoutCards();
 
     const originals = [...track.children];
     const total = originals.length;
     if (total <= 1) return;
 
-    // Клонируем для бесконечности
-    track.appendChild(originals[0].cloneNode(true));
-    track.insertBefore(originals[total - 1].cloneNode(true), track.firstChild);
+    // Клоны для бесконечности (копируем perView штук с каждой стороны)
+    for (let i = 0; i < perView; i++) track.appendChild(originals[i].cloneNode(true));
+    for (let i = perView - 1; i >= 0; i--) track.insertBefore(originals[total - 1 - i].cloneNode(true), track.firstChild);
 
     const allItems = track.children;
-    let current = 1;
+    let current = perView; // начинаем с первого реального
     let animating = false;
 
     // Стрелки
@@ -542,7 +550,7 @@ function initSlider(container, sliderSelector, dotsSelector, dotClass) {
     for (let i = 0; i < total; i++) {
         const d = document.createElement('button');
         d.className = dotClass + (i === 0 ? ' active' : '');
-        d.onclick = () => goTo(i + 1);
+        d.onclick = () => slideTo(i + perView);
         dotsEl.appendChild(d);
     }
 
@@ -550,33 +558,56 @@ function initSlider(container, sliderSelector, dotsSelector, dotClass) {
         if (animating) return;
         animating = true;
 
-        const w = wrap.clientWidth;
+        const { cardW: cw } = layoutCards();
+        cardW = cw;
+
         current = index;
-        track.style.transform = 'translateX(-' + (current * w) + 'px)';
+        track.style.transform = 'translateX(-' + (current * cardW) + 'px)';
 
-        // Обновляем точки
-        const realIdx = current - 1;
-        dotsEl.querySelectorAll('.' + dotClass).forEach((d, i) => d.classList.toggle('active', i === (realIdx + total) % total));
+        // Точки
+        const realIdx = (current - perView + total) % total;
+        dotsEl.querySelectorAll('.' + dotClass).forEach((d, i) => d.classList.toggle('active', i === realIdx));
 
-        // Проверяем, не ушли ли на клон
+        // Проверка клонов
         setTimeout(() => {
             animating = false;
-            if (current >= allItems.length - 1) { // на клоне первой
+            const maxClone = allItems.length - perView;
+            if (current >= maxClone) {
                 track.style.transition = 'none';
-                current = 1;
-                track.style.transform = 'translateX(-' + (current * w) + 'px)';
+                current = perView;
+                track.style.transform = 'translateX(-' + (current * cardW) + 'px)';
                 requestAnimationFrame(() => requestAnimationFrame(() => { track.style.transition = 'transform 0.5s ease'; }));
-            } else if (current <= 0) { // на клоне последней
+            } else if (current < perView) {
                 track.style.transition = 'none';
-                current = total;
-                track.style.transform = 'translateX(-' + (current * w) + 'px)';
+                current = total + perView - 1;
+                track.style.transform = 'translateX(-' + (current * cardW) + 'px)';
                 requestAnimationFrame(() => requestAnimationFrame(() => { track.style.transition = 'transform 0.5s ease'; }));
             }
         }, 550);
     }
 
+    // Обработка ресайза
+    window.addEventListener('resize', () => {
+        const newPerView = getCardsPerView();
+        if (newPerView !== perView) {
+            perView = newPerView;
+            layoutCards();
+            // Пересоздаём клоны
+            // Удаляем старые клоны
+            while (track.children.length > total) track.removeChild(track.lastChild);
+            while (track.children.length > total) track.removeChild(track.firstChild);
+            track.style.transition = 'none';
+            // Добавляем новые
+            for (let i = 0; i < perView; i++) track.appendChild(originals[i].cloneNode(true));
+            for (let i = perView - 1; i >= 0; i--) track.insertBefore(originals[total - 1 - i].cloneNode(true), track.firstChild);
+            current = perView;
+            track.style.transform = 'translateX(-' + (current * cardW) + 'px)';
+            requestAnimationFrame(() => requestAnimationFrame(() => { track.style.transition = 'transform 0.5s ease'; }));
+        }
+    });
+
     container.querySelector('.slider-prev').onclick = () => slideTo(current - 1);
     container.querySelector('.slider-next').onclick = () => slideTo(current + 1);
 
-    slideTo(1);
+    slideTo(perView);
 }
