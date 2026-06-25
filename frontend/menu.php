@@ -85,7 +85,7 @@
     }
     .dish-card img {
         width: 100%;
-        height: 240px;
+        height: 200px;
         object-fit: cover;
         border-radius: 16px 16px 0 0;
     }
