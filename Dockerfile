@@ -9,8 +9,8 @@ COPY . /app
 # Рабочая директория
 WORKDIR /app
 
-# PHP built-in server с роутером
-EXPOSE 8000
+# Railway даёт порт через переменную PORT
+EXPOSE 8080
 
 # router.php перенаправляет запросы
-CMD ["php", "-S", "0.0.0.0:8000", "router.php"]
+CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} router.php"]
