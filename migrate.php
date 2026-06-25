@@ -16,7 +16,6 @@ try {
     exit(1);
 }
 
-// Ensure database exists
 $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbName` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
 $pdo->exec("USE `$dbName`");
 
@@ -31,17 +30,13 @@ try {
 
 if (!$hasCategories) {
     echo "📦 Tables incomplete. Reimporting schema...\n";
-    
-    // Drop everything and reimport
     $tables = $pdo->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
     $pdo->exec("SET FOREIGN_KEY_CHECKS = 0");
     foreach ($tables as $t) {
         $pdo->exec("DROP TABLE IF EXISTS `$t`");
     }
     $pdo->exec("SET FOREIGN_KEY_CHECKS = 1");
-    echo "   Dropped " . count($tables) . " existing tables\n";
     
-    // Read and filter the SQL dump
     $sql = file_get_contents(__DIR__ . '/database/restaurant.sql');
     $lines = explode("\n", $sql);
     $filtered = [];
@@ -52,37 +47,64 @@ if (!$hasCategories) {
         $filtered[] = $line;
     }
     
-    // Execute statement by statement
-    $fullSql = implode("\n", $filtered);
-    try {
-        $pdo->exec($fullSql);
-        echo "✅ Schema imported successfully\n";
-    } catch (Exception $e) {
-        echo "⚠️ Import error: " . $e->getMessage() . "\n";
-        echo "   Trying line-by-line...\n";
-        // Fallback: execute each statement separately
-        $statements = explode(";\n", $fullSql);
-        $success = 0; $failed = 0;
-        foreach ($statements as $stmt) {
-            $stmt = trim($stmt);
-            if (empty($stmt)) continue;
-            try {
-                $pdo->exec($stmt);
-                $success++;
-            } catch (Exception $e) {
-                $failed++;
-            }
+    $statements = explode(";\n", implode("\n", $filtered));
+    $success = 0; $failed = 0;
+    foreach ($statements as $stmt) {
+        $stmt = trim($stmt);
+        if (empty($stmt)) continue;
+        try {
+            $pdo->exec($stmt);
+            $success++;
+        } catch (Exception $e) {
+            $failed++;
         }
-        echo "   ✅ $success statements OK, ⚠️ $failed skipped\n";
     }
+    echo "   ✅ $success statements, ⚠️ $failed skipped\n";
 } else {
     echo "✅ Categories table exists\n";
+    
+    // Check each table for missing columns and add them
+    echo "📦 Checking for missing columns...\n";
+    
+    $columns = [
+        'orders' => [
+            'type' => "VARCHAR(20) DEFAULT 'delivery' AFTER status",
+            'payment_status' => "VARCHAR(20) DEFAULT 'unpaid' AFTER type",
+            'booking_id' => 'INT DEFAULT NULL AFTER payment_status',
+        ],
+        'users' => [
+            'name' => "VARCHAR(100) DEFAULT NULL AFTER phone",
+            'bio' => 'TEXT DEFAULT NULL AFTER name',
+            'avatar' => "VARCHAR(255) DEFAULT NULL AFTER bio",
+            'position' => "VARCHAR(100) DEFAULT NULL AFTER avatar",
+            'updated_at' => "TIMESTAMP DEFAULT CURRENTESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER created_at",
+        ],
+        'dishes' => [
+            'ingredients' => 'TEXT DEFAULT NULL AFTER description',
+            'is_popular' => "TINYINT(1) DEFAULT 0 AFTER image",
+            'is_special' => "TINYINT(1) DEFAULT 0 AFTER is_popular",
+        ],
+    ];
+    
+    foreach ($columns as $table => $tableCols) {
+        try {
+            $existingCols = $pdo->query("SHOW COLUMNS FROM `$table`")->fetchAll(PDO::FETCH_COLUMN);
+            foreach ($tableCols as $col => $def) {
+                if (!in_array($col, $existingCols)) {
+                    $pdo->exec("ALTER TABLE `$table` ADD COLUMN `$col` $def");
+                    echo "   ✅ Added `$col` to `$table`\n";
+                }
+            }
+        } catch (Exception $e) {
+            echo "   ⚠️ $table: " . $e->getMessage() . "\n";
+        }
+    }
 }
 
 // Add cold dishes category if missing
 $stmt = $pdo->query("SELECT COUNT(*) FROM categories WHERE name = 'Холодные блюда'");
 if ($stmt->fetchColumn() == 0) {
-    echo "📦 Adding 'Холодные блюда' category...\n";
+    echo "📦 Adding 'Холодные блюда'...\n";
     $pdo->exec("INSERT INTO categories (name) VALUES ('Холодные блюда')");
     $catId = $pdo->lastInsertId();
     $pdo->exec("INSERT INTO dishes (category_id, name, description, price, weight) VALUES 
