@@ -43,41 +43,48 @@
         <div class="container">
             <h2 class="section-title fade-in">Наша <span>команда</span></h2>
             <p class="section-subtitle fade-in">Профессионалы, которые создают для вас кулинарные шедевры</p>
-            <div class="team-grid">
-                <div class="team-card fade-in">
-                    <img class="team-card-image clickable-img" src="uploads/team/1-chef.jpg" alt="Антонио Бьянки">
-                    <div class="team-card-body">
-                        <h3>Антонио Бьянки</h3>
-                        <div class="team-role">Шеф-повар</div>
-                        <p>15 лет опыта в ресторанах Мишлен</p>
+            <div class="team-grid" id="team-grid">
+                <div class="team-slider">
+                    <div class="team-card">
+                        <img class="team-card-image clickable-img" src="uploads/team/1-chef.jpg" alt="Антонио Бьянки">
+                        <div class="team-card-body">
+                            <h3>Антонио Бьянки</h3>
+                            <div class="team-role">Шеф-повар</div>
+                            <p>15 лет опыта в ресторанах Мишлен</p>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <img class="team-card-image clickable-img" src="uploads/team/2-sous-chef.jpg" alt="Анастасия Костюренко">
+                        <div class="team-card-body">
+                            <h3>Анастасия Костюренко</h3>
+                            <div class="team-role">Су-шеф</div>
+                            <p>Специалист по итальянской кухне</p>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <img class="team-card-image clickable-img" src="uploads/team/3-pastry.jpg" alt="Дмитрий Волков">
+                        <div class="team-card-body">
+                            <h3>Дмитрий Волков</h3>
+                            <div class="team-role">Кондитер</div>
+                            <p>Автор уникальных десертов</p>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <img class="team-card-image clickable-img" src="uploads/team/4-sommelier.jpg" alt="Елена Преображенская">
+                        <div class="team-card-body">
+                            <h3>Елена Преображенская</h3>
+                            <div class="team-role">Сомелье</div>
+                            <p>Эксперт по винным сочетаниям</p>
+                        </div>
                     </div>
                 </div>
-                <div class="team-card fade-in">
-                    <img class="team-card-image clickable-img" src="uploads/team/2-sous-chef.jpg" alt="Мария Соколова">
-                    <div class="team-card-body">
-                        <h3>Анастасия Костюренко</h3>
-                        <div class="team-role">Су-шеф</div>
-                        <p>Специалист по итальянской кухне</p>
-                    </div>
-                </div>
-                <div class="team-card fade-in">
-                    <img class="team-card-image clickable-img" src="uploads/team/3-pastry.jpg" alt="Дмитрий Волков">
-                    <div class="team-card-body">
-                        <h3>Дмитрий Волков</h3>
-                        <div class="team-role">Кондитер</div>
-                        <p>Автор уникальных десертов</p>
-                    </div>
-                </div>
-                <div class="team-card fade-in">
-                    <img class="team-card-image clickable-img" src="uploads/team/4-sommelier.jpg" alt="Елена Преображенская">
-                    <div class="team-card-body">
-                        <h3>Елена Преображенская</h3>
-                        <div class="team-role">Сомелье</div>
-                        <p>Эксперт по винным сочетаниям</p>
-                    </div>
-                </div>
+                <div class="team-slider-dots"></div>
             </div>
         </div>
+        <script>setTimeout(() => {
+            const g = document.getElementById('team-grid');
+            if (g && !g.querySelector('.slider-arrow')) initSlider(g, '.team-slider', '.team-slider-dots', 'team-dot');
+        }, 500);</script>
     </section>
 
     <section class="reviews">

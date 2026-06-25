@@ -184,28 +184,7 @@ function loadTeam() {
         <div class="team-slider-dots"></div>
     `;
 
-    // Слайдер навигация (кнопки)
-    const slider = container.querySelector('.team-slider');
-    const dotsContainer = container.querySelector('.team-slider-dots');
-
-    // Создаём точки
-    team.forEach((_, i) => {
-        const dot = document.createElement('button');
-        dot.className = 'team-dot' + (i === 0 ? ' active' : '');
-        dot.onclick = () => {
-            slider.scrollTo({ left: slider.children[i].offsetLeft - slider.offsetLeft, behavior: 'smooth' });
-        };
-        dotsContainer.appendChild(dot);
-    });
-
-    // Обновляем активную точку при скролле
-    slider.addEventListener('scroll', () => {
-        const index = Math.round(slider.scrollLeft / (slider.children[0].offsetWidth + 20));
-        dotsContainer.querySelectorAll('.team-dot').forEach((d, i) => {
-            d.classList.toggle('active', i === Math.min(index, team.length - 1));
-        });
-    });
-
+    initSlider(container, '.team-slider', '.team-slider-dots', 'team-dot');
     setTimeout(initFadeIn, 100);
 }
 
@@ -234,25 +213,7 @@ function loadReviews() {
         <div class="reviews-slider-dots"></div>
     `;
 
-    // Слайдер навигация
-    const slider = container.querySelector('.reviews-slider');
-    const dotsContainer = container.querySelector('.reviews-slider-dots');
-
-    reviews.forEach((_, i) => {
-        const dot = document.createElement('button');
-        dot.className = 'review-dot' + (i === 0 ? ' active' : '');
-        dot.onclick = () => {
-            slider.scrollTo({ left: slider.children[i].offsetLeft - slider.offsetLeft, behavior: 'smooth' });
-        };
-        dotsContainer.appendChild(dot);
-    });
-
-    slider.addEventListener('scroll', () => {
-        const idx = Math.round(slider.scrollLeft / (slider.children[0].offsetWidth + 25));
-        dotsContainer.querySelectorAll('.review-dot').forEach((d, i) => {
-            d.classList.toggle('active', i === Math.min(idx, reviews.length - 1));
-        });
-    });
+    initSlider(container, '.reviews-slider', '.reviews-slider-dots', 'review-dot');
 
     setTimeout(initFadeIn, 100);
 }
@@ -307,21 +268,7 @@ function loadNews() {
         <div class="news-slider-dots"></div>
     `;
 
-    const slider = container.querySelector('.news-slider');
-    const dotsContainer = container.querySelector('.news-slider-dots');
-
-    news.forEach((_, i) => {
-        const dot = document.createElement('button');
-        dot.className = 'news-dot' + (i === 0 ? ' active' : '');
-        dot.onclick = () => slider.scrollTo({ left: slider.children[i].offsetLeft - slider.offsetLeft, behavior: 'smooth' });
-        dotsContainer.appendChild(dot);
-    });
-
-    slider.addEventListener('scroll', () => {
-        const idx = Math.round(slider.scrollLeft / (slider.children[0].offsetWidth + 25));
-        dotsContainer.querySelectorAll('.news-dot').forEach((d, i) => d.classList.toggle('active', i === Math.min(idx, news.length - 1)));
-    });
-
+    initSlider(container, '.news-slider', '.news-slider-dots', 'news-dot');
     setTimeout(initFadeIn, 100);
 }
 
@@ -539,4 +486,78 @@ function showToast(msg) {
         toast.style.transform = 'translateY(20px)';
         setTimeout(() => toast.remove(), 300);
     }, 2500);
+}
+
+// ========== УНИВЕРСАЛЬНЫЙ СЛАЙДЕР (стрелки + точки + бесконечный) ==========
+function initSlider(container, sliderSelector, dotsSelector, dotClass) {
+    const slider = container.querySelector(sliderSelector);
+    const dotsContainer = container.querySelector(dotsSelector);
+    if (!slider || slider.children.length === 0) return;
+
+    const items = slider.children;
+    const total = items.length;
+    if (total <= 1) return;
+
+    // Кнопки навигации
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'slider-arrow slider-prev';
+    prevBtn.innerHTML = '‹';
+    prevBtn.setAttribute('aria-label', 'Назад');
+    container.appendChild(prevBtn);
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'slider-arrow slider-next';
+    nextBtn.innerHTML = '›';
+    nextBtn.setAttribute('aria-label', 'Вперёд');
+    container.appendChild(nextBtn);
+
+    // Точки
+    for (let i = 0; i < total; i++) {
+        const dot = document.createElement('button');
+        dot.className = dotClass + (i === 0 ? ' active' : '');
+        dot.onclick = () => scrollToItem(i);
+        dotsContainer.appendChild(dot);
+    }
+
+    function scrollToItem(index) {
+        const target = items[index];
+        if (target) {
+            slider.scrollTo({ left: target.offsetLeft - slider.offsetLeft, behavior: 'smooth' });
+        }
+    }
+
+    function getCurrentIndex() {
+        const w = items[0].offsetWidth + parseInt(getComputedStyle(slider).gap || '25');
+        return Math.round(slider.scrollLeft / w);
+    }
+
+    function updateDots() {
+        const idx = getCurrentIndex();
+        dotsContainer.querySelectorAll('.' + dotClass).forEach((d, i) => {
+            d.classList.toggle('active', i === Math.min(idx, total - 1));
+        });
+    }
+
+    prevBtn.onclick = () => {
+        const idx = getCurrentIndex();
+        if (idx <= 0) {
+            // Бесконечный скролл — последний элемент
+            scrollToItem(total - 1);
+        } else {
+            scrollToItem(idx - 1);
+        }
+    };
+
+    nextBtn.onclick = () => {
+        const idx = getCurrentIndex();
+        if (idx >= total - 1) {
+            // Бесконечный скролл — первый элемент
+            scrollToItem(0);
+        } else {
+            scrollToItem(idx + 1);
+        }
+    };
+
+    slider.addEventListener('scroll', updateDots);
+    updateDots();
 }
