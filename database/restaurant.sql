@@ -48,6 +48,7 @@ ALTER TABLE bookings ADD COLUMN user_id INT DEFAULT NULL AFTER id;
 -- Добавление колонок is_popular и is_special (для старых версий MySQL без IF NOT EXISTS)
 ALTER TABLE dishes ADD COLUMN is_popular TINYINT(1) DEFAULT 0 AFTER image;
 ALTER TABLE dishes ADD COLUMN is_special TINYINT(1) DEFAULT 0 AFTER is_popular;
+ALTER TABLE dishes ADD COLUMN IF NOT EXISTS ingredients TEXT DEFAULT NULL AFTER description;
 
 -- ========== 3. КАТЕГОРИИ БЛЮД ==========
 CREATE TABLE categories (
@@ -68,6 +69,7 @@ CREATE TABLE dishes (
     category_id INT NOT NULL,
     name VARCHAR(200) NOT NULL,
     description TEXT,
+    ingredients TEXT DEFAULT NULL,  -- состав блюда
     price DECIMAL(10, 2) NOT NULL,
     weight INT DEFAULT 0,          -- вес в граммах
     image VARCHAR(255) DEFAULT NULL,
