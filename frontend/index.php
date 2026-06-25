@@ -26,6 +26,25 @@
                         <p>Точка Кипения — это не просто ресторан. Это место, где встречаются традиции и современность...</p>
                         <a href="javascript:void(0)" class="btn" onclick="openAboutModal()">Подробнее</a>
                     </div>
+                    <div class="about-text-full">
+                        <p>Точка Кипения — это не просто ресторан. Это место, где встречаются традиции и современность, где каждое блюдо — произведение искусства.</p>
+                        <p>Мы используем только свежие продукты от местных фермеров, а наши шеф-повара постоянно экспериментируют, чтобы удивлять вас новыми вкусами.</p>
+                        <div class="about-features">
+                            <div class="about-feature">
+                                <span class="feature-icon">🥩</span>
+                                <span>Свежие продукты</span>
+                            </div>
+                            <div class="about-feature">
+                                <span class="feature-icon">👨‍🍳</span>
+                                <span>Шеф-повара из Европы</span>
+                            </div>
+                            <div class="about-feature">
+                                <span class="feature-icon">🍷</span>
+                                <span>Винная карта</span>
+                            </div>
+                        </div>
+                        <a href="about.php" class="btn">Узнать больше</a>
+                    </div>
                 </div>
 
                 <div class="about-modal-overlay" id="aboutModal" onclick="if(event.target===this)closeAboutModal()">
@@ -216,6 +235,43 @@
     </div>
 
     <style>
+    .about-modal-overlay {
+        position: fixed; inset: 0; z-index: 99999;
+        background: rgba(0,0,0,0.7);
+        display: flex; align-items: center; justify-content: center;
+        visibility: hidden; opacity: 0;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(4px);
+    }
+    .about-modal-overlay.active {
+        visibility: visible; opacity: 1;
+    }
+    .about-modal {
+        background: var(--color-surface, #1e1e2e);
+        border: 1px solid var(--color-border, #333);
+        border-radius: 20px;
+        max-width: 500px; width: 90%;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+        transform: scale(0.85) translateY(20px);
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .about-modal-overlay.active .about-modal {
+        transform: scale(1) translateY(0);
+    }
+    .about-modal-close {
+        position: absolute; top: 15px; right: 20px;
+        background: none; border: none;
+        font-size: 2rem; color: #aaa;
+        cursor: pointer; transition: color 0.3s;
+    }
+    .about-modal-close:hover {
+        color: #fff;
+    }
+    .about-modal {
+        position: relative;
+    }
     .booking-modal-overlay {
         position: fixed; inset: 0; z-index: 99999;
         background: rgba(0,0,0,0.7);

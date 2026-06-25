@@ -56,6 +56,14 @@
         document.getElementById('navOverlay').classList.toggle('active');
         document.body.style.overflow = document.querySelector('.nav').classList.contains('mobile-open') ? 'hidden' : '';
     }
+    function openAboutModal() {
+        document.getElementById('aboutModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeAboutModal() {
+        document.getElementById('aboutModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
     </script>
 </body>
 </html>
