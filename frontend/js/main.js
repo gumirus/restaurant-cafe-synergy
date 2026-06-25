@@ -159,8 +159,6 @@ function loadPopularDishes() {
 function loadTeam() {
     const container = document.getElementById('team-grid');
     if (!container) return;
-    // Не заменяем, если уже есть слайдер (страница "О нас")
-    if (container.querySelector('.team-slider')) return;
 
     const team = [
         { name: 'Антонио Бьянки', role: 'Шеф-повар', desc: '15 лет опыта в ресторанах Мишлен', img: 'uploads/team/1-chef.jpg' },
@@ -186,7 +184,7 @@ function loadTeam() {
         <div class="team-slider-dots"></div>
     `;
 
-    initSlider(container, '.team-slider', '.team-slider-dots', 'team-dot');
+    setTimeout(() => initSlider(container, '.team-slider', '.team-slider-dots', 'team-dot'), 50);
     setTimeout(initFadeIn, 100);
 }
 
@@ -216,7 +214,7 @@ function loadReviews() {
         <div class="reviews-slider-dots"></div>
     `;
 
-    initSlider(container, '.reviews-slider', '.reviews-slider-dots', 'review-dot');
+    setTimeout(() => initSlider(container, '.reviews-slider', '.reviews-slider-dots', 'review-dot'), 50);
 
     setTimeout(initFadeIn, 100);
 }
@@ -272,7 +270,7 @@ function loadNews() {
         <div class="news-slider-dots"></div>
     `;
 
-    initSlider(container, '.news-slider', '.news-slider-dots', 'news-dot');
+    setTimeout(() => initSlider(container, '.news-slider', '.news-slider-dots', 'news-dot'), 50);
     setTimeout(initFadeIn, 100);
 }
 
