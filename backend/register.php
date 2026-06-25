@@ -27,11 +27,11 @@ $phone = trim($_POST['phone'] ?? '');
 $email = trim($_POST['email'] ?? '');
 $password = $_POST['password'] ?? '';
 $password_confirm = $_POST['password_confirm'] ?? '';
+$verify_code = trim($_POST['verify_code'] ?? ''); // код подтверждения (опционально)
 
 // Валидация
 $errors = [];
 
-// Если email указан — проверяем, что не занят
 if (!empty($email)) {
     $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
     $stmt->execute([$email]);
@@ -40,7 +40,6 @@ if (!empty($email)) {
     }
 }
 
-// Телефон — обязателен
 if (empty($phone) || strlen($phone) < 10) {
     $errors[] = 'Введите корректный номер телефона';
 } else {
@@ -59,6 +58,23 @@ if ($password !== $password_confirm) {
     $errors[] = 'Пароли не совпадают';
 }
 
+// Если указан код подтверждения — проверяем его в БД
+if (!empty($verify_code)) {
+    $method = !empty($email) ? 'email' : 'sms';
+    $field = $method === 'email' ? 'email' : 'phone';
+    $value = $method === 'email' ? $email : $phone;
+
+    $stmt = $pdo->prepare("
+        SELECT id FROM verification_codes
+        WHERE $field = ? AND code = ? AND verified = 0 AND expires_at > NOW()
+        ORDER BY created_at DESC LIMIT 1
+    ");
+    $stmt->execute([$value, $verify_code]);
+    if (!$stmt->fetch()) {
+        $errors[] = 'Неверный или просроченный код подтверждения';
+    }
+}
+
 if (!empty($errors)) {
     if ($isAjax || $isJson) {
         http_response_code(400);
@@ -73,7 +89,7 @@ if (!empty($errors)) {
     exit;
 }
 
-// Регистрируем
+// Создаём пользователя
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 $stmt = $pdo->prepare("INSERT INTO users (phone, email, password, access_rights_id) VALUES (?, ?, ?, 2)");
 $stmt->execute([$phone, $email ?: null, $hashedPassword]);
