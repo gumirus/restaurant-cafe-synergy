@@ -124,14 +124,23 @@ if ($noImg > 0) {
     $images = [
         'Цезарь с курицей' => 'uploads/dishes/1-caesar.jpg',
         'Греческий салат' => 'uploads/dishes/2-greek.jpg',
+        'Боул с киноа' => 'uploads/dishes/11-bowl.jpg',
+        'Нисуаз' => 'uploads/dishes/14-salad.jpg',
         'Том Ям' => 'uploads/dishes/3-tom-yam.jpg',
         'Борщ' => 'uploads/dishes/4-borscht.jpg',
+        'Рамен' => 'uploads/dishes/13-ramen.jpg',
         'Стейк Рибай' => 'uploads/dishes/5-steak.jpg',
         'Паста Карбонара' => 'uploads/dishes/6-carbonara.jpg',
+        'Пицца Маргарита' => 'uploads/dishes/12-pizza.jpg',
+        'Лосось с овощами' => 'uploads/dishes/15-fish.jpg',
+        'Куриный рулет' => 'uploads/dishes/16-chicken.jpg',
+        'Бургер' => 'uploads/dishes/18-burger.jpg',
         'Тирамису' => 'uploads/dishes/7-tiramisu.jpg',
         'Чизкейк' => 'uploads/dishes/8-cheesecake.jpg',
+        'Мороженое' => 'uploads/dishes/20-icecream.jpg',
         'Лимонад' => 'uploads/dishes/9-lemonade.jpg',
         'Кофе' => 'uploads/dishes/10-coffee.jpg',
+        'Смузи' => 'uploads/dishes/19-smoothie.jpg',
         'Суши-сет' => 'uploads/dishes/17-sushi.jpg',
         'Холодец' => 'uploads/dishes/21-kholodets.jpg',
         'Окрошка' => 'uploads/dishes/22-okroshka.jpg',
@@ -143,6 +152,37 @@ if ($noImg > 0) {
     echo "   ✅ $updated dishes updated with images\n";
 } else {
     echo "   ✅ All dishes have images\n";
+}
+
+// Add missing dishes (not in the original dump)
+echo "📦 Checking for missing dishes...\n";
+$extraDishes = [
+    ['name' => 'Боул с киноа', 'cat' => 'Салаты', 'desc' => 'Полезный боул с киноа, авокадо и овощами', 'price' => 420.00, 'img' => 'uploads/dishes/11-bowl.jpg'],
+    ['name' => 'Нисуаз', 'cat' => 'Салаты', 'desc' => 'Французский салат с тунцом и яйцом', 'price' => 390.00, 'img' => 'uploads/dishes/14-salad.jpg'],
+    ['name' => 'Рамен', 'cat' => 'Супы', 'desc' => 'Японский суп с лапшой, свининой и яйцом', 'price' => 480.00, 'img' => 'uploads/dishes/13-ramen.jpg'],
+    ['name' => 'Пицца Маргарита', 'cat' => 'Горячие блюда', 'desc' => 'Классическая итальянская пицца с моцареллой', 'price' => 550.00, 'img' => 'uploads/dishes/12-pizza.jpg'],
+    ['name' => 'Лосось с овощами', 'cat' => 'Горячие блюда', 'desc' => 'Запечённый лосось с сезонными овощами', 'price' => 890.00, 'img' => 'uploads/dishes/15-fish.jpg'],
+    ['name' => 'Куриный рулет', 'cat' => 'Горячие блюда', 'desc' => 'Куриный рулет с грибами и сыром', 'price' => 520.00, 'img' => 'uploads/dishes/16-chicken.jpg'],
+    ['name' => 'Бургер', 'cat' => 'Горячие блюда', 'desc' => 'Говяжий бургер с сыром и карамелизированным луком', 'price' => 490.00, 'img' => 'uploads/dishes/18-burger.jpg'],
+    ['name' => 'Мороженое', 'cat' => 'Десерты', 'desc' => 'Пломбир с ягодным топпингом', 'price' => 280.00, 'img' => 'uploads/dishes/20-icecream.jpg'],
+    ['name' => 'Смузи', 'cat' => 'Напитки', 'desc' => 'Ягодный смузи с бананом и мятой', 'price' => 250.00, 'img' => 'uploads/dishes/19-smoothie.jpg'],
+];
+
+$added = 0;
+foreach ($extraDishes as $d) {
+    $exists = $pdo->query("SELECT COUNT(*) FROM dishes WHERE name = '{$d['name']}'")->fetchColumn();
+    if ($exists == 0) {
+        $catId = $pdo->query("SELECT id FROM categories WHERE name = '{$d['cat']}'")->fetchColumn();
+        if ($catId) {
+            $pdo->exec("INSERT INTO dishes (category_id, name, description, price, image) VALUES ($catId, '{$d['name']}', '{$d['desc']}', {$d['price']}, '{$d['img']}')");
+            $added++;
+        }
+    }
+}
+if ($added > 0) {
+    echo "   ✅ $added missing dishes added\n";
+} else {
+    echo "   ✅ No missing dishes\n";
 }
 
 echo "\n=== 📋 Menu summary ===\n";
