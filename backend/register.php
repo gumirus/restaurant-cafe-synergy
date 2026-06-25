@@ -1,17 +1,25 @@
 <?php
 // =============================================
 // РЕГИСТРАЦИЯ ПОЛЬЗОВАТЕЛЯ
-// Поддерживает два способа: email и sms (демо)
 // =============================================
 
 require_once __DIR__ . '/config/db.php';
 require_once __DIR__ . '/config/session.php';
 
-header('Content-Type: application/json; charset=utf-8');
+$isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+$isJson = !$isAjax && (strpos($_SERVER['CONTENT_TYPE'] ?? '', 'json') !== false);
+
+if (!$isAjax && !$isJson) {
+    header('Content-Type: text/html; charset=utf-8');
+}
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+    if ($isAjax || $isJson) {
+        http_response_code(405);
+        echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+    } else {
+        redirect('../frontend/register.php');
+    }
     exit;
 }
 
@@ -19,18 +27,9 @@ $phone = trim($_POST['phone'] ?? '');
 $email = trim($_POST['email'] ?? '');
 $password = $_POST['password'] ?? '';
 $password_confirm = $_POST['password_confirm'] ?? '';
-$verify_method = $_POST['verify_method'] ?? ($email ? 'email' : 'sms');
 
 // Валидация
 $errors = [];
-
-// Проверка: хотя бы один способ подтверждения
-if ($verify_method === 'email' && empty($email)) {
-    $errors[] = 'Укажите email для подтверждения по почте';
-}
-if ($verify_method === 'sms' && (empty($phone) || strlen($phone) < 10)) {
-    $errors[] = 'Укажите номер телефона для подтверждения по SMS';
-}
 
 // Если email указан — проверяем, что не занят
 if (!empty($email)) {
@@ -41,7 +40,7 @@ if (!empty($email)) {
     }
 }
 
-// Телефон — обязателен для входа
+// Телефон — обязателен
 if (empty($phone) || strlen($phone) < 10) {
     $errors[] = 'Введите корректный номер телефона';
 } else {
@@ -61,18 +60,22 @@ if ($password !== $password_confirm) {
 }
 
 if (!empty($errors)) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'errors' => $errors]);
+    if ($isAjax || $isJson) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'errors' => $errors]);
+    } else {
+        echo '<h2>Ошибки регистрации:</h2><ul>';
+        foreach ($errors as $error) {
+            echo "<li>$error</li>";
+        }
+        echo '</ul><a href="../frontend/register.php">Назад</a>';
+    }
     exit;
 }
 
 // Регистрируем
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-$stmt = $pdo->prepare("
-    INSERT INTO users (phone, email, password, access_rights_id)
-    VALUES (?, ?, ?, 2)
-");
+$stmt = $pdo->prepare("INSERT INTO users (phone, email, password, access_rights_id) VALUES (?, ?, ?, 2)");
 $stmt->execute([$phone, $email ?: null, $hashedPassword]);
 
 $userId = $pdo->lastInsertId();
@@ -80,8 +83,8 @@ $_SESSION['user_id'] = $userId;
 $_SESSION['user_phone'] = $phone;
 $_SESSION['access_rights'] = 'USER';
 
-echo json_encode([
-    'success' => true,
-    'message' => 'Регистрация успешна',
-    'redirect' => '../frontend/index.php'
-]);
+if ($isAjax || $isJson) {
+    echo json_encode(['success' => true, 'message' => 'Регистрация успешна', 'redirect' => '../frontend/index.php']);
+} else {
+    redirect('../frontend/index.php');
+}
