@@ -357,9 +357,10 @@
             'weight' => (int)$d['weight'],
             'desc' => $d['description'] ?? '',
             'ingredients' => $d['ingredients'] ?? '',
+            'category' => $catMap[$d['category_name']] ?? 'main',
             'img' => $d['image'] ? $d['image'] : 'uploads/dishes/placeholder.jpg',
         ];
-    }, $dishes)) ?>;
+    }, $dishes), JSON_UNESCAPED_UNICODE) ?>;
 
     function showToast(msg) {
         const existing = document.querySelector('.toast');
