@@ -119,6 +119,30 @@ if ($stmt->fetchColumn() == 0) {
     echo "✅ 'Холодные блюда' already exists\n";
 }
 
+// Migrate existing file avatars to DB (base64)
+echo "📦 Checking file avatars...\n";
+$usersNoData = $pdo->query("SELECT id, avatar FROM users WHERE avatar IS NOT NULL AND avatar != '' AND (avatar_data IS NULL OR avatar_data = '')")->fetchAll();
+if (count($usersNoData) > 0) {
+    $converted = 0;
+    foreach ($usersNoData as $u) {
+        $filePath = __DIR__ . '/frontend/uploads/' . $u['avatar'];
+        if (file_exists($filePath)) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_file($finfo, $filePath);
+            finfo_close($finfo);
+            $imgData = file_get_contents($filePath);
+            if ($imgData !== false) {
+                $b64 = 'data:' . $mime . ';base64,' . base64_encode($imgData);
+                $pdo->exec("UPDATE users SET avatar_data = " . $pdo->quote($b64) . " WHERE id = {$u['id']}");
+                $converted++;
+            }
+        }
+    }
+    echo "   ✅ $converted file avatars converted to DB\n";
+} else {
+    echo "   ✅ No file avatars to convert\n";
+}
+
 // Create verification_codes table if missing
 try {
     $pdo->query("SELECT 1 FROM verification_codes LIMIT 1");

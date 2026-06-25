@@ -29,19 +29,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $file = $_FILES['avatar'];
         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
         if (in_array($file['type'], $allowedTypes)) {
-            // Сохраняем файл (для совместимости)
+            // Сначала читаем файл в base64 (пока он во временной папке)
+            $imageData = file_get_contents($file['tmp_name']);
+            if ($imageData !== false) {
+                $avatarData = 'data:' . $file['type'] . ';base64,' . base64_encode($imageData);
+            }
+
+            // Потом сохраняем файл (для совместимости)
             $uploadDir = __DIR__ . '/../frontend/uploads/';
             $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
             $filename = 'avatar_' . $userId . '_' . time() . '.' . $ext;
             $destPath = $uploadDir . $filename;
             if (move_uploaded_file($file['tmp_name'], $destPath)) {
                 $avatar = $filename;
-            }
-
-            // Сохраняем в БД как base64 (для Railway — переживает деплои)
-            $imageData = file_get_contents($file['tmp_name']);
-            if ($imageData !== false) {
-                $avatarData = 'data:' . $file['type'] . ';base64,' . base64_encode($imageData);
             }
         }
     }
