@@ -258,7 +258,7 @@ if ($order) {
         font-size: 1.1rem;
         transition: all 0.3s;
     }
-    .qty-btn:hover { background: var(--color-primary); color: #fff; }
+    .qty-btn:hover { background: var(--color-primary); color: var(--color-text); }
     .qty-value {
         display: inline-block;
         min-width: 30px;
@@ -299,7 +299,7 @@ if ($order) {
     }
     .btn-outline:hover {
         background: var(--color-primary);
-        color: #fff;
+        color: var(--color-text);
     }
     .cart-total {
         font-size: 1.3rem;
@@ -322,7 +322,7 @@ if ($order) {
         visibility: visible; opacity: 1;
     }
     .checkout-content {
-        background: #1a1a2e;
+        background: var(--color-bg-section);
         border-radius: 20px;
         max-width: 520px; width: 92%;
         padding: 35px 30px;
@@ -337,16 +337,16 @@ if ($order) {
     }
     .checkout-close {
         position: absolute; top: 12px; right: 18px;
-        background: rgba(255,255,255,0.1); border: none;
-        font-size: 1.8rem; cursor: pointer; color: #fff;
+        background: rgba(0,0,0,0.05); border: none;
+        font-size: 1.8rem; cursor: pointer; color: var(--color-text-light);
         line-height: 1; width: 36px; height: 36px;
         border-radius: 50%; display: flex;
         align-items: center; justify-content: center;
         z-index: 2; transition: background 0.2s;
     }
-    .checkout-close:hover { background: rgba(255,255,255,0.2); }
+    .checkout-close:hover { background: rgba(0,0,0,0.1); }
     .checkout-content h2 {
-        color: var(--color-text-white);
+        color: var(--color-text);
         margin-bottom: 5px;
     }
     .checkout-types {
@@ -360,8 +360,8 @@ if ($order) {
         align-items: center;
         gap: 12px;
         padding: 14px 16px;
-        background: rgba(255,255,255,0.05);
-        border: 2px solid rgba(255,255,255,0.1);
+        background: var(--color-bg);
+        border: 2px solid var(--color-border);
         border-radius: 12px;
         cursor: pointer;
         transition: all 0.3s;
@@ -407,7 +407,7 @@ if ($order) {
         background: rgba(255,255,255,0.08);
         border: 1px solid rgba(255,255,255,0.15);
         border-radius: 8px;
-        color: #fff;
+        color: var(--color-text);
         font-size: 0.95rem;
         transition: border-color 0.3s;
     }
@@ -424,7 +424,8 @@ if ($order) {
         flex: 1;
     }
     .checkout-summary {
-        background: rgba(255,255,255,0.05);
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
         border-radius: 12px;
         padding: 16px;
         margin-bottom: 20px;
@@ -446,7 +447,8 @@ if ($order) {
         margin-bottom: 5px;
     }
     .checkout-card {
-        background: rgba(255,255,255,0.05);
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
         border-radius: 12px;
         padding: 16px;
     }
@@ -456,7 +458,7 @@ if ($order) {
         background: rgba(255,255,255,0.08);
         border: 1px solid rgba(255,255,255,0.15);
         border-radius: 8px;
-        color: #fff;
+        color: var(--color-text);
         font-size: 0.95rem;
     }
     .checkout-card .form-row {
