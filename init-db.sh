@@ -27,5 +27,22 @@ if [ "$TABLE_COUNT" = "0" ] || [ -z "$TABLE_COUNT" ]; then
     mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" < /app/database/restaurant.sql
     echo "✅ Дамп импортирован"
 else
-    echo "✅ Таблицы уже существуют ($TABLE_COUNT таблиц), пропускаем импорт"
+    echo "✅ Таблицы уже существуют ($TABLE_COUNT таблиц), проверяем миграции..."
+
+    # Миграция: добавляем категорию "Холодные блюда", если её нет
+    CAT_EXISTS=$(mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" -N -e "SELECT COUNT(*) FROM categories WHERE name='Холодные блюда'" 2>/dev/null)
+    if [ "$CAT_EXISTS" = "0" ]; then
+        echo "📦 Миграция: добавляем категорию 'Холодные блюда'..."
+        mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" -e "
+            INSERT INTO categories (name) VALUES ('Холодные блюда');
+            SET @cat_id = LAST_INSERT_ID();
+            INSERT INTO dishes (category_id, name, description, price, weight) VALUES
+                (@cat_id, 'Суши-сет', 'Набор из 8 видов суши и роллов с лососем, тунцом и креветкой', 950.00, 350),
+                (@cat_id, 'Холодец', 'Домашний холодец из говядины с хреном и горчицей', 350.00, 250),
+                (@cat_id, 'Окрошка', 'Классическая окрошка на квасе с говядиной', 280.00, 300);
+        " 2>/dev/null
+        echo "✅ Миграция: категория и блюда добавлены"
+    else
+        echo "✅ Миграций не требуется"
+    fi
 fi
