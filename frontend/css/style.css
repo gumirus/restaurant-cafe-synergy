@@ -1446,6 +1446,8 @@ section {
 @media (max-width: 768px) {
     .burger-btn {
         display: block;
+        position: relative;
+        z-index: 1001;
     }
     .nav {
         position: fixed;
