@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_phone'] = $phone;
         $_SESSION['access_rights'] = 'USER';
 
-        redirect('../frontend/index.html');
+        redirect('../frontend/index.php');
     }
 
     // Если есть ошибки
