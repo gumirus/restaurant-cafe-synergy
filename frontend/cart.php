@@ -472,6 +472,53 @@ if ($order) {
         font-size: 0.85rem;
         margin-bottom: 5px;
     }
+
+    /* ===== MOBILE CART ===== */
+    @media (max-width: 768px) {
+        .cart-header { display: none; }
+        .cart-row {
+            grid-template-columns: 1fr;
+            gap: 6px;
+            padding: 16px;
+            margin-bottom: 12px;
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+        }
+        .cart-col {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+        }
+        .cart-col-product {
+            justify-content: flex-start;
+            gap: 12px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 10px;
+            margin-bottom: 4px;
+        }
+        .cart-col-price::before { content: "Цена: "; color: var(--color-text-light); font-weight: 400; }
+        .cart-col-qty::before { content: "Кол-во: "; color: var(--color-text-light); font-weight: 400; }
+        .cart-col-total::before { content: "Сумма: "; color: var(--color-text-light); font-weight: 400; }
+        .cart-col-total { font-weight: 700; color: var(--color-primary); font-size: 1.1rem; }
+        .cart-col-action { justify-content: flex-end; padding-top: 6px; border-top: 1px solid var(--color-border); }
+        .cart-col-action .cart-remove {
+            width: 100%; padding: 10px;
+            background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px;
+            font-size: 0.9rem; text-align: center;
+        }
+        .cart-summary { flex-direction: column; align-items: stretch; gap: 15px; }
+        .cart-actions { flex-direction: column; }
+        .cart-actions .btn,
+        .cart-actions .btn-outline { width: 100%; text-align: center; }
+        .cart-item-image { width: 50px; height: 50px; }
+    }
+    @media (max-width: 480px) {
+        .cart-row { padding: 12px; }
+        .cart-item-image { width: 40px; height: 40px; }
+    }
     </style>
 
     <script>
