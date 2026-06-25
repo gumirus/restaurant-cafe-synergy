@@ -200,7 +200,7 @@
         visibility: visible; opacity: 1;
     }
     .dish-modal-content {
-        background: #1a1a2e;
+        background: var(--color-bg-section);
         border-radius: 20px;
         max-width: 700px; width: 92%;
         position: relative;
@@ -215,7 +215,8 @@
     .dish-modal-close {
         position: absolute; top: 12px; right: 18px;
         background: rgba(0,0,0,0.3); border: none;
-        font-size: 1.8rem; cursor: pointer; color: #fff;
+        font-size: 1.8rem; cursor: pointer;
+        color: #fff;
         line-height: 1; width: 36px; height: 36px;
         border-radius: 50%; display: flex;
         align-items: center; justify-content: center;
@@ -261,7 +262,8 @@
         min-width: 250px;
     }
     .dish-modal-info h2 {
-        font-size: 1.6rem; color: var(--color-text-white);
+        font-size: 1.6rem;
+        color: var(--color-text);
         margin-bottom: 12px;
     }
     .dish-modal-meta {
@@ -284,12 +286,13 @@
         margin-bottom: 18px;
     }
     .dish-modal-ingredients {
-        background: rgba(255,255,255,0.05);
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
         border-radius: 12px; padding: 16px;
         margin-bottom: 20px;
     }
     .dish-modal-ingredients h4 {
-        color: var(--color-text-white);
+        color: var(--color-text);
         font-size: 0.9rem; margin-bottom: 8px;
     }
     .dish-modal-ingredients p {
@@ -317,7 +320,7 @@
     <style>
     .dish-img-overlay {
         position: fixed; inset: 0; z-index: 999999;
-        background: transparent;
+        background: rgba(0,0,0,0.85);
         display: flex; align-items: center; justify-content: center;
         visibility: hidden; opacity: 0;
         transition: all 0.3s ease;
@@ -329,7 +332,7 @@
     .dish-img-overlay img {
         width: 45vw;
         height: 45vh;
-        object-fit: cover;
+        object-fit: contain;
         transition: transform 0.3s ease;
         border-radius: 16px;
         box-shadow: 0 20px 60px rgba(0,0,0,0.5);
@@ -345,6 +348,12 @@
         z-index: 10; transition: background 0.2s;
     }
     .dish-img-close:hover { background: rgba(255,255,255,0.3); }
+    @media (max-width: 600px) {
+        .dish-img-overlay img {
+            width: 90vw;
+            height: 60vh;
+        }
+    }
     </style>
 
     <script>
