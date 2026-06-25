@@ -282,6 +282,37 @@
         font-size: 2rem; color: var(--color-text-light);
         cursor: pointer; transition: color 0.3s;
     }
+    .about-modal-close:hover {
+        color: var(--color-text);
+    }
+    @media (max-width: 480px) {
+        .about-modal {
+            padding: 30px 20px;
+            width: 95%;
+            border-radius: 16px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .about-modal h2 {
+            font-size: 1.4rem;
+        }
+        .about-modal p {
+            font-size: 0.85rem;
+        }
+        .about-modal .about-feature {
+            padding: 10px 14px;
+            font-size: 0.8rem;
+        }
+        .about-modal-close {
+            top: 10px;
+            right: 12px;
+            font-size: 1.6rem;
+        }
+        .about-modal .btn {
+            padding: 12px 20px;
+            font-size: 11px;
+        }
+    }
     .booking-modal-overlay {
         position: fixed; inset: 0; z-index: 99999;
         background: rgba(0,0,0,0.7);
@@ -294,8 +325,8 @@
         visibility: visible; opacity: 1;
     }
     .booking-modal {
-        background: var(--color-surface, #1e1e2e);
-        border: 1px solid var(--color-border, #333);
+        background: var(--color-bg-section);
+        border: 1px solid var(--color-border);
         border-radius: 20px;
         max-width: 400px; width: 90%;
         padding: 50px 40px 40px;
