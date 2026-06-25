@@ -645,20 +645,13 @@ section {
 }
 
 .team-slider {
-    display: flex;
-    gap: 25px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    margin: 0 -10px;
     padding-bottom: 20px;
 }
-.team-slider::-webkit-scrollbar { display: none; }
 
 .team-card {
-    flex: 0 0 calc(33.333% - 17px);
     min-width: 280px;
-    scroll-snap-align: start;
+    width: calc(33.333% - 17px);
     background: var(--color-bg-card);
     border-radius: var(--border-radius);
     overflow: hidden;
@@ -821,20 +814,12 @@ section {
 }
 
 .reviews-slider {
-    display: flex;
-    gap: 25px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    margin: 0 -10px;
     padding-bottom: 20px;
 }
-.reviews-slider::-webkit-scrollbar { display: none; }
 
 .review-card {
-    flex: 0 0 calc(33.333% - 17px);
     min-width: 300px;
-    scroll-snap-align: start;
     background: var(--color-bg-card);
     padding: 35px;
     border-radius: var(--border-radius);
@@ -957,20 +942,13 @@ section {
 }
 
 .news-slider {
-    display: flex;
-    gap: 25px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    margin: 0 -10px;
     padding-bottom: 20px;
 }
-.news-slider::-webkit-scrollbar { display: none; }
 
 .news-card {
-    flex: 0 0 calc(33.333% - 17px);
     min-width: 300px;
-    scroll-snap-align: start;
+    width: calc(33.333% - 17px);
     background: var(--color-bg-card);
     border-radius: var(--border-radius);
     overflow: hidden;

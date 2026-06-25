@@ -492,17 +492,27 @@ function showToast(msg) {
     }, 2500);
 }
 
-// ========== УНИВЕРСАЛЬНЫЙ СЛАЙДЕР (стрелки + точки + бесконечный) ==========
+// ========== УНИВЕРСАЛЬНЫЙ СЛАЙДЕР (translateX, без scroll-snap) ==========
 function initSlider(container, sliderSelector, dotsSelector, dotClass) {
-    const slider = container.querySelector(sliderSelector);
+    const wrap = container.querySelector(sliderSelector);
     const dotsContainer = container.querySelector(dotsSelector);
-    if (!slider || slider.children.length === 0) return;
+    if (!wrap || wrap.children.length === 0) return;
 
-    const items = slider.children;
+    // Оборачиваем items в дополнительный div для translateX
+    const track = document.createElement('div');
+    track.style.cssText = 'display:flex;gap:25px;transition:transform 0.4s ease';
+    while (wrap.firstChild) track.appendChild(wrap.firstChild);
+    wrap.innerHTML = '';
+    wrap.style.cssText = 'overflow:hidden;display:flex';
+    wrap.appendChild(track);
+
+    const items = track.children;
     const total = items.length;
     if (total <= 1) return;
 
-    // Кнопки навигации
+    let current = 0;
+
+    // Кнопки
     const prevBtn = document.createElement('button');
     prevBtn.className = 'slider-arrow slider-prev';
     prevBtn.innerHTML = '‹';
@@ -519,52 +529,27 @@ function initSlider(container, sliderSelector, dotsSelector, dotClass) {
     for (let i = 0; i < total; i++) {
         const dot = document.createElement('button');
         dot.className = dotClass + (i === 0 ? ' active' : '');
-        dot.onclick = () => scrollToItem(i);
+        dot.onclick = () => goTo(i);
         dotsContainer.appendChild(dot);
     }
 
-    function scrollToItem(index) {
-        if (index < 0 || index >= items.length) return;
-        const target = items[index];
-        if (target) {
-            slider.scrollLeft = target.offsetLeft - slider.offsetLeft;
-        }
+    function getItemWidth() {
+        return items[0].offsetWidth + 25; // 25 = gap
     }
 
-    function getCurrentIndex() {
-        const gapVal = parseInt(getComputedStyle(slider).gap) || 25;
-        const w = items[0].offsetWidth + gapVal;
-        if (w <= gapVal) return 0;
-        return Math.round(slider.scrollLeft / w);
-    }
-
-    function updateDots() {
-        const idx = getCurrentIndex();
+    function goTo(index) {
+        if (index < 0) index = total - 1; // loop back
+        if (index >= total) index = 0; // loop forward
+        current = index;
+        track.style.transform = 'translateX(-' + (index * getItemWidth()) + 'px)';
+        // Точки
         dotsContainer.querySelectorAll('.' + dotClass).forEach((d, i) => {
-            d.classList.toggle('active', i === Math.min(idx, total - 1));
+            d.classList.toggle('active', i === current);
         });
     }
 
-    prevBtn.onclick = () => {
-        const idx = getCurrentIndex();
-        if (idx <= 0) {
-            // Бесконечный скролл — последний элемент
-            scrollToItem(total - 1);
-        } else {
-            scrollToItem(idx - 1);
-        }
-    };
+    prevBtn.onclick = () => goTo(current - 1);
+    nextBtn.onclick = () => goTo(current + 1);
 
-    nextBtn.onclick = () => {
-        const idx = getCurrentIndex();
-        if (idx >= total - 1) {
-            // Бесконечный скролл — первый элемент
-            scrollToItem(0);
-        } else {
-            scrollToItem(idx + 1);
-        }
-    };
-
-    slider.addEventListener('scroll', updateDots);
-    updateDots();
+    goTo(0);
 }
