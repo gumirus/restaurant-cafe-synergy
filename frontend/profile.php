@@ -192,6 +192,19 @@ $avatar_url = $user['avatar_data'] ?: ($user['avatar'] ? 'uploads/' . $user['ava
 
                         <button type="submit" name="update_profile" class="btn">💾 Сохранить</button>
                     </form>
+
+                    <div style="margin-top:40px;padding-top:25px;border-top:1px solid var(--color-border);">
+                        <h3 style="font-size:1rem;color:var(--color-text);margin-bottom:12px;">🚫 Удаление аккаунта</h3>
+                        <p style="font-size:0.85rem;color:var(--color-text-light);margin-bottom:12px;">Все ваши данные будут безвозвратно удалены. Отменить это действие невозможно.</p>
+                        <form method="POST" action="../backend/delete_account.php" onsubmit="return confirm('Удалить аккаунт? Это действие необратимо.')">
+                            <input type="password" name="password" placeholder="Введите пароль" required style="width:100%;padding:10px 12px;border:1px solid var(--color-border);border-radius:6px;margin-bottom:10px;font-size:0.9rem;">
+                            <div style="margin-bottom:10px;">
+                                <label style="font-size:0.85rem;color:var(--color-text-light);">Введите <strong>УДАЛИТЬ</strong> для подтверждения:</label>
+                                <input type="text" name="confirm_text" placeholder="УДАЛИТЬ" required style="width:100%;padding:10px 12px;border:1px solid #fecaca;border-radius:6px;font-size:0.9rem;background:#fef2f2;">
+                            </div>
+                            <button type="submit" class="btn" style="background:#dc2626;width:100%;">🚫 Удалить аккаунт</button>
+                        </form>
+                    </div>
                 </div>
 
                 <!-- ===== ПРАВАЯ КОЛОНКА — Заказы ===== -->
