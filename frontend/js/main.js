@@ -520,14 +520,18 @@ function initSlider(container, sliderSelector, dotsSelector, dotClass) {
     }
 
     function scrollToItem(index) {
+        if (index < 0 || index >= items.length) return;
         const target = items[index];
         if (target) {
-            slider.scrollTo({ left: target.offsetLeft - slider.offsetLeft, behavior: 'smooth' });
+            const left = target.offsetLeft - slider.offsetLeft;
+            slider.scrollTo({ left: left, behavior: 'smooth' });
         }
     }
 
     function getCurrentIndex() {
-        const w = items[0].offsetWidth + parseInt(getComputedStyle(slider).gap || '25');
+        const gapVal = parseInt(getComputedStyle(slider).gap) || 25;
+        const w = items[0].offsetWidth + gapVal;
+        if (w <= gapVal) return 0;
         return Math.round(slider.scrollLeft / w);
     }
 
