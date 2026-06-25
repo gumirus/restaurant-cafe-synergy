@@ -49,6 +49,9 @@ if (isLoggedIn()) {
             <button class="burger-btn" onclick="toggleMobileNav()">☰</button>
             <div class="nav-overlay" id="navOverlay" onclick="toggleMobileNav()"></div>
             <nav class="nav">
+                <div class="nav-logo">
+                    <img src="images/logo.svg" alt="Точка Кипения" height="40">
+                </div>
                 <ul>
                     <li><a href="index.php" class="<?= $current_page === 'index.php' ? 'active' : '' ?>">Главная</a></li>
                     <li><a href="about.php" class="<?= $current_page === 'about.php' ? 'active' : '' ?>">О нас</a></li>
