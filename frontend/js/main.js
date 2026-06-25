@@ -516,7 +516,7 @@ function initSlider(container, sliderSelector, dotsSelector, dotClass) {
         const w = wrap.clientWidth;
         const cardW = w / perView;
         for (let c of track.children) {
-            c.style.cssText = 'min-width:' + cardW + 'px;flex-shrink:0;box-sizing:border-box';
+            c.style.cssText = 'width:' + cardW + 'px;min-width:' + cardW + 'px;flex-shrink:0;box-sizing:border-box';
         }
         return { perView, cardW };
     }
