@@ -291,16 +291,36 @@ function loadNews() {
         { title: 'Мастер-класс от шеф-повара', date: '20.05.2026', desc: 'Научитесь готовить фирменные блюда нашего ресторана', img: 'uploads/news/3-masterclass.jpg' },
     ];
 
-    container.innerHTML = news.map(n => `
-        <div class="news-card fade-in">
-            <img class="news-card-image clickable-img" src="${n.img}" alt="${n.title}">
-            <div class="news-card-body">
-                <span class="news-date">${n.date}</span>
-                <h3>${n.title}</h3>
-                <p>${n.desc}</p>
-            </div>
+    container.innerHTML = `
+        <div class="news-slider">
+            ${news.map(n => `
+                <div class="news-card">
+                    <img class="news-card-image clickable-img" src="${n.img}" alt="${n.title}">
+                    <div class="news-card-body">
+                        <span class="news-date">${n.date}</span>
+                        <h3>${n.title}</h3>
+                        <p>${n.desc}</p>
+                    </div>
+                </div>
+            `).join('')}
         </div>
-    `).join('');
+        <div class="news-slider-dots"></div>
+    `;
+
+    const slider = container.querySelector('.news-slider');
+    const dotsContainer = container.querySelector('.news-slider-dots');
+
+    news.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'news-dot' + (i === 0 ? ' active' : '');
+        dot.onclick = () => slider.scrollTo({ left: slider.children[i].offsetLeft - slider.offsetLeft, behavior: 'smooth' });
+        dotsContainer.appendChild(dot);
+    });
+
+    slider.addEventListener('scroll', () => {
+        const idx = Math.round(slider.scrollLeft / (slider.children[0].offsetWidth + 25));
+        dotsContainer.querySelectorAll('.news-dot').forEach((d, i) => d.classList.toggle('active', i === Math.min(idx, news.length - 1)));
+    });
 
     setTimeout(initFadeIn, 100);
 }
