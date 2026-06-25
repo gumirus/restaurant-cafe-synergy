@@ -26,25 +26,6 @@
                         <p>Точка Кипения — это не просто ресторан. Это место, где встречаются традиции и современность...</p>
                         <a href="javascript:void(0)" class="btn" onclick="openAboutModal()">Подробнее</a>
                     </div>
-                    <div class="about-text-full">
-                        <p>Точка Кипения — это не просто ресторан. Это место, где встречаются традиции и современность, где каждое блюдо — произведение искусства.</p>
-                        <p>Мы используем только свежие продукты от местных фермеров, а наши шеф-повара постоянно экспериментируют, чтобы удивлять вас новыми вкусами.</p>
-                        <div class="about-features">
-                            <div class="about-feature">
-                                <span class="feature-icon">🥩</span>
-                                <span>Свежие продукты</span>
-                            </div>
-                            <div class="about-feature">
-                                <span class="feature-icon">👨‍🍳</span>
-                                <span>Шеф-повара из Европы</span>
-                            </div>
-                            <div class="about-feature">
-                                <span class="feature-icon">🍷</span>
-                                <span>Винная карта</span>
-                            </div>
-                        </div>
-                        <a href="about.php" class="btn">Узнать больше</a>
-                    </div>
                 </div>
 
                 <div class="about-modal-overlay" id="aboutModal" onclick="if(event.target===this)closeAboutModal()">
