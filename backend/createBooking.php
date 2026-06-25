@@ -20,6 +20,7 @@ $date = $_POST['date'] ?? '';
 $time = $_POST['time'] ?? '';
 $guests = (int)($_POST['guests'] ?? 1);
 $comment = trim($_POST['comment'] ?? '');
+$occasion = trim($_POST['occasion'] ?? '');
 
 // Если пользователь авторизован — берём данные из профиля
 $userId = null;
@@ -50,10 +51,10 @@ if (!empty($errors)) {
 
 try {
     $stmt = $pdo->prepare("
-        INSERT INTO bookings (user_id, name, phone, email, guests, booking_date, booking_time, comment, status, created_at)
-        VALUES (?, ?, ?, '', ?, ?, ?, ?, 'pending', NOW())
+        INSERT INTO bookings (user_id, name, phone, email, guests, booking_date, booking_time, occasion, comment, status, created_at)
+        VALUES (?, ?, ?, '', ?, ?, ?, ?, ?, 'pending', NOW())
     ");
-    $stmt->execute([$userId, $name, $phone, $guests, $date, $time, $comment]);
+    $stmt->execute([$userId, $name, $phone, $guests, $date, $time, $occasion ?: null, $comment]);
 
     echo json_encode([
         'success' => true,

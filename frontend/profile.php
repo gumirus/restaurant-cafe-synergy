@@ -134,7 +134,7 @@ $status_labels = [
 
 // История бронирований (по user_id, если есть, иначе по телефону)
 $stmt = $pdo->prepare("
-    SELECT b.id, b.name, b.phone, b.guests, b.booking_date, b.booking_time, b.comment, b.status, b.created_at
+    SELECT b.id, b.name, b.phone, b.guests, b.booking_date, b.booking_time, b.occasion, b.comment, b.status, b.created_at
     FROM bookings b
     WHERE b.user_id = ? OR (b.user_id IS NULL AND b.phone = ?)
     ORDER BY b.created_at DESC
@@ -228,6 +228,9 @@ $avatar_url = $user['avatar_data'] ?: ($user['avatar'] ? 'uploads/' . $user['ava
                                     <div style="display:flex; gap:20px; flex-wrap:wrap; padding:5px 0;">
                                         <span>👥 <?= $booking['guests'] ?> <?= $booking['guests'] === 1 ? 'гость' : 'гостей' ?></span>
                                         <span>📞 <?= htmlspecialchars($booking['phone']) ?></span>
+                                        <?php if ($booking['occasion']): ?>
+                                            <span>📌 <?= htmlspecialchars($booking['occasion']) ?></span>
+                                        <?php endif; ?>
                                         <?php if ($booking['comment']): ?>
                                             <span>💬 <?= htmlspecialchars($booking['comment']) ?></span>
                                         <?php endif; ?>

@@ -93,6 +93,20 @@
                         </div>
                         <div class="form-group">
                             <label>Пожелания</label>
+                        <div class="form-group">
+                            <label>Повод</label>
+                            <select name="occasion" style="width:100%;padding:12px;border:1px solid var(--color-border);border-radius:8px;font-size:0.95rem;background:var(--color-bg);">
+                                <option value="">— Не выбран —</option>
+                                <option value="День рождения">🎂 День рождения</option>
+                                <option value="Юбилей">🎉 Юбилей</option>
+                                <option value="Свадьба">💍 Свадьба</option>
+                                <option value="Романтический ужин">💕 Романтический ужин</option>
+                                <option value="Деловая встреча">💼 Деловая встреча</option>
+                                <option value="Семейный обед">👨‍👩‍👧‍👦 Семейный обед</option>
+                                <option value="Корпоратив">🏢 Корпоратив</option>
+                                <option value="Другая">📌 Другая</option>
+                            </select>
+                        </div>
                             <textarea name="comment" placeholder="Особые пожелания..."></textarea>
                         </div>
                         <button type="submit" class="btn">Забронировать</button>

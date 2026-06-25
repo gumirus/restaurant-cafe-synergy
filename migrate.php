@@ -163,6 +163,11 @@ try {
     echo "   ✅ verification_codes table created\n";
 }
 
+// Add occasion column to bookings table
+try {$pdo->query("SELECT occasion FROM bookings LIMIT 1");} catch (Exception $e) {
+    $pdo->exec("ALTER TABLE bookings ADD COLUMN occasion VARCHAR(100) DEFAULT NULL AFTER booking_time");
+    echo "   ✅ Added 'occasion' to bookingsn";
+}
 // Add images to dishes that have NULL image
 echo "📦 Checking dish images...\n";
 $noImg = $pdo->query("SELECT COUNT(*) FROM dishes WHERE image IS NULL OR image = ''")->fetchColumn();

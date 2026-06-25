@@ -213,6 +213,7 @@ CREATE TABLE bookings (
     guests INT NOT NULL DEFAULT 1,
     booking_date DATE NOT NULL,
     booking_time TIME NOT NULL,
+    occasion VARCHAR(100) DEFAULT NULL,
     comment TEXT DEFAULT NULL,
     status VARCHAR(20) DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
