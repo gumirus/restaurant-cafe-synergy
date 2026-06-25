@@ -107,14 +107,43 @@ if ($stmt->fetchColumn() == 0) {
     echo "📦 Adding 'Холодные блюда'...\n";
     $pdo->exec("INSERT INTO categories (name) VALUES ('Холодные блюда')");
     $catId = $pdo->lastInsertId();
-    $pdo->exec("INSERT INTO dishes (category_id, name, description, price, weight) VALUES 
-        ($catId, 'Суши-сет', 'Набор из 8 видов суши и роллов с лососем, тунцом и креветкой', 950.00, 350),
-        ($catId, 'Холодец', 'Домашний холодец из говядины с хреном и горчицей', 350.00, 250),
-        ($catId, 'Окрошка', 'Классическая окрошка на квасе с говядиной', 280.00, 300)
+    $pdo->exec("INSERT INTO dishes (category_id, name, description, price, weight, image) VALUES
+        ($catId, 'Суши-сет', 'Набор из 8 видов суши и роллов с лососем, тунцом и креветкой', 950.00, 350, 'uploads/dishes/17-sushi.jpg'),
+        ($catId, 'Холодец', 'Домашний холодец из говядины с хреном и горчицей', 350.00, 250, 'uploads/dishes/21-kholodets.jpg'),
+        ($catId, 'Окрошка', 'Классическая окрошка на квасе с говядиной', 280.00, 300, 'uploads/dishes/22-okroshka.jpg')
     ");
     echo "✅ Cold dishes added!\n";
 } else {
     echo "✅ 'Холодные блюда' already exists\n";
+}
+
+// Add images to dishes that have NULL image
+echo "📦 Checking dish images...\n";
+$noImg = $pdo->query("SELECT COUNT(*) FROM dishes WHERE image IS NULL OR image = ''")->fetchColumn();
+if ($noImg > 0) {
+    $images = [
+        'Цезарь с курицей' => 'uploads/dishes/1-caesar.jpg',
+        'Греческий салат' => 'uploads/dishes/2-greek.jpg',
+        'Том Ям' => 'uploads/dishes/3-tom-yam.jpg',
+        'Борщ' => 'uploads/dishes/4-borscht.jpg',
+        'Стейк Рибай' => 'uploads/dishes/5-steak.jpg',
+        'Паста Карбонара' => 'uploads/dishes/6-carbonara.jpg',
+        'Тирамису' => 'uploads/dishes/7-tiramisu.jpg',
+        'Чизкейк' => 'uploads/dishes/8-cheesecake.jpg',
+        'Лимонад' => 'uploads/dishes/9-lemonade.jpg',
+        'Кофе' => 'uploads/dishes/10-coffee.jpg',
+        'Суши-сет' => 'uploads/dishes/17-sushi.jpg',
+        'Холодец' => 'uploads/dishes/21-kholodets.jpg',
+        'Окрошка' => 'uploads/dishes/22-okroshka.jpg',
+    ];
+    $updated = 0;
+    foreach ($images as $name => $img) {
+        $pdo->exec("UPDATE dishes SET image = '$img' WHERE name = '$name' AND (image IS NULL OR image = '')");
+        $updated += $pdo->rowCount();
+    }
+    echo "   ✅ $updated dishes updated with images\n";
+} else {
+    echo "   ✅ All dishes have images\n";
 }
 
 echo "\n=== 📋 Menu summary ===\n";
