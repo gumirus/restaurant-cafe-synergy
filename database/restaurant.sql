@@ -22,10 +22,11 @@ INSERT INTO access_rights (name) VALUES ('ADMIN'), ('USER'), ('EMPLOYEE');
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     phone VARCHAR(20) NOT NULL UNIQUE,
+    email VARCHAR(255) DEFAULT NULL,
     name VARCHAR(100) DEFAULT NULL,
     bio TEXT DEFAULT NULL,
     avatar VARCHAR(255) DEFAULT NULL,
-    position VARCHAR(100) DEFAULT NULL,  -- должность (Шеф-повар, Повар, Официант и т.д.)
+    position VARCHAR(100) DEFAULT NULL,
     password VARCHAR(255) NOT NULL,
     access_rights_id INT NOT NULL DEFAULT 2,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

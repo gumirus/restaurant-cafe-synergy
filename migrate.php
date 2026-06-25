@@ -73,7 +73,8 @@ if (!$hasCategories) {
             'booking_id' => 'INT DEFAULT NULL AFTER payment_status',
         ],
         'users' => [
-            'name' => "VARCHAR(100) DEFAULT NULL AFTER phone",
+            'email' => "VARCHAR(255) DEFAULT NULL AFTER phone",
+            'name' => "VARCHAR(100) DEFAULT NULL AFTER email",
             'bio' => 'TEXT DEFAULT NULL AFTER name',
             'avatar' => "VARCHAR(255) DEFAULT NULL AFTER bio",
             'position' => "VARCHAR(100) DEFAULT NULL AFTER avatar",
