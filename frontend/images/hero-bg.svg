@@ -20,7 +20,7 @@
   <line x1="100" y1="900" x2="400" y2="900" stroke="#D4A853" stroke-width="2" opacity="0.3"/>
   <line x1="1520" y1="200" x2="1820" y2="200" stroke="#D4A853" stroke-width="2" opacity="0.3"/>
   <!-- Текст -->
-  <text x="960" y="450" font-family="Georgia, serif" font-size="72" fill="#D4A853" text-anchor="middle" letter-spacing="4">BEAN SCENE</text>
+  <text x="960" y="450" font-family="Georgia, serif" font-size="72" fill="#D4A853" text-anchor="middle" letter-spacing="4">ТОЧКА КИПЕНИЯ</text>
   <text x="960" y="520" font-family="Arial, sans-serif" font-size="24" fill="#fff" text-anchor="middle" letter-spacing="6" opacity="0.7">РЕСТОРАН &amp; КОФЕЙНЯ</text>
   <text x="960" y="600" font-family="Arial, sans-serif" font-size="16" fill="#fff" text-anchor="middle" opacity="0.5">Изображение: Интерьер ресторана</text>
 </svg>

@@ -23,7 +23,7 @@ if (isLoggedIn()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bean Scene — Ресторан премиум-кухни</title>
+    <title>Точка Кипения — Ресторан премиум-кухни</title>
     <link rel="stylesheet" href="css/color.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/svg+xml" href="images/logo.svg">
@@ -44,7 +44,7 @@ if (isLoggedIn()) {
     <header class="header scrolled" id="header">
         <div class="container">
             <a href="index.php" class="logo">
-                <img src="images/logo.svg" alt="Bean Scene" height="50">
+                <img src="images/logo.svg" alt="Точка Кипения" height="50">
             </a>
             <button class="burger-btn" onclick="toggleMobileNav()">☰</button>
             <div class="nav-overlay" id="navOverlay" onclick="toggleMobileNav()"></div>

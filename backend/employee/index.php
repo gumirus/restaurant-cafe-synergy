@@ -1,6 +1,6 @@
 <?php
 // =============================================
-// ПАНЕЛЬ СОТРУДНИКА Bean Scene
+// ПАНЕЛЬ СОТРУДНИКА Точка Кипения
 // =============================================
 
 require_once __DIR__ . '/../config/db.php';
@@ -82,7 +82,7 @@ $positionIcon = match(true) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Панель сотрудника — Bean Scene</title>
+    <title>Панель сотрудника — Точка Кипения</title>
     <link rel="stylesheet" href="../admin/css/admin.css">
     <style>
         .employee-badge {
@@ -220,7 +220,7 @@ $positionIcon = match(true) {
     <!-- ========== SIDEBAR ========== -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <h2>☕ BEAN SCENE</h2>
+            <h2>☕ ТОЧКА КИПЕНИЯ</h2>
             <p>Панель сотрудника</p>
             <span class="employee-badge"><?= $positionIcon ?> <?= htmlspecialchars($position ?: $user['phone']) ?></span>
             <?php if ($position): ?>

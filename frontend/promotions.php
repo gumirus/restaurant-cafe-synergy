@@ -3,7 +3,7 @@
     <section class="page-hero">
         <div class="container">
             <h1>Акции</h1>
-            <p>Специальные предложения и скидки Bean Scene</p>
+            <p>Специальные предложения и скидки Точка Кипения</p>
         </div>
     </section>
 

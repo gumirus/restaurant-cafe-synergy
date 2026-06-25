@@ -3,7 +3,7 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <h4>Bean Scene</h4>
+                    <h4>Точка Кипения</h4>
                     <p>Ресторан премиум-кухни. Мы создаём незабываемые гастрономические впечатления для наших гостей. Свежие продукты, авторские рецепты, уютная атмосфера.</p>
                     <div class="social-links">
                         <a href="#" title="Instagram">📷</a>
@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 Bean Scene. Все права защищены. Сделано с ❤️</p>
+                <p>&copy; 2026 Точка Кипения. Все права защищены. Сделано с ❤️</p>
             </div>
         </div>
     </footer>

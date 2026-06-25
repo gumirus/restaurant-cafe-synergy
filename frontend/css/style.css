@@ -1431,126 +1431,6 @@ section {
 /* ========== TEAM CARD IMAGE ========== */
 .team-card-image { width: 100%; height: 250px; object-fit: cover; object-position: top; }
 
-/* ========== COLLAPSIBLE SECTIONS (mobile) ========== */
-.about-text-collapsed { display: none; }
-
-@media (max-width: 768px) {
-    .about-text.collapsible .about-text-full { display: none; }
-    .about-text.collapsible .about-text-collapsed { display: block; }
-    .about-text.collapsible.expanded .about-text-full { display: block; }
-    .about-text.collapsible.expanded .about-text-collapsed { display: none; }
-    .about-text .btn { margin-top: 10px; display: inline-block; }
-    .about-modal-overlay {
-        display: none;
-        position: fixed; inset: 0;
-        background: rgba(0,0,0,0.7);
-        z-index: 9999;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-    }
-    .about-modal-overlay.active { display: flex; }
-    .about-modal {
-        background: var(--color-surface);
-        border-radius: 16px;
-        max-width: 500px;
-        width: 100%;
-        max-height: 80vh;
-        overflow-y: auto;
-        padding: 30px;
-        position: relative;
-    }
-    .about-modal-close {
-        position: absolute;
-        top: 10px; right: 15px;
-        font-size: 1.8rem;
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: var(--color-text);
-        opacity: 0.6;
-    }
-    .about-modal-close:hover { opacity: 1; }
-}
-
-/* ========== TABLET (768-1024) ========== */
-@media (min-width: 769px) and (max-width: 1024px) {
-    .dishes-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .hero h1 { font-size: 42px; }
-    .nav ul { gap: 10px; }
-    .nav a { font-size: 13px; padding: 8px 10px; }
-    .header-actions a { padding: 8px 12px; font-size: 11px; }
-    .profile-layout { grid-template-columns: 1fr 1fr; gap: 20px; }
-}
-
-/* ========== PORTRAIT MONITOR (монитор вертикально) ========== */
-@media (orientation: portrait) and (max-width: 1024px) {
-    .header { height: var(--header-height-mobile); }
-    .header .logo img { height: 35px; }
-}
-
-@media (orientation: portrait) and (min-width: 1025px) {
-    .header { height: 60px; }
-    .header .logo img { height: 35px; }
-    .nav ul { gap: 8px; }
-    .nav a { font-size: 13px; padding: 6px 10px; }
-    .hero { padding: 80px 0 40px; }
-    .hero h1 { font-size: 36px; }
-    .hero p { font-size: 1rem; }
-    .hero-buttons { flex-direction: column; align-items: center; gap: 10px; }
-    .container { max-width: 700px; }
-    .dishes-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .about-grid,
-    .contact-grid,
-    .booking-wrapper { grid-template-columns: 1fr; }
-    .profile-layout { grid-template-columns: 1fr; }
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    .footer-grid { grid-template-columns: 1fr; }
-    .section-title { font-size: 28px; }
-    .section { padding: 50px 0; }
-    .form-row { grid-template-columns: 1fr; }
-    .header-actions { gap: 5px; }
-    .header-actions a { padding: 6px 12px; font-size: 11px; }
-    .specials-grid { grid-template-columns: 1fr; }
-    .special-card { flex-direction: column; }
-    .special-card-image { width: 100%; height: 200px; }
-    .news-grid { grid-template-columns: 1fr; }
-    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-    .booking-form { padding: 25px; }
-}
-
-/* ========== PORTRAIT (телефон вертикально) ========== */
-@media (orientation: portrait) and (max-width: 480px) {
-    .header .container { padding: 0 10px; }
-    .header .logo img { height: 32px; }
-    .hero { padding: 100px 15px 40px; }
-    .hero h1 { font-size: 24px; }
-    .hero p { font-size: 0.9rem; }
-    .section-title { font-size: 24px; }
-    .section { padding: 40px 0; }
-    .dish-card-image { height: 150px; }
-    .dish-card-body { padding: 10px; }
-    .dish-card-body h3 { font-size: 0.95rem; }
-    .dish-card-body .price { font-size: 1rem; }
-    .form-group { margin-bottom: 12px; }
-    .btn { padding: 10px 18px; font-size: 0.85rem; }
-    .booking-form { padding: 20px 15px; }
-    .profile-section { padding: 100px 0 30px; }
-    .profile-card { padding: 20px; }
-    .order-card-header,
-    .order-card-body,
-    .order-card-footer { padding: 10px 12px; }
-    .modal-content { padding: 25px 15px; margin: 10px; }
-    .alert { padding: 10px 12px; font-size: 0.85rem; }
-}
-
-/* ========== PORTRAIT TABLET ========== */
-@media (orientation: portrait) and (min-width: 481px) and (max-width: 768px) {
-    .hero h1 { font-size: 34px; }
-    .dishes-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-    .profile-layout { grid-template-columns: 1fr; }
-}
-
 /* ========== MOBILE BURGER MENU ========== */
 .burger-btn {
     display: none;
@@ -1566,12 +1446,6 @@ section {
 @media (max-width: 768px) {
     .burger-btn {
         display: block;
-    }
-    .header {
-        height: var(--header-height-mobile);
-    }
-    .header .logo img {
-        height: 35px;
     }
     .nav {
         position: fixed;

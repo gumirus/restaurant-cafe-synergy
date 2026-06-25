@@ -61,7 +61,7 @@ if ($order) {
                         <?php $subtotal = $item['price'] * $item['quantity']; ?>
                         <div class="cart-row" data-cart-id="<?= $item['id'] ?>">
                             <div class="cart-col cart-col-product">
-                                <img src="<?= htmlspecialchars($item['image'] ?: 'images/placeholder.jpg') ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="cart-item-image">
+                                <img src="<?= htmlspecialchars($item['image'] ?: 'images/placeholder.svg') ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="cart-item-image" onerror="this.src='images/placeholder.svg'">
                                 <span><?= htmlspecialchars($item['name']) ?></span>
                             </div>
                             <div class="cart-col cart-col-price"><?= number_format($item['price'], 2) ?> ₽</div>

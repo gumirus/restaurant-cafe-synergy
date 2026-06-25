@@ -1,10 +1,10 @@
 // =============================================
-// MAIN JS — Bean Scene Restaurant
+// MAIN JS — Точка Кипения Restaurant
 // Анимации, счётчики, загрузка данных
 // =============================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🍽 Bean Scene — загружен');
+    console.log('🍽 Точка Кипения — загружен');
 
     initHeaderScroll();
     initFadeIn();

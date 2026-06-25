@@ -1,13 +1,18 @@
 <?php
 // =============================================
-// АДМИН-ПАНЕЛЬ Bean Scene — Главная
+// АДМИН-ПАНЕЛЬ Точка Кипения — Главная
 // =============================================
 
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../config/session.php';
 
+if (!isLoggedIn()) {
+    header('Location: ../../frontend/login.php');
+    exit;
+}
 if (!isAdmin()) {
-    die('Доступ запрещён');
+    header('Location: ../../frontend/index.php');
+    exit;
 }
 
 $user = getCurrentUser();
@@ -40,7 +45,7 @@ $stats['bookings'] = $stmt->fetch()['count'];
 $stmt = $pdo->query("
     SELECT o.id, u.phone, u.name as user_name, o.total_price, o.status, o.type, o.payment_status, o.created_at,
            GROUP_CONCAT(CONCAT(d.name, ' (', oi.count, ' шт.)') SEPARATOR ', ') as items,
-           ofb.rating as feedback_rating, ofb.comment as feedback_comment
+           ANY_VALUE(ofb.rating) as feedback_rating, ANY_VALUE(ofb.comment) as feedback_comment
     FROM orders o
     JOIN users u ON o.user_id = u.id
     LEFT JOIN order_items oi ON oi.order_id = o.id
@@ -146,7 +151,7 @@ $page = $_GET['page'] ?? 'dashboard';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Админ-панель — Bean Scene</title>
+    <title>Админ-панель — Точка Кипения</title>
     <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
@@ -167,7 +172,7 @@ $page = $_GET['page'] ?? 'dashboard';
         <div class="sidebar-header">
             <button class="sidebar-toggle" onclick="toggleSidebar()" title="Свернуть/развернуть">☰</button>
             <div class="sidebar-header-text">
-                <h2>☕ BEAN SCENE</h2>
+                <h2>☕ ТОЧКА КИПЕНИЯ</h2>
                 <p>Админ-панель</p>
             </div>
         </div>

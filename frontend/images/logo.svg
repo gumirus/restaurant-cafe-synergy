@@ -22,14 +22,14 @@
           fill="url(#gold)" opacity="0.15"/>
   </g>
 
-  <!-- Текст BEAN SCENE -->
-  <text x="68" y="30" font-family="'Playfair Display', Georgia, serif" font-size="22" font-weight="700" fill="#FFFFFF" letter-spacing="3">
-    BEAN
-    <tspan fill="#D4A853"> SCENE</tspan>
+  <!-- Текст ТОЧКА КИПЕНИЯ -->
+  <text x="68" y="28" font-family="'Playfair Display', Georgia, serif" font-size="16" font-weight="700" fill="#FFFFFF" letter-spacing="2">
+    ТОЧКА
+    <tspan fill="#D4A853"> КИПЕНИЯ</tspan>
   </text>
 
   <!-- Подпись -->
   <text x="68" y="46" font-family="'Montserrat', Arial, sans-serif" font-size="9" font-weight="500" fill="rgba(255,255,255,0.5)" letter-spacing="4" text-transform="uppercase">
-    PREMIUM RESTAURANT
+    РЕСТОРАН &amp; КОФЕЙНЯ
   </text>
 </svg>
