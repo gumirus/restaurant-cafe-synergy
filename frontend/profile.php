@@ -21,22 +21,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 
     // Загрузка аватара
     $avatar = null;
+    $avatarData = null;
     if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
-        $ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION);
-        $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-        if (in_array(strtolower($ext), $allowed)) {
+        $file = $_FILES['avatar'];
+        $allowedExt = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+        if (in_array(strtolower($ext), $allowedExt)) {
+            // Сначала читаем в base64 (пока файл во временной папке)
+            $imgData = file_get_contents($file['tmp_name']);
+            if ($imgData !== false) {
+                $mime = 'image/' . ($ext === 'jpg' ? 'jpeg' : $ext);
+                $avatarData = 'data:' . $mime . ';base64,' . base64_encode($imgData);
+            }
+            // Потом сохраняем файл
             $avatar = 'avatar_' . $user_id . '_' . time() . '.' . $ext;
-            move_uploaded_file($_FILES['avatar']['tmp_name'], __DIR__ . '/uploads/' . $avatar);
+            move_uploaded_file($file['tmp_name'], __DIR__ . '/uploads/' . $avatar);
         }
     }
 
-    $sql = "UPDATE users SET name = ?, bio = ?" . ($avatar ? ", avatar = ?" : "") . " WHERE id = ?";
-    $params = [$name, $bio];
-    if ($avatar) $params[] = $avatar;
-    $params[] = $user_id;
-
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute($params);
+    if ($avatarData) {
+        $stmt = $pdo->prepare("UPDATE users SET name = ?, bio = ?, avatar = ?, avatar_data = ? WHERE id = ?");
+        $stmt->execute([$name, $bio, $avatar, $avatarData, $user_id]);
+    } elseif ($avatar) {
+        $stmt = $pdo->prepare("UPDATE users SET name = ?, bio = ?, avatar = ? WHERE id = ?");
+        $stmt->execute([$name, $bio, $avatar, $user_id]);
+    } else {
+        $stmt = $pdo->prepare("UPDATE users SET name = ?, bio = ? WHERE id = ?");
+        $stmt->execute([$name, $bio, $user_id]);
+    }
     $success = '✅ Профиль обновлён';
 }
 
