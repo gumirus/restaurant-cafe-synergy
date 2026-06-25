@@ -1256,7 +1256,7 @@ $page = $_GET['page'] ?? 'dashboard';
                                 ");
                                 while ($userRow = $stmt->fetch()):
                                 ?>
-                                    <tr class="user-row" style="cursor:pointer;" onclick="openUserModal(<?= $userRow['id'] ?>, '<?= htmlspecialchars($userRow['name'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['phone'], ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['position'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['bio'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['avatar'] ?? '', ENT_QUOTES) ?>', '<?= $userRow['access_name'] ?>', '<?= date('d.m.Y H:i', strtotime($userRow['created_at'])) ?>')">
+                                    <tr class="user-row" style="cursor:pointer;" onclick="openUserModal(<?= $userRow['id'] ?>, '<?= htmlspecialchars($userRow['name'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['phone'], ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['position'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['bio'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['avatar'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['avatar_data'] ?? '', ENT_QUOTES) ?>', '<?= $userRow['access_name'] ?>', '<?= date('d.m.Y H:i', strtotime($userRow['created_at'])) ?>')">
                                         <td><?= $userRow['id'] ?></td>
                                         <td>
                                             <?php if ($userRow['avatar']): ?>
@@ -1307,7 +1307,7 @@ $page = $_GET['page'] ?? 'dashboard';
                                 ");
                                 while ($userRow = $stmt->fetch()):
                                 ?>
-                                    <tr class="user-row" style="cursor:pointer;" onclick="openUserModal(<?= $userRow['id'] ?>, '<?= htmlspecialchars($userRow['name'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['phone'], ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['position'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['bio'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['avatar'] ?? '', ENT_QUOTES) ?>', '<?= $userRow['access_name'] ?>', '<?= date('d.m.Y H:i', strtotime($userRow['created_at'])) ?>')">
+                                    <tr class="user-row" style="cursor:pointer;" onclick="openUserModal(<?= $userRow['id'] ?>, '<?= htmlspecialchars($userRow['name'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['phone'], ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['position'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['bio'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['avatar'] ?? '', ENT_QUOTES) ?>', '<?= htmlspecialchars($userRow['avatar_data'] ?? '', ENT_QUOTES) ?>', '<?= $userRow['access_name'] ?>', '<?= date('d.m.Y H:i', strtotime($userRow['created_at'])) ?>')">
                                         <td><?= $userRow['id'] ?></td>
                                         <td>
                                             <?php if ($userRow['avatar']): ?>
@@ -1456,7 +1456,7 @@ $page = $_GET['page'] ?? 'dashboard';
             <script>
 
 
-            function openUserModal(id, name, phone, position, bio, avatar, role, date) {
+            function openUserModal(id, name, phone, position, bio, avatar, avatarData, role, date) {
                 document.getElementById('user-modal-name').textContent = name || 'Без имени';
                 document.getElementById('user-modal-position').textContent = position || '';
                 document.getElementById('user-modal-phone').textContent = phone;
@@ -1465,7 +1465,9 @@ $page = $_GET['page'] ?? 'dashboard';
                 document.getElementById('user-modal-bio').textContent = bio || 'Пользователь не заполнил информацию о себе';
 
                 const img = document.getElementById('user-modal-img');
-                if (avatar) {
+                if (avatarData) {
+                    img.src = avatarData;
+                } else if (avatar) {
                     img.src = '../../frontend/uploads/' + avatar;
                     img.style.display = 'block';
                 } else {
