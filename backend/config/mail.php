@@ -75,6 +75,10 @@ function sendSmtpMail(string $to, string $subject, string $body): bool {
 }
 
 function sendVerificationEmail(string $email, string $code): bool {
+    if (empty(SMTP_USER)) {
+        error_log("SMTP_USER not configured - email cannot be sent");
+        return false;
+    }
     $subject = 'Код подтверждения — Bean Scene';
     $body = "Здравствуйте!\n\nВаш код подтверждения: $code\n\nКод действителен 10 минут.\n\nС уважением,\nРесторан Bean Scene";
     return sendSmtpMail($email, $subject, $body);

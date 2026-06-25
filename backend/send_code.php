@@ -46,13 +46,26 @@ $demoCode = null;
 
 if ($method === 'email') {
     $sent = sendVerificationEmail($value, $code);
-    $message = $sent ? 'Код отправлен на почту' : 'Не удалось отправить код';
+    if ($sent) {
+        $message = 'Код отправлен на почту';
+    } else {
+        // SMTP не настроен — показываем код на экране
+        $demoCode = $code;
+        $sent = true;
+        $message = '⚠️ SMTP не настроен. Код показан ниже (демо-режим)';
+    }
 } else {
     // SMS — демо-режим (показываем код на экране)
     $demoCode = $code;
     $sent = true;
     $message = 'Демо-режим: код показан ниже';
 }
+
+echo json_encode([
+    'success' => $sent,
+    'message' => $message,
+    'demo_code' => $demoCode,
+]);
 
 echo json_encode([
     'success' => $sent,
