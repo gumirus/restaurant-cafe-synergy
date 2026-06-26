@@ -72,11 +72,11 @@
     .promo-primary h3, .promo-primary p, .promo-primary .promo-meta { color: #fff; }
     .promo-badge {
         display: inline-block; padding: 4px 14px; border-radius: 20px;
-        background: rgba(255,255,255,0.2); color: #fff; font-size: 0.8rem; font-weight: 600;
+        background: var(--color-primary); color: #fff; font-size: 0.8rem; font-weight: 600;
         margin-bottom: 15px;
     }
     .promo-primary .promo-badge { background: rgba(0,0,0,0.2); }
-    .promo-card h3 { color: var(--color-text-white); font-size: 1.4rem; margin-bottom: 12px; }
+    .promo-card h3 { color: var(--color-text); font-size: 1.4rem; margin-bottom: 12px; }
     .promo-card p { color: var(--color-text-light); line-height: 1.6; margin-bottom: 15px; }
     .promo-meta { color: var(--color-primary); font-size: 0.85rem; font-weight: 500; }
     .promo-primary .promo-meta { color: rgba(255,255,255,0.8); }

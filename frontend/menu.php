@@ -96,7 +96,7 @@
         flex: 1;
     }
     .dish-card-body h3 {
-        color: var(--color-text-white);
+        color: var(--color-text);
         margin-bottom: 8px;
         font-size: 1.2rem;
     }

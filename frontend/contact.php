@@ -135,17 +135,17 @@
     .page-hero p { color: var(--color-text-light); font-size: 1.1rem; }
     .contact-section { padding: 80px 0; }
     .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
-    .contact-info h2, .contact-form h2 { font-size: 2rem; margin-bottom: 30px; color: var(--color-text-white); }
+    .contact-info h2, .contact-form h2 { font-size: 2rem; margin-bottom: 30px; color: var(--color-text); }
     .contact-info h2 span, .contact-form h2 span { color: var(--color-primary); }
     .contact-item { display: flex; gap: 15px; margin-bottom: 25px; }
     .contact-icon { font-size: 1.8rem; }
-    .contact-item strong { display: block; color: var(--color-text-white); margin-bottom: 4px; }
+    .contact-item strong { display: block; color: var(--color-text); margin-bottom: 4px; }
     .contact-item p, .contact-item a { color: var(--color-text-light); text-decoration: none; }
     .contact-item a:hover { color: var(--color-primary); }
     .contact-form { background: var(--color-surface); padding: 40px; border-radius: 16px; border: 1px solid var(--color-border); }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
     .form-group { margin-bottom: 18px; }
-    .form-group label { display: block; margin-bottom: 6px; color: var(--color-text-white); font-weight: 500; font-size: 0.9rem; }
+    .form-group label { display: block; margin-bottom: 6px; color: var(--color-text); font-weight: 500; font-size: 0.9rem; }
     .form-group input, .form-group textarea {
         width: 100%; padding: 12px 16px; border: 1px solid var(--color-border); border-radius: 8px;
         background: var(--color-bg); color: var(--color-text); font-size: 0.95rem; transition: border-color 0.3s;
