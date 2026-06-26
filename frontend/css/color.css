@@ -6,6 +6,7 @@
     --color-bg-dark: #1E1E1E;        /* Тёмный фон */
     --color-bg-section: #F8F5F0;     /* Светлый кремовый для секций */
     --color-bg-card: #FFF;           /* Фон карточек */
+    --color-surface: #2a2a2a;        /* Поверхность карточек (тёмная) */
     --color-text: #2D2D2D;           /* Основной текст */
     --color-text-light: #7A7A7A;     /* Дополнительный текст */
     --color-text-white: #FFF;        /* Белый текст */

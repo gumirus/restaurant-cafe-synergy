@@ -483,6 +483,7 @@ $avatar_url = $user['avatar_data'] ?: ($user['avatar'] ? 'uploads/' . $user['ava
         border-radius: 12px;
         margin-bottom: 20px;
         overflow: hidden;
+        color: var(--color-text-white);
     }
     .order-card-header {
         display: flex;
@@ -523,7 +524,7 @@ $avatar_url = $user['avatar_data'] ?: ($user['avatar'] ? 'uploads/' . $user['ava
     .order-items-table td {
         padding: 8px 10px;
         border-bottom: 1px solid var(--color-border);
-        color: var(--color-text);
+        color: inherit;
     }
 
     .order-card-footer {
@@ -536,7 +537,7 @@ $avatar_url = $user['avatar_data'] ?: ($user['avatar'] ? 'uploads/' . $user['ava
     }
     .order-total {
         font-size: 1.1rem;
-        color: var(--color-text);
+        color: inherit;
     }
     .order-total strong {
         color: var(--color-primary);

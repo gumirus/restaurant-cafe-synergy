@@ -145,7 +145,7 @@
     .contact-form { background: var(--color-surface); padding: 40px; border-radius: 16px; border: 1px solid var(--color-border); }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
     .form-group { margin-bottom: 18px; }
-    .form-group label { display: block; margin-bottom: 6px; color: var(--color-text); font-weight: 500; font-size: 0.9rem; }
+    .form-group label { display: block; margin-bottom: 6px; color: var(--color-text-white); font-weight: 500; font-size: 0.9rem; }
     .form-group input, .form-group textarea {
         width: 100%; padding: 12px 16px; border: 1px solid var(--color-border); border-radius: 8px;
         background: var(--color-bg); color: var(--color-text); font-size: 0.95rem; transition: border-color 0.3s;
