@@ -49,7 +49,10 @@ if (isLoggedIn()) {
     <header class="header scrolled" id="header">
         <div class="container">
             <a href="index.php" class="logo">
-                <img src="images/logo.svg" alt="Точка Кипения" height="50">
+                <picture>
+                    <source media="(max-width: 900px)" srcset="images/logo-icon.svg">
+                    <img src="images/logo.svg" alt="Точка Кипения" height="50">
+                </picture>
             </a>
             <button class="burger-btn" id="burgerBtn" onclick="toggleMobileMenu()" aria-label="Меню">
                 <span class="burger-line"></span>
