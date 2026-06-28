@@ -367,8 +367,13 @@ function initCart() {
             if (result.success) {
                 btn.textContent = '✅ В корзине';
                 updateCartCount();
-                // Показываем уведомление
-                showToast('✅ Добавлено в корзину');
+                // Показываем уведомление над кнопкой корзины
+                var notif = document.createElement('div');
+                notif.textContent = '✅ Добавлено в корзину';
+                notif.style.cssText = 'text-align:center;padding:8px 16px;margin-bottom:10px;background:#1E1E1E;color:#D4A853;border-radius:8px;font-size:0.85rem;border:1px solid rgba(212,168,83,0.2);';
+                btn.parentNode.insertBefore(notif, btn);
+                setTimeout(function() { notif.style.opacity = '0'; notif.style.transition = 'opacity 0.3s'; }, 1500);
+                setTimeout(function() { if (notif.parentNode) notif.remove(); }, 2000);
                 // Диспатчим событие для menu.php и других страниц
                 document.dispatchEvent(new CustomEvent('cart-updated', { detail: { count: result.cart_count } }));
             } else {
@@ -468,13 +473,13 @@ function showToast(msg) {
     toast.className = 'toast-notification';
     toast.textContent = msg;
     Object.assign(toast.style, {
-        position: 'fixed', bottom: '30px', right: '30px',
-        background: '#1a1a2e', color: '#fff',
-        padding: '16px 28px', borderRadius: '12px',
-        fontSize: '1rem', zIndex: '100000',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-        opacity: '0', transform: 'translateY(20px)',
-        transition: 'opacity 0.3s, transform 0.3s'
+        position: 'fixed', left: '50%', transform: 'translateX(-50%)', bottom: '100px',
+        background: '#1E1E1E', color: '#D4A853',
+        padding: '12px 24px', borderRadius: '10px',
+        fontSize: '0.9rem', zIndex: '100000',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+        opacity: '0',
+        transition: 'opacity 0.3s'
     });
     document.body.appendChild(toast);
 
