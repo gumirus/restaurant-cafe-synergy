@@ -43,6 +43,11 @@ document.addEventListener('DOMContentLoaded', function() {
             filterBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             renderDishes(this.dataset.category);
+            // Update URL
+            var url = new URL(window.location);
+            if (this.dataset.category === 'all') url.searchParams.delete('cat');
+            else url.searchParams.set('cat', this.dataset.category);
+            window.history.replaceState({}, '', url);
         });
     });
 

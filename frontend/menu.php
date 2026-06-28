@@ -38,10 +38,30 @@
         var filters = document.getElementById('menuFilters');
         var toggle = document.getElementById('menuFiltersToggle');
         if (!filters || !toggle) return;
+        
+        // Restore category from URL on page load
+        var params = new URLSearchParams(window.location.search);
+        var saved = params.get('cat');
+        if (saved) {
+            var btn = filters.querySelector('.filter-btn[data-category="' + saved + '"]');
+            if (btn) {
+                btn.click();
+                var name = btn.textContent.trim();
+                if (name !== 'Все') toggle.textContent = '📋 ' + name + ' ▾';
+            }
+        }
+        
         filters.addEventListener('click', function(e) {
             var btn = e.target.closest('.filter-btn');
             if (!btn) return;
             var name = btn.textContent.trim();
+            var cat = btn.dataset.category;
+            // Save to URL without page reload
+            var url = new URL(window.location);
+            if (cat === 'all') url.searchParams.delete('cat');
+            else url.searchParams.set('cat', cat);
+            window.history.replaceState({}, '', url);
+            // Update toggle text
             if (name === 'Все') {
                 toggle.textContent = '📋 Категории ▾';
             } else {
