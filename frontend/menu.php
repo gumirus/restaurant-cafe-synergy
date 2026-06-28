@@ -34,6 +34,23 @@
         if (f) f.classList.toggle('open');
         if (b) b.textContent = f && f.classList.contains('open') ? '📋 Категории ▴' : '📋 Категории ▾';
     }
+    document.addEventListener('DOMContentLoaded', function() {
+        var filters = document.getElementById('menuFilters');
+        var toggle = document.getElementById('menuFiltersToggle');
+        if (!filters || !toggle) return;
+        filters.addEventListener('click', function(e) {
+            var btn = e.target.closest('.filter-btn');
+            if (!btn) return;
+            var name = btn.textContent.trim();
+            if (name === 'Все') {
+                toggle.textContent = '📋 Категории ▾';
+            } else {
+                toggle.textContent = '📋 ' + name + ' ▾';
+            }
+            filters.classList.remove('open');
+            toggle.textContent = toggle.textContent.replace('▴', '▾');
+        });
+    });
     </script>
     <style>
     .page-hero {

@@ -80,3 +80,62 @@
         padding: 25px;
     }
 }
+/* ========== MOBILE FILTERS TOGGLE ========== */
+.menu-filters-toggle {
+    display: none;
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--color-bg-dark);
+    color: var(--color-text-white);
+    border: 1px solid rgba(212,168,83,0.2);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-align: left;
+    margin-bottom: 20px;
+    font-family: inherit;
+}
+.menu-filters-toggle:hover {
+    border-color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+    .menu-filters-toggle {
+        display: block;
+    }
+    .menu-filters {
+        display: flex !important;
+        flex-direction: column;
+        gap: 6px;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.4s ease, opacity 0.3s ease;
+        margin-bottom: 0;
+    }
+    .menu-filters.open {
+        max-height: 500px;
+        opacity: 1;
+        margin-bottom: 30px;
+    }
+    .menu-filters.open .filter-btn {
+        animation: filterFadeIn 0.3s ease forwards;
+        opacity: 0;
+    }
+    .menu-filters.open .filter-btn:nth-child(1) { animation-delay: 0.05s; }
+    .menu-filters.open .filter-btn:nth-child(2) { animation-delay: 0.1s; }
+    .menu-filters.open .filter-btn:nth-child(3) { animation-delay: 0.15s; }
+    .menu-filters.open .filter-btn:nth-child(4) { animation-delay: 0.2s; }
+    .menu-filters.open .filter-btn:nth-child(5) { animation-delay: 0.25s; }
+    .menu-filters.open .filter-btn:nth-child(6) { animation-delay: 0.3s; }
+    .menu-filters.open .filter-btn:nth-child(7) { animation-delay: 0.35s; }
+    .filter-btn {
+        width: 100%;
+        text-align: left;
+        padding: 10px 14px;
+    }
+    @keyframes filterFadeIn {
+        from { opacity: 0; transform: translateY(-8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+}
