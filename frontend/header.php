@@ -51,8 +51,22 @@ if (isLoggedIn()) {
             <a href="index.php" class="logo">
                 <img src="images/logo.svg" alt="Точка Кипения" height="50">
             </a>
-            <button class="burger-btn" onclick="toggleMobileNav()">☰</button>
-            <div class="nav-overlay" id="navOverlay" onclick="toggleMobileNav()"></div>
+            <button class="burger-btn" id="burgerBtn" onclick="toggleMobileMenu()" aria-label="Меню">
+                <span class="burger-line"></span>
+                <span class="burger-line"></span>
+                <span class="burger-line"></span>
+            </button>
+            <div class="mobile-menu-dropdown" id="mobileMenuDropdown">
+                <ul>
+                    <li><a href="index.php" class="<?= $current_page === 'index.php' ? 'active' : '' ?>" onclick="toggleMobileMenu()">Главная</a></li>
+                    <li><a href="about.php" class="<?= $current_page === 'about.php' ? 'active' : '' ?>" onclick="toggleMobileMenu()">О нас</a></li>
+                    <li><a href="menu.php" class="<?= $current_page === 'menu.php' ? 'active' : '' ?>" onclick="toggleMobileMenu()">Меню</a></li>
+                    <li><a href="promotions.php" class="<?= $current_page === 'promotions.php' ? 'active' : '' ?>" onclick="toggleMobileMenu()">Акции</a></li>
+                    <li><a href="news.php" class="<?= $current_page === 'news.php' ? 'active' : '' ?>" onclick="toggleMobileMenu()">Новости</a></li>
+                    <li><a href="contact.php" class="<?= $current_page === 'contact.php' ? 'active' : '' ?>" onclick="toggleMobileMenu()">Контакты</a></li>
+                </ul>
+            </div>
+            <div class="nav-overlay" id="navOverlay" onclick="toggleMobileMenu()"></div>
             <nav class="nav">
                 <div class="nav-logo">
                     <img src="images/logo.svg" alt="Точка Кипения" height="40">

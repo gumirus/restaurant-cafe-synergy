@@ -2,6 +2,29 @@
    BASE — Точка Кипения
    ============================================= */
 
+
+:root {
+    --color-primary: #D4A853;
+    --color-primary-hover: #c49a3f;
+    --color-bg: #FFF;
+    --color-bg-dark: #1E1E1E;
+    --color-bg-section: #F8F5F0;
+    --color-bg-card: #FFF;
+    --color-surface: #fff;
+    --color-text: #2D2D2D;
+    --color-text-light: #7A7A7A;
+    --color-text-white: #FFF;
+    --color-border: #E8E0D6;
+    --color-overlay: rgba(0,0,0,0.6);
+    --font-main: 'Montserrat', 'Inter', Arial, sans-serif;
+    --font-heading: 'Playfair Display', 'Georgia', serif;
+    --container-width: 1200px;
+    --header-height: 80px;
+    --border-radius: 8px;
+    --shadow-card: 0 2px 15px rgba(0,0,0,0.06);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+}
+
 /* ========== RESET & BASE ========== */
 *, *::before, *::after {
     margin: 0;
