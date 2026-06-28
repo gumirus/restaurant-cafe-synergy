@@ -108,8 +108,10 @@ function loadSpecials() {
                         <span class="special-badge">👨‍🍳 Шеф-рекомендует</span>
                         <h3>${dish.name}</h3>
                         <p>${dish.description || ''}</p>
-                        <span class="price">${Number(dish.price).toLocaleString()} ₽</span>
-                        <a href="menu.php" class="btn" style="margin-top:auto;font-size:11px;padding:8px 16px;">🍽 В меню</a>
+                        <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;padding-top:8px;">
+                            <span class="price">${Number(dish.price).toLocaleString()} ₽</span>
+                            <a href="menu.php" class="btn" style="font-size:11px;padding:8px 16px;">🍽 В меню</a>
+                        </div>
                     </div>
                 </div>
             `).join('');
