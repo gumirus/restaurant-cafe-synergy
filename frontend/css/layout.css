@@ -1,0 +1,385 @@
+/* =============================================
+   LAYOUT — Точка Кипения
+   ============================================= */
+
+/* ========== HEADER ========== */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    background: var(--color-bg-dark);
+    color: var(--color-text-white);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    transition: all 0.4s;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+
+.header.scrolled {
+    background: var(--color-bg-dark);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 45px;
+    width: auto;
+    display: block;
+    transition: opacity 0.3s;
+}
+
+.logo:hover img {
+    opacity: 0.9;
+}
+
+.nav ul {
+    display: flex;
+    gap: 30px;
+}
+
+.nav a {
+    color: var(--color-text-white);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    position: relative;
+    padding-bottom: 4px;
+}
+
+.nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--color-primary);
+    transition: width 0.3s;
+}
+
+.nav a:hover::after,
+.nav a.active::after {
+    width: 100%;
+}
+
+.nav a:hover {
+    color: var(--color-primary);
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.header-actions a {
+    color: var(--color-text-white);
+    padding: 10px 22px;
+    border: 1px solid var(--color-primary);
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+    text-decoration: none;
+}
+
+.header-actions a:hover {
+    background: var(--color-primary);
+    color: var(--color-text-white);
+}
+
+.header-actions .btn-primary {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.header-actions .btn-primary:hover {
+    background: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+}
+
+/* ========== CART BADGE ========== */
+.cart-btn {
+    position: relative;
+    font-size: 1.4rem;
+    padding: 8px 14px !important;
+    border: none !important;
+}
+
+.cart-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.user-info {
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.btn-logout {
+    padding: 6px 14px !important;
+    border: 1px solid rgba(255,255,255,0.3) !important;
+    border-radius: 4px;
+    font-size: 11px !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+}
+
+.btn-logout:hover {
+    border-color: #e74c3c !important;
+    background: transparent !important;
+    color: #e74c3c !important;
+}
+
+/* ========== HEADER AVATAR ========== */
+.header-avatar-link {
+    padding: 0 !important;
+    border: none !important;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.header-avatar {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    border: 2px solid var(--color-primary);
+    transition: transform 0.2s, box-shadow 0.2s;
+    flex-shrink: 0;
+}
+
+.header-avatar:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(212, 168, 83, 0.4);
+}
+
+.header-avatar-placeholder {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+/* ========== FOOTER ========== */
+.footer {
+    background: var(--color-bg-dark);
+    color: var(--color-text-white);
+    padding: 80px 0 30px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 50px;
+}
+
+.footer-col h4 {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: var(--color-text-white);
+}
+
+.footer-col p {
+    color: rgba(255,255,255,0.5);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.footer-col ul li {
+    margin-bottom: 12px;
+}
+
+.footer-col ul a {
+    color: rgba(255,255,255,0.5);
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.footer-col ul a:hover {
+    color: var(--color-primary);
+}
+
+.social-links {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.social-links a {
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: all 0.3s;
+}
+
+.social-links a:hover {
+    background: var(--color-primary);
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.3);
+    font-size: 13px;
+}
+
+/* ========== MOBILE BURGER MENU ========== */
+.burger-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: var(--color-text);
+    padding: 5px;
+    line-height: 1;
+}
+
+.nav-logo {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .burger-btn {
+        display: block;
+        position: relative;
+        z-index: 1001;
+    }
+    .nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 280px;
+        background: var(--color-bg-dark);
+        z-index: 1000;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        padding: 30px 20px;
+        box-shadow: 4px 0 30px rgba(0,0,0,0.4);
+        border-right: 1px solid rgba(212, 168, 83, 0.15);
+        display: flex;
+        flex-direction: column;
+    }
+    .nav-logo {
+        display: block;
+        padding: 10px 10px 30px;
+        border-bottom: 1px solid rgba(212, 168, 83, 0.2);
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    .nav-logo img {
+        height: 45px;
+        width: auto;
+        display: block;
+        margin: 0 auto;
+    }
+    .nav.mobile-open {
+        transform: translateX(0);
+    }
+    .nav ul {
+        flex-direction: column;
+        gap: 5px;
+    }
+    .nav a {
+        display: block;
+        padding: 14px 20px;
+        font-size: 0.95rem;
+        color: rgba(255,255,255,0.7);
+        border-radius: 8px;
+        transition: all 0.3s;
+        text-transform: none;
+        letter-spacing: 0.5px;
+    }
+    .nav a:hover,
+    .nav a.active {
+        color: var(--color-primary);
+        background: rgba(212, 168, 83, 0.1);
+    }
+    .nav a::after {
+        display: none;
+    }
+    .nav-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.6);
+        z-index: 999;
+    }
+    .nav-overlay.active {
+        display: block;
+    }
+    .header .container {
+        justify-content: space-between;
+    }
+    .header-actions a {
+        padding: 6px 10px;
+        font-size: 10px;
+    }
+    .dishes-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    .profile-layout { grid-template-columns: 1fr; }
+    .order-card-header,
+    .order-card-footer { flex-direction: column; gap: 8px; }
+    .order-items-table { font-size: 0.8rem; }
+    .order-items-table th,
+    .order-items-table td { padding: 5px; }
+    .dish-card-body { padding: 12px; }
+    .dish-card-image,
+    .dish-card img,
+    .special-card-image {
+        border-radius: 12px 0 0 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dishes-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 26px; }
+    .header-actions a { font-size: 9px; padding: 5px 8px; }
+    .header .logo img { height: 35px; }
+    .dish-card-image,
+    .dish-card img,
+}

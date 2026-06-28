@@ -1,0 +1,82 @@
+/* =============================================
+   RESPONSIVE — Точка Кипения
+   ============================================= */
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 38px;
+    }
+
+    .about-grid,
+    .contact-grid,
+    .booking-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nav ul {
+        gap: 15px;
+    }
+
+    .section-title {
+        font-size: 30px;
+    }
+
+    .header-actions a {
+        padding: 8px 14px;
+        font-size: 11px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .newsletter-form {
+        flex-direction: column;
+    }
+
+    .specials-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .special-card-image {
+        height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 28px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dishes-grid,
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-form {
+        padding: 25px;
+    }
+}
