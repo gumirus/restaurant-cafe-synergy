@@ -609,5 +609,55 @@ function initSlider(container, sliderSelector, dotsSelector, dotClass) {
     container.querySelector('.slider-prev').onclick = () => slideTo(current - 1);
     container.querySelector('.slider-next').onclick = () => slideTo(current + 1);
 
+    // Touch/Swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let isDragging = false;
+
+    wrap.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+        isDragging = false;
+    }, { passive: true });
+
+    wrap.addEventListener('touchmove', function(e) {
+        if (Math.abs(e.changedTouches[0].screenX - touchStartX) > 10) {
+            isDragging = true;
+        }
+    }, { passive: true });
+
+    wrap.addEventListener('touchend', function(e) {
+        if (!isDragging) return;
+        touchEndX = e.changedTouches[0].screenX;
+        var diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 40) {
+            if (diff > 0) slideTo(current + 1);
+            else slideTo(current - 1);
+        }
+    }, { passive: true });
+
+    // Mouse drag support (for desktop trackpad)
+    var mouseDown = false;
+    var mouseStartX = 0;
+    wrap.addEventListener('mousedown', function(e) {
+        mouseDown = true;
+        mouseStartX = e.screenX;
+        e.preventDefault();
+    });
+    wrap.addEventListener('mousemove', function(e) {
+        if (!mouseDown) return;
+        if (Math.abs(e.screenX - mouseStartX) > 10) isDragging = true;
+    });
+    document.addEventListener('mouseup', function(e) {
+        if (!mouseDown) return;
+        mouseDown = false;
+        if (!isDragging) return;
+        var diff = mouseStartX - e.screenX;
+        if (Math.abs(diff) > 40) {
+            if (diff > 0) slideTo(current + 1);
+            else slideTo(current - 1);
+        }
+        isDragging = false;
+    });
+
     slideTo(perView);
 }

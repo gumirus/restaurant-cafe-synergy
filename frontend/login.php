@@ -77,7 +77,7 @@ if (isLoggedIn()) {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'X-Requested-With': 'XMLHttpRequest'
                 },
-                body: 'phone=' + encodeURIComponent(login) + '&password=' + encodeURIComponent(pass)
+                body: 'phone=' + encodeURIComponent(login) + '&password=' + encodeURIComponent(pass) + '&csrf_token=' + encodeURIComponent('<?= generateCsrfToken() ?>')
             });
             const data = await resp.json();
 

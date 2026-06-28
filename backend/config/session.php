@@ -3,6 +3,11 @@
 // УПРАВЛЕНИЕ СЕССИЯМИ
 // =============================================
 
+require_once __DIR__ . '/../helpers.php';
+
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_samesite', 'Strict');
+
 session_start();
 
 // Проверка авторизации

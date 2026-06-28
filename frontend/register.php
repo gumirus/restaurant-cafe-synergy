@@ -9,6 +9,7 @@ if (isLoggedIn()) {
     <section class="auth-section">
         <div class="container">
             <form class="auth-form" id="register-form" method="POST" action="../backend/register.php">
+                            <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                 <h2>Регистрация</h2>
                 <input type="tel" id="reg-phone" name="phone" placeholder="Номер телефона" required>
                 <input type="email" id="reg-email" name="email" placeholder="Электронная почта">

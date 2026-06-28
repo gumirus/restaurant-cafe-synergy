@@ -578,6 +578,7 @@ $page = $_GET['page'] ?? 'dashboard';
             <div class="card">
                 <h2>Добавить новое блюдо</h2>
                 <form method="POST" action="../createProduct.php" enctype="multipart/form-data">
+                            <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                     <div class="form-row">
                         <div class="form-group">
                             <label>Название блюда</label>
@@ -656,6 +657,7 @@ $page = $_GET['page'] ?? 'dashboard';
                 <div class="card">
                     <h2>✏️ Редактировать блюдо</h2>
                     <form method="POST" action="../updateProduct.php" enctype="multipart/form-data">
+                            <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                         <input type="hidden" name="id" value="<?= $dish['id'] ?>">
                         <input type="hidden" name="existing_image" value="<?= $dish['image'] ?>">
 
@@ -1335,6 +1337,7 @@ $page = $_GET['page'] ?? 'dashboard';
             <div class="card" style="margin-top: 20px;">
                 <h2>➕ Добавить сотрудника</h2>
                 <form method="POST" action="../createEmployee.php">
+                            <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                     <div class="form-row">
                         <div class="form-group">
                             <label>Имя сотрудника</label>
@@ -1495,6 +1498,7 @@ $page = $_GET['page'] ?? 'dashboard';
             <div class="card">
                 <h2>Управление акциями</h2>
                 <form method="POST" action="../createPromotion.php" style="margin-bottom: 30px; padding-bottom: 30px; border-bottom: 1px solid var(--color-border);">
+                            <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                     <div class="form-group">
                         <label>Название акции</label>
                         <input type="text" name="title" placeholder="Например: Скидка 20%" required>
@@ -1607,6 +1611,7 @@ $page = $_GET['page'] ?? 'dashboard';
                     </div>
                     <div style="flex:1;min-width:280px;">
                         <form method="POST" action="../updateEmployeeProfile.php" enctype="multipart/form-data">
+                            <input type="hidden" name="csrf_token" value="<?= generateCsrfToken() ?>">
                             <input type="hidden" name="user_id" value="<?= $adminProfile['id'] ?>">
                             <div class="form-group">
                                 <label>Имя</label>

@@ -18,7 +18,7 @@ $stmt->execute([$user_id]);
 $order = $stmt->fetch();
 
 // Получаем брони пользователя
-$stmt = $pdo->prepare("SELECT id, booking_date, booking_time, guests, occasion FROM bookings WHERE user_id = ? AND status IN ('pending', 'confirmed') ORDER BY booking_date DESC");
+$stmt = $pdo->prepare("SELECT id, booking_date, booking_time, guests FROM bookings WHERE user_id = ? AND status IN ('pending', 'confirmed') ORDER BY booking_date DESC");
 $stmt->execute([$user_id]);
 $userBookings = $stmt->fetchAll();
 
@@ -143,9 +143,9 @@ if ($order) {
                             <select id="checkout-select-booking" style="width:100%;padding:12px;border:1px solid var(--color-border);border-radius:10px;font-size:0.95rem;background:var(--color-bg);color:var(--color-text);" onchange="fillBooking()">
                                 <option value="">— Выберите бронь —</option>
                                 <?php foreach ($userBookings as $b): ?>
-                                    <option value="<?= $b['id'] ?>" data-date="<?= $b['booking_date'] ?>" data-time="<?= $b['booking_time'] ?>" data-guests="<?= $b['guests'] ?>" data-occasion="<?= htmlspecialchars($b['occasion'] ?? '') ?>">
+                                    <option value="<?= $b['id'] ?>" data-date="<?= $b['booking_date'] ?>" data-time="<?= $b['booking_time'] ?>" data-guests="<?= $b['guests'] ?>" data-="<?= htmlspecialchars($b[''] ?? '') ?>">
                                         📅 <?= date('d.m.Y', strtotime($b['booking_date'])) ?> в <?= substr($b['booking_time'], 0, 5) ?>
-                                        <?= $b['occasion'] ? '· ' . $b['occasion'] : '' ?>
+                                        <?= $b[''] ? '· ' . $b[''] : '' ?>
                                         · 👥 <?= $b['guests'] ?> чел
                                     </option>
                                 <?php endforeach; ?>

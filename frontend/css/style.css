@@ -1027,7 +1027,7 @@ section {
 .slider-next { right: -10px; }
 
 @media (max-width: 768px) {
-    .slider-arrow { display: none; }
+    .slider-arrow { font-size: 28px; width: 36px; height: 36px; }
 }
 
 .news-date {
