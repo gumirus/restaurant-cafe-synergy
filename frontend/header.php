@@ -26,11 +26,11 @@ if (isLoggedIn()) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Точка Кипения — Ресторан премиум-кухни</title>
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/sections.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/base.css?v=1782653036">
+    <link rel="stylesheet" href="css/layout.css?v=1782653036">
+    <link rel="stylesheet" href="css/components.css?v=1782653036">
+    <link rel="stylesheet" href="css/sections.css?v=1782653036">
+    <link rel="stylesheet" href="css/responsive.css?v=1782653036">
     <link rel="icon" type="image/svg+xml" href="images/logo.svg">
     <script>
     function openAboutModal() {
