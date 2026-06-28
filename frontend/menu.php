@@ -11,7 +11,8 @@
     <!-- ========== MENU ========== -->
     <section class="menu-section">
         <div class="container">
-            <div class="menu-filters">
+            <button class="menu-filters-toggle" id="menuFiltersToggle" onclick="toggleMenuFilters()">📋 Категории ▾</button>
+            <div class="menu-filters" id="menuFilters">
                 <button class="filter-btn active" data-category="all">Все</button>
                 <button class="filter-btn" data-category="salads">Салаты</button>
                 <button class="filter-btn" data-category="soups">Супы</button>
@@ -26,6 +27,14 @@
         </div>
     </section>
 
+    <script>
+    function toggleMenuFilters() {
+        var f = document.getElementById('menuFilters');
+        var b = document.getElementById('menuFiltersToggle');
+        if (f) f.classList.toggle('open');
+        if (b) b.textContent = f && f.classList.contains('open') ? '📋 Категории ▴' : '📋 Категории ▾';
+    }
+    </script>
     <style>
     .page-hero {
         padding: 140px 0 60px;
