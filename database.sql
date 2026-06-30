@@ -445,3 +445,28 @@ SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2026-06-10 11:46:53
+
+-- Обновление составов
+UPDATE dishes SET ingredients = 'Куриное филе, салат айсберг, пармезан, гренки, соус Цезарь' WHERE id = 1;
+UPDATE dishes SET ingredients = 'Огурцы, помидоры, перец, оливки, сыр фета, оливковое масло' WHERE id = 2;
+UPDATE dishes SET ingredients = 'Креветки, кокосовое молоко, том ям паста, грибы, лемонграсс' WHERE id = 3;
+UPDATE dishes SET ingredients = 'Свекла, капуста, картофель, морковь, сметана, зелень' WHERE id = 4;
+UPDATE dishes SET ingredients = 'Мраморная говядина, розмарин, тимьян, овощи гриль, соус' WHERE id = 5;
+UPDATE dishes SET ingredients = 'Паста, бекон, яйцо, пармезан, сливки, черный перец' WHERE id = 6;
+UPDATE dishes SET ingredients = 'Маскарпоне, савоярди, кофе эспрессо, какао, яйца' WHERE id = 7;
+UPDATE dishes SET ingredients = 'Сливочный сыр, печенье, сливки, сахар, ягоды' WHERE id = 8;
+UPDATE dishes SET ingredients = 'Лимоны, апельсины, мята, сахар, газированная вода' WHERE id = 9;
+UPDATE dishes SET ingredients = 'Зерна арабики, вода' WHERE id = 10;
+UPDATE dishes SET ingredients = 'Киноа, авокадо, овощи, зелень, оливковое масло' WHERE id = 11;
+UPDATE dishes SET ingredients = 'Тесто, моцарелла, томатный соус, базилик' WHERE id = 12;
+UPDATE dishes SET ingredients = 'Лапша, свинина, яйцо, бульон, нори, зелёный лук' WHERE id = 13;
+UPDATE dishes SET ingredients = 'Тунец, яйцо, фасоль, оливки, лук, горчичный соус' WHERE id = 14;
+UPDATE dishes SET ingredients = 'Филе лосося, цукини, перец, лимон, сливочный соус' WHERE id = 15;
+UPDATE dishes SET ingredients = 'Куриное филе, грибы, сыр, сливки, специи' WHERE id = 16;
+UPDATE dishes SET ingredients = 'Лосось, тунец, креветка, рис, нори, васаби, имбирь' WHERE id = 17;
+UPDATE dishes SET ingredients = 'Говяжья котлета, булочка, сыр, салат, помидор, соус' WHERE id = 18;
+UPDATE dishes SET ingredients = 'Банан, ягоды, йогурт, мед, мята' WHERE id = 19;
+UPDATE dishes SET ingredients = 'Пломбир, клубника, шоколадный топпинг, вафля' WHERE id = 20;
+UPDATE dishes SET ingredients = 'Говядина, чеснок, морковь, перец горошком, лавровый лист' WHERE id = 21;
+UPDATE dishes SET ingredients = 'Квас, огурцы, редис, яйцо, колбаса, зелень, сметана' WHERE id = 22;
+
