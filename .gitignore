@@ -18,3 +18,5 @@
 
 # macOS
 .DS_Store
+/backend/storage/rate_limits/*.json
+!*.gitkeep

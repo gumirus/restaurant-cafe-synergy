@@ -442,14 +442,38 @@
         ];
     }, $dishes), JSON_UNESCAPED_UNICODE) ?>;
 
-    function showToast(msg) {
-        const existing = document.querySelector('.toast');
+    function showToast(msg, btn) {
+        const existing = document.querySelector('.toast-notification');
         if (existing) existing.remove();
         const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.textContent = msg;
+        toast.className = 'toast-notification';
+        toast.innerHTML = msg;
+        Object.assign(toast.style, {
+            position: 'fixed', left: '50%', transform: 'translateX(-50%) translateY(20px)',
+            bottom: '100px', background: 'rgba(255,255,255,0.92)', color: '#2d3436',
+            padding: '10px 20px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: '500',
+            zIndex: '100000', boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+            backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+            border: '1px solid rgba(212,168,83,0.25)',
+            opacity: '0', transition: 'opacity 0.3s ease, transform 0.3s ease',
+            pointerEvents: 'none', whiteSpace: 'nowrap',
+        });
+        if (btn) {
+            const rect = btn.getBoundingClientRect();
+            toast.style.left = (rect.left + rect.width / 2) + 'px';
+            toast.style.transform = 'translateX(-50%) translateY(-10px)';
+            toast.style.bottom = 'auto';
+            toast.style.top = (rect.top - 50) + 'px';
+        }
         document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 2500);
+        requestAnimationFrame(() => {
+            toast.style.opacity = '1';
+            toast.style.transform = toast.style.transform.replace('translateY(20px)','translateY(0)').replace('translateY(-10px)','translateY(-20px)');
+        });
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 300);
+        }, 1000);
     }
 
     // ====== Добавление в корзину (универсальная функция) ======
@@ -468,7 +492,7 @@
                 if (data.success) {
                 const cartCount = document.getElementById('cart-count');
                 if (cartCount) cartCount.textContent = data.cart_count;
-                showToast('✅ ' + item.name + ' добавлен в корзину');
+                showToast('✅ ' + item.name + ' добавлен в корзину', btn);
             } else {
                 showToast('⚠️ ' + (data.error || 'Ошибка'));
             }
@@ -508,8 +532,9 @@
     document.addEventListener('DOMContentLoaded', function() {
         // ====== Кнопка в корзину из модального окна ======
         document.getElementById('dish-modal-cart-btn').addEventListener('click', function() {
+            const btn = this;
             const id = parseInt(this.dataset.id);
-            addToCart(id);
+            addToCart(id, btn);
             closeDishModal();
         });
 
@@ -527,17 +552,22 @@
 
         const menuItems = <?= json_encode(array_map(function($d) use ($catMap) {
             $catKey = $catMap[$d['category_name']] ?? 'other';
+            $categories = [$catKey];
+            // Окрошка — холодный суп, показываем и в Супах, и в Холодных блюдах
+            if (mb_stripos($d['name'], 'окрошка') !== false || mb_stripos($d['name'], 'okroshka') !== false) {
+                $categories = ['soups', 'sushi'];
+            }
             return [
                 'id' => (int)$d['id'],
                 'name' => $d['name'],
                 'price' => (int)$d['price'],
                 'weight' => (int)$d['weight'],
-                'categories' => [$catKey],
+                'categories' => $categories,
                 'desc' => $d['description'] ?? '',
                 'ingredients' => $d['ingredients'] ?? '',
                 'img' => $d['image'] ? $d['image'] : 'uploads/dishes/placeholder.jpg',
             ];
-        }, $dishes)) ?>;
+        }, $dishes), JSON_UNESCAPED_UNICODE) ?>;
 
         function renderDishes(category = 'all') {
             const filtered = category === 'all' 

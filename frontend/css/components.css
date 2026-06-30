@@ -228,3 +228,9 @@
 .img-modal-close:hover {
     opacity: 1;
 }
+/* ========== TOAST NOTIFICATION ========== */
+.toast-notification {
+    position: fixed;
+    z-index: 100000;
+    pointer-events: none;
+}

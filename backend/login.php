@@ -5,15 +5,10 @@
 
 require_once __DIR__ . '/config/db.php';
 require_once __DIR__ . '/config/session.php';
+require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/rate_limit.php';
 
 $isAjax = (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
-
-function jsonError($message, $status = 400) {
-    http_response_code($status);
-    echo json_encode(['success' => false, 'errors' => is_array($message) ? $message : [$message]]);
-    exit;
-}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {

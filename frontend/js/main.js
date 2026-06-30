@@ -369,13 +369,8 @@ function initCart() {
             if (result.success) {
                 btn.textContent = '✅ В корзине';
                 updateCartCount();
-                // Показываем уведомление над кнопкой корзины
-                var notif = document.createElement('div');
-                notif.textContent = '✅ Добавлено в корзину';
-                notif.style.cssText = 'text-align:center;padding:8px 16px;margin-bottom:10px;background:#1E1E1E;color:#D4A853;border-radius:8px;font-size:0.85rem;border:1px solid rgba(212,168,83,0.2);';
-                btn.parentNode.insertBefore(notif, btn);
-                setTimeout(function() { notif.style.opacity = '0'; notif.style.transition = 'opacity 0.3s'; }, 1500);
-                setTimeout(function() { if (notif.parentNode) notif.remove(); }, 2000);
+                // Показываем уведомление (тост) над кнопкой
+                showToast('✅ Добавлено в корзину', btn);
                 // Диспатчим событие для menu.php и других страниц
                 document.dispatchEvent(new CustomEvent('cart-updated', { detail: { count: result.cart_count } }));
             } else {
@@ -467,34 +462,65 @@ function initImageModal() {
 }
 
 // ========== TOAST NOTIFICATION ==========
-function showToast(msg) {
+function showToast(msg, anchorBtn) {
     const existing = document.querySelector('.toast-notification');
     if (existing) existing.remove();
 
     const toast = document.createElement('div');
     toast.className = 'toast-notification';
-    toast.textContent = msg;
+    toast.innerHTML = msg;
     Object.assign(toast.style, {
-        position: 'fixed', left: '50%', transform: 'translateX(-50%)', bottom: '100px',
-        background: '#1E1E1E', color: '#D4A853',
-        padding: '12px 24px', borderRadius: '10px',
-        fontSize: '0.9rem', zIndex: '100000',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+        position: 'fixed',
+        left: '50%',
+        transform: 'translateX(-50%) translateY(20px)',
+        bottom: '100px',
+        background: 'rgba(255, 255, 255, 0.92)',
+        color: '#2d3436',
+        padding: '10px 20px',
+        borderRadius: '12px',
+        fontSize: '0.85rem',
+        fontWeight: '600',
+        zIndex: '100000',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(8px)',
+        border: '1px solid rgba(212, 168, 83, 0.25)',
         opacity: '0',
-        transition: 'opacity 0.3s'
+        transition: 'opacity 0.3s ease, transform 0.3s ease',
+        pointerEvents: 'none',
+        whiteSpace: 'nowrap',
     });
+
+    // Если передана кнопка — позиционируем над ней
+    if (anchorBtn) {
+        const rect = anchorBtn.getBoundingClientRect();
+        toast.style.position = 'fixed';
+        toast.style.left = (rect.left + rect.width / 2) + 'px';
+        toast.style.transform = 'translateX(-50%) translateY(-10px)';
+        toast.style.bottom = 'auto';
+        toast.style.top = (rect.top - 50) + 'px';
+    }
+
     document.body.appendChild(toast);
 
+    // Анимация появления
     requestAnimationFrame(() => {
         toast.style.opacity = '1';
-        toast.style.transform = 'translateY(0)';
+        // Сохраняем горизонтальное смещение, меняем только вертикаль
+        const isCentered = !anchorBtn;
+        if (isCentered) {
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+        } else {
+            toast.style.transform = 'translateX(-50%) translateY(-20px)';
+        }
     });
 
+    // Исчезновение через 1 сек
     setTimeout(() => {
         toast.style.opacity = '0';
-        toast.style.transform = 'translateY(20px)';
+        toast.style.transform += ' translateY(10px)';
         setTimeout(() => toast.remove(), 300);
-    }, 2500);
+    }, 1000);
 }
 
 // ========== СЛАЙДЕР (адаптивный, несколько карточек) ==========

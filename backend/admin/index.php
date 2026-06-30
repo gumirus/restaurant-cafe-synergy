@@ -525,11 +525,16 @@ $page = $_GET['page'] ?? 'dashboard';
                                     ORDER BY d.name
                                 ");
                             } else {
+                                // Окрошка показывается и в Супах (cat=2) и в Холодных блюдах (cat=6)
+                                $extraCondition = '';
+                                if ($activeCat == 2) {
+                                    $extraCondition = " OR (d.id IN (SELECT id FROM dishes WHERE (name LIKE '%окрошка%' OR name LIKE '%okroshka%') AND category_id = 6))";
+                                }
                                 $stmt = $pdo->prepare("
                                     SELECT d.*, c.name as category_name
                                     FROM dishes d
                                     JOIN categories c ON d.category_id = c.id
-                                    WHERE d.category_id = ?
+                                    WHERE d.category_id = ? $extraCondition
                                     ORDER BY d.name
                                 ");
                                 $stmt->execute([$activeCat]);
